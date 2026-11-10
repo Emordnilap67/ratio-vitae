@@ -1,0 +1,7 @@
+# made by the build
+build/
+out/
+# never in the repository
+*.keystore
+*.jks
+*.p12
