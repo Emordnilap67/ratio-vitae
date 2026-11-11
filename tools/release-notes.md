@@ -1,3 +1,9 @@
+**New in 1.1:**
+
+- **+ Add a medication** checks your list first - a medication already active is not added twice
+- **Blood pressure and temperature**: the day buttons show the date ("Today · Tue Nov 10") and the hour is said plainly ("20:00 = 8 PM")
+- **The food stock counter** has an Ate 4 button too, on the app and on the Money widget
+
 **Ratio Vitae 1.0 - the first public version.**
 
 Your money and your health in one app, on your phone - no internet, no

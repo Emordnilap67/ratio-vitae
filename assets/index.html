@@ -1801,7 +1801,7 @@ function renderHealth() {
     h += '</section>';
   }
 
-  h += '<button class="imbtn cyadd" data-medadd="1">+ Add a medication<small>' + (M.length ? 'or an injection - it joins your morning / night sets' : 'your pills and injections - each with its morning and night amounts') + '</small></button>';
+  h += '<button class="imbtn cyadd" data-medadd="1">+ Add a medication<small>or an injection - it joins your morning / night sets</small></button>';
   h += '<div class="sec">Weight</div><section class="hc wt">';
   if (W.length) {
     const last = W[W.length - 1], first = W[0], off = last.lb - GOAL_LB;
@@ -4964,6 +4964,7 @@ function tempHTML() {
   } else h += '<div class="row2"><div class="s">no readings yet</div><button class="lw" data-temp="1">+ Temp</button></div>';
   return h + units + '</section>';
 }
+
 let md = null;
 function renderMedAdd() {
   const chip = function (k, v, on) { return '<button data-' + k + '="' + esc(v) + '" class="' + (on ? "on" : "") + '">' + esc(v) + '</button>'; };
@@ -4991,6 +4992,7 @@ document.addEventListener("click", function (e) {
   if (md && e.target.closest("[data-medsave]")) {
     const name = clean(md.n), shot = md.f === "injection", am = shot ? 0 : num(md.am || 0), pm = shot ? 0 : num(md.pm || 0), iv = shot ? Math.trunc(num(md.i)) : 0;
     if (!name) { toast("Type the medication's name", false, true); return; }
+    if (loadMeds(parseCSV(readFile("pills_log.csv"))).some(function (m) { return m.name.toLowerCase() === name.toLowerCase() && m.status === "active"; })) { toast(name + " is already on your list", false, true); return; }
     if (shot ? !(iv > 0) : !(am > 0 || pm > 0)) { toast(shot ? "Type every how many days - like 28" : "Type how many in the morning or at night", false, true); return; }
     const row = [iso(new Date()), name, md.f, String(num(md.s) || ""), md.u, shot ? "0" : String(+am), shot ? "0" : String(+pm), "no", iv ? String(iv) : "", "active", "", clean(md.p), "added in Ratio Vitae"].join(",");
     if (applyOps([{ f: "pills_log.csv", op: "append", rows: row + "\n" }])) { md = null; closeSheet(); toast("Added " + name, true, false); renderHealth(); }
@@ -5050,8 +5052,11 @@ function healthMoreHTML(today) {
 
 function whenPick(o, pre) {
   const nowH = new Date().getHours();
-  return '<div class="lbl">Day</div><div class="chips">' + [["t", "Today"], ["y", "Yesterday"]].map(function (x) { return '<button data-' + pre + 'day="' + x[0] + '" class="' + (o.day === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div>' +
-    '<div class="lbl">Hour</div><div class="chips" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">' +
+
+  const dd = function (back) { const d = new Date(); d.setDate(d.getDate() - back); return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()] + " " + ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"][d.getMonth()] + " " + d.getDate(); };
+  const h12 = function (h) { return (h % 12 || 12) + (h < 12 ? " AM" : " PM"); };
+  return '<div class="lbl">Day</div><div class="chips">' + [["t", "Today", 0], ["y", "Yesterday", 1]].map(function (x) { return '<button data-' + pre + 'day="' + x[0] + '" class="' + (o.day === x[0] ? "on" : "") + '">' + x[1] + ' · ' + dd(x[2]) + '</button>'; }).join("") + '</div>' +
+    '<div class="lbl">Hour (24-hour clock) · ' + pad2(o.hr) + ':00 = ' + h12(o.hr) + '</div><div class="chips" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">' +
     Array.from({ length: 24 }, function (_, h) { return '<button data-' + pre + 'hr="' + h + '" class="' + (o.hr === h ? "on" : "") + '"' + (o.day === "t" && h > nowH ? " disabled" : "") + '>' + pad2(h) + '</button>'; }).join("") + '</div>';
 }
 function whenDate(o) { const n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate() - (o.day === "y" ? 1 : 0)); }
