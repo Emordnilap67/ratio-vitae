@@ -1,3 +1,7 @@
+**New in 1.2.1:**
+
+- **Every PDF prints all its pages** - the budget, health and investment PDFs could stop after the first page
+
 **New in 1.2:**
 
 - **Your investments over time** - every account gets its own card: its value as a line that is green where it rises and red where it falls (highs and lows marked), the gain or loss since you bought, and the gain or loss at each reading

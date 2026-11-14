@@ -468,6 +468,7 @@ html,body{height:100%;overflow:hidden}
 #printv.brec table.brt tr.th td{background:#1F1F1F;color:#fff;font-weight:700;font-size:8pt}#printv.brec table.brt tr.dk td{background:#1F1F1F;color:#fff;font-weight:700}
 #printv.brec table.brt tr.tn td{font-size:7.5pt;font-style:italic;color:#3A3A3A;padding-top:.5pt}
 #printv.brec table.brt tr{page-break-inside:avoid}#printv .br-br{page-break-before:always;height:0}#printv.brec svg{display:block;margin:4pt auto}}
+@media print{html,body{height:auto!important;overflow:visible!important;min-height:0!important}#printv{position:static!important}}
 @media print{body>*:not(#printv){display:none!important}#printv{display:block!important;color:#111;background:#fff;font:12px/1.4 Inter,Arial,sans-serif;padding:10px}body{background:#fff!important}
 #printv h1{font-size:22px;margin:0}#printv .pv-h p{color:#555;margin:2px 0 12px}#printv h2{font-size:14px;margin:14px 0 4px;border-bottom:1.5px solid #333;display:flex;justify-content:space-between}
 #printv table{width:100%;border-collapse:collapse}#printv td{padding:3px 4px;border-bottom:1px solid #ddd;vertical-align:top}#printv .pv-t td:nth-child(even){font-weight:700;text-align:right}#printv .pv-l .a{text-align:right;white-space:nowrap}#printv .pv-l .n{color:#666;font-size:11px}#printv .pv-br{page-break-before:always}}.payo{margin-top:6px;color:var(--mist);font-size:12px}.payc b{color:#fff}.srr span.dim{color:var(--mist);font-weight:400}
