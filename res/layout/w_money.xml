@@ -38,6 +38,6 @@
         <TextView android:id="@+id/w_b3" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1" android:layout_marginEnd="4dp"
             android:gravity="center" android:background="@drawable/wbtn" android:text="Pay a bill" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" />
         <TextView android:id="@+id/w_b4" android:layout_width="0dp" android:layout_height="34dp" android:layout_weight="1"
-            android:gravity="center" android:background="@drawable/wbtn" android:text="📷 Receipt" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" />
+            android:gravity="center" android:background="@drawable/wbtn" android:text="⇪ Import" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" />
     </LinearLayout>
 </LinearLayout>

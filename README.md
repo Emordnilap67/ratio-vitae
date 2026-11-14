@@ -10,8 +10,9 @@ own accounts, categories, bills, cards, investments and medications, and it
 becomes yours.
 
 - **Free**, no ads, no account, no sign-in.
-- **No internet.** The app does not even ask for internet access. Nothing is
-  sent anywhere.
+- **Almost no internet.** The only thing it ever looks up is share prices over time for the
+  investments you hold (Yahoo Finance's daily closes) - only the ticker name goes out. Nothing
+  about you is sent anywhere.
 - **Your data is plain files you own** - simple csv files in a folder called
   `Ratio Vitae` on your phone. Open them in any spreadsheet, back them up,
   sync them, move them to a new phone.

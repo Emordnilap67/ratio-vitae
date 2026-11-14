@@ -78,7 +78,9 @@ public class MainActivity extends Activity {
 
             "goals.csv", "networth_log.csv", "grocery_list.csv",
 
-            "temp_log.csv"};
+            "temp_log.csv",
+
+            "invest_log.csv"};
 
     static final String[] READ_EXTRA = {"fx.txt"};
 
@@ -308,6 +310,7 @@ public class MainActivity extends Activity {
             {"pills_log.csv", "date,medication,form,strength,unit,morning,night,flex,interval_days,status,prescriber,purpose,note"},
             {"investments.csv", "name,kind,value,money_in,date,note"},
             {"networth_log.csv", "date,net_worth,have,owe"},
+            {"invest_log.csv", "date,account,ticker,shares,price,currency,value,book,note"},
             {"food_log.csv", "month,date,place,item,amount,note"},
             {"weight_log.csv", "month,pounds,note"},
             {"credit_log.csv", "month,equifax,transunion"},
@@ -708,6 +711,49 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 return "";
             }
+        }
+
+        @JavascriptInterface
+        public void prices(final String json) {
+            new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        JSONArray a = new JSONArray(json);
+                        for (int i = 0; i < a.length(); i++) {
+                            JSONObject o = a.getJSONObject(i);
+                            final String t = o.optString("t"), y = o.optString("y"), r = o.optString("r", "2y");
+                            if (!y.matches("[A-Za-z0-9.\\-]{1,16}") || !r.matches("[0-9a-z]{1,4}")) continue;
+                            String body = "";
+                            java.net.HttpURLConnection c = null;
+                            try {
+                                c = (java.net.HttpURLConnection) new java.net.URL("https://query1.finance.yahoo.com/v8/finance/chart/" + y
+                                        + "?range=" + r + "&interval=1d").openConnection();
+                                c.setConnectTimeout(10000);
+                                c.setReadTimeout(15000);
+                                c.setRequestProperty("User-Agent", "Mozilla/5.0");
+                                if (c.getResponseCode() == 200) {
+                                    InputStream in = c.getInputStream();
+                                    ByteArrayOutputStream bo = new ByteArrayOutputStream();
+                                    byte[] buf = new byte[16384];
+                                    int n;
+                                    while ((n = in.read(buf)) > 0 && bo.size() < 4000000) bo.write(buf, 0, n);
+                                    in.close();
+                                    body = bo.toString("UTF-8");
+                                }
+                            } catch (Exception e) {
+                                body = "";
+                            } finally {
+                                if (c != null) c.disconnect();
+                            }
+                            if (body.isEmpty()) continue;
+                            final String b = body;
+                            runOnUiThread(new Runnable() {
+                                public void run() { js("window.priceIn&&priceIn(" + JSONObject.quote(t) + "," + JSONObject.quote(b) + ")"); }
+                            });
+                        }
+                    } catch (Exception ignored) { }
+                }
+            }).start();
         }
 
         @JavascriptInterface

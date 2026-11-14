@@ -166,7 +166,7 @@ public class Wid {
         v.setOnClickPendingIntent(id(c, "w_b1"), open(c, 301, 0, "spent"));
         v.setOnClickPendingIntent(id(c, "w_b2"), open(c, 302, 0, "in"));
         v.setOnClickPendingIntent(id(c, "w_b3"), open(c, 303, 0, "bills"));
-        v.setOnClickPendingIntent(id(c, "w_b4"), open(c, 304, 0, "receipt"));
+        v.setOnClickPendingIntent(id(c, "w_b4"), open(c, 304, 0, "import"));
         return v;
     }
 
@@ -493,7 +493,7 @@ public class Wid {
 
     static RemoteViews money2(Context c) {
         JSONObject d = data(c), m = d.optJSONObject("money");
-        RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(6);
+        RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(7);
 
         RemoteViews L = item(c, "wi_left");
         if (m == null) {
@@ -517,8 +517,24 @@ public class Wid {
         B.setOnClickFillInIntent(id(c, "w_b1"), goTo(0, "spent"));
         B.setOnClickFillInIntent(id(c, "w_b2"), goTo(0, "in"));
         B.setOnClickFillInIntent(id(c, "w_b3"), goTo(0, "bills"));
-        B.setOnClickFillInIntent(id(c, "w_b4"), goTo(0, "receipt"));
+        B.setOnClickFillInIntent(id(c, "w_b4"), goTo(0, "import"));
         b.addItem(2, B);
+
+        JSONArray cats = m == null ? null : m.optJSONArray("cats");
+        if (cats != null && cats.length() > 0) {
+            RemoteViews K = item(c, "wi_cats");
+            String[] ids = {"w_c1", "w_c2", "w_c3", "w_c4"};
+            for (int k = 0; k < ids.length; k++) {
+                JSONObject o = k < cats.length() ? cats.optJSONObject(k) : null;
+                if (o == null) { K.setViewVisibility(id(c, ids[k]), android.view.View.INVISIBLE); continue; }
+                String nm = o.optString("n", "");
+                android.text.SpannableString sp = new android.text.SpannableString("● " + nm);
+                sp.setSpan(new android.text.style.ForegroundColorSpan(colour(o.optString("col"), 0xFF9AA0C0)), 0, 1, 0);
+                K.setTextViewText(id(c, ids[k]), sp);
+                K.setOnClickFillInIntent(id(c, ids[k]), goTo(0, "cat:" + nm));
+            }
+            b.addItem(6, K);
+        }
         if (m != null) {
             String np = m.optString("nextPay", "");
             b.addItem(3, line(c, "📅", 0xFFAFAFFF, "NEXT BILL", m.optString("next", "no bills left to pay"), 0xFFFFFFFF, np.isEmpty() ? "" : "tap to pay it",

@@ -437,6 +437,23 @@ html,body{height:100%;overflow:hidden}
 #printv.hrec table{width:100%;border-collapse:collapse;margin:3pt 0 8pt;table-layout:fixed}#printv.hrec td{border:.5pt solid #9AA3AB;padding:2.5pt 4pt;font-size:9pt;vertical-align:top;font-weight:400;text-align:left}
 #printv.hrec tr.th td{background:#000;color:#fff;font-weight:700}#printv.hrec tr.tb td{font-weight:700}#printv.hrec tr.tn td{font-size:7.5pt;font-style:italic;color:#444A50;padding-top:1pt}
 #printv.hrec tr{page-break-inside:avoid}#printv .hr-br{page-break-before:always;height:0}}
+.udsvg{width:100%;height:auto;display:block;margin:4px 0 2px}
+.ilc .t b small{font-weight:400;font-size:12px;color:var(--mist)}.ilk{margin-top:12px;font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mist)}.ilk small{letter-spacing:0;text-transform:none;font-size:11px;margin-left:4px}
+.ilg{font-size:17px;font-weight:600;margin-top:3px}.ilg em{font-style:normal}.ilg small{display:block;font-size:12px;font-weight:400;color:var(--plumq);margin-top:2px}
+.ilpdf{margin-top:12px;border-top:1px solid var(--line);padding-top:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;cursor:pointer}
+.ilpdf .l{font-size:14px;font-weight:600;color:var(--plum)}.ilpdf .l small{display:block;font-size:12px;font-weight:400;color:var(--mist);margin-top:2px}.ilpdf .a{font-size:20px;color:var(--plum)}.crd .hxc{display:none}.crd.full .hxc{display:block;margin-top:6px}
+@media print{#printv.irec{font:8.5pt/1.3 Carlito,Calibri,"Helvetica Neue",Arial,sans-serif!important;color:#000!important;padding:0!important}
+#printv.irec,#printv.irec *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+#printv .ir-border{position:fixed;inset:0;border:1.5pt solid var(--ibd)}#printv .ir-hd{position:fixed;top:2.5mm;left:6mm;font-size:7.5pt;color:#888}#printv .ir-in{padding:9mm 6mm 6mm}
+#printv .ir-title{font-size:22pt;font-weight:700;color:var(--it);margin:0 0 3pt}#printv.irec p{margin:0 0 4pt}#printv .ir-sub{font-style:italic}
+#printv.irec h1{font-size:15pt;font-weight:700;color:var(--ih);margin:12pt 0 4pt;display:block;border:0}#printv.irec h2{font-size:10pt;font-weight:700;margin:8pt 0 2pt;display:block;border:0;color:#222}
+#printv .ir-key span{display:inline-block;margin:0 9pt 3pt 0;font-weight:700;font-size:9.5pt}#printv .ir-key i{display:inline-block;width:8pt;height:8pt;margin-right:3pt;vertical-align:-.5pt}
+#printv.irec table.brt{width:100%;border-collapse:collapse;table-layout:fixed;margin:2pt 0 8pt}
+#printv.irec table.brt td{border:.5pt solid #AFAFAF;padding:1.5pt 3pt;font-size:8.5pt;vertical-align:top;text-align:left;font-weight:400}
+#printv.irec table.brt td.r{text-align:right}#printv.irec table.brt td.b{font-weight:700}
+#printv.irec table.brt tr.th td{background:var(--ihd);color:#fff;font-weight:700;font-size:8pt}#printv.irec table.brt tr.dk td{background:var(--ihd);color:#fff;font-weight:700}
+#printv.irec table.brt tr.tn td{font-size:7.5pt;font-style:italic;color:#3A3A3A;padding-top:.5pt}
+#printv.irec table.brt tr{page-break-inside:avoid}#printv .ir-br{page-break-before:always;height:0}#printv.irec svg{display:block;margin:4pt auto}}
 @media print{#printv.brec{font:8.5pt/1.3 Carlito,Calibri,"Helvetica Neue",Arial,sans-serif!important;color:#000!important;padding:0!important}
 #printv.brec,#printv.brec *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 #printv .br-border{position:fixed;inset:0;border:1pt solid #1A3A5C}#printv .br-hd{position:fixed;top:2.5mm;left:6mm;font-size:7.5pt;color:#888}
@@ -3566,7 +3583,9 @@ function renderInvest() {
   const total = invested + cashC, divYear = Math.round(rows.reduce(function (s, r) { return s + r.div; }, 0));
   const NW = nwNumbers(total);
   nwLog(NW);
-  h += netWorthHTML(total) + nwChartHTML() + allInvHTML(total) + goalsHTML(NW);
+  try { ilDaily(rows, cashC, total, FX); pxFetch(rows.filter(function (r) { return r.shares > 0; }).map(function (r) { return { t: r.t, cur: r.cur }; })); } catch (e) {   }
+  let ilH = ""; try { ilH = ilAccountsHTML(); } catch (e) { ilH = ""; }
+  h += netWorthHTML(total) + nwChartHTML() + allInvHTML(total) + ilH + goalsHTML(NW);
   if (!H.length) h += '<div class="sec">TD Direct Investing</div><button class="imbtn iv" data-pickfile="1">⇪ Import TD files<small>optional - a TD holdings export (csv) brings in every position, the cash and the USD rate</small></button>';
   else {
   h += '<div class="sec">TD account</div>';
@@ -3608,6 +3627,7 @@ function renderInvest() {
       '<div class="s">' + g(have) + (tg ? " of " + tg + " shares" + (have >= tg ? " · target met" : " · need " + g(+(tg - have).toFixed(4))) : " shares") + (r.div ? " · " + money(Math.round(r.div)) + " a year" : "") + '</div>' +
       '<div class="s">Price a share <em>' + pps(r) + '</em></div>' +
       '<div class="nt">' + esc(r.cat) + (r.yld ? ' · yield ' + r.yld.toFixed(2) + '%' : "") + (r.freq && r.freq !== "N" ? ' · pays ' + ({ M: "monthly", Q: "quarterly", S: "twice a year", A: "once a year" }[r.freq] || r.freq) : "") + '</div>' +
+      '<div class="hxc" data-hxc="' + esc(r.t) + '">' + (state.full[id] ? holdChartsHTML(r.t) : "") + '</div>' +
       '<div class="hx"><span class="hxb" data-hedit="' + esc(r.t) + '">' + (tg ? "Change the target ›" : "Set a target ›") + '</span>' + (have === 0 ? '<span class="hxb del" data-hdel="' + esc(r.t) + '">Take it off ›</span>' : "") + '</div></button>';
   });
   h += '</section>';
@@ -3619,7 +3639,8 @@ function renderInvest() {
   const sold = CR.filter(function (r) { return !(num(r.quantity) > 0 || num(r.worth_now) > 0); }).length;
   if (sold) h += '<button class="imbtn iv cyadd" data-crydel="1">Take the ' + sold + ' sold ones off<small>crypto at 0 - their rows leave crypto_holdings.csv</small></button>';
   if (held.length) held.forEach(function (r) { h += '<button class="cyr" data-cry="' + esc(r.platform + "|" + r.holding) + '"><div class="t"><b style="color:var(--plum)">' + esc(r.holding) + '</b><span>' + money(cents(r.worth_now)) + '</span></div><div class="s">' + esc(r.platform) + ' · ' + g(num(r.quantity)) + ' · in ' + money(cents(r.money_in)) + ' · tap to update</div></button>'; });
-  h += '<button class="imbtn iv cyadd" data-cryadd="1">+ Add crypto<small>or set what one is worth now</small></button></section>';
+  h += '<button class="imbtn iv cyadd" data-cryadd="1">+ Add crypto<small>or set what one is worth now</small></button>' +
+    '<div class="r tap ilpdf" data-ipdf="Crypto"><div class="l">PDF of Crypto ›<small>purple + rose · Save as PDF</small></div><div class="a">⎙</div></div></section>';
   h += '<p class="foot">rdsp_holdings · rdsp_cash · dividends · crypto_holdings · FX from fx.txt · <button data-again="1">read again</button></p><div style="height:40px"></div>';
   iv.innerHTML = h;
 }
@@ -3943,6 +3964,7 @@ function widgetData(now) {
 
         inOut: "in " + money(P.inNow) + " · out " + money(P.paidOut),
         low: U.start !== null ? money(U.low.c) + " · " + (U.low.d ? wDay(U.low.d, U.today) : "now") : "", lowHex: tier(U.low.c).hex };
+      try { out.money.cats = topCats(4); } catch (e) {   }
     }
   } catch (e) {   }
   try {
@@ -4018,7 +4040,8 @@ function widgetAct(act) {
 
   else if (act === "koho") openMoney(function (m) { m.type = "koho"; });
 
-  else if (act === "receipt") { rcWant = true; takePhoto(); }
+  else if (act === "receipt" || act === "import") openImport();
+  else if (act.indexOf("cat:") === 0) openMoney(function (m) { m.cat = act.slice(4); });
   else if (act === "bills") {
     state.view = "day"; store.set("view", "day"); render();
     const el = document.querySelector(".seg.pv");
@@ -4157,7 +4180,8 @@ function readTD(text) {
     const f = impSplit(L[i]), sym = (f[col("Symbol")] || "").trim();
     if (!sym) continue;
     rows.push({ sym: sym, market: (f[col("Market")] || "").trim(), desc: (f[col("Description")] || "").replace(/\s+/g, " ").trim(),
-      qty: +f[col("Quantity")], price: +f[col("Price")], mv: impAmt(f[col("Market Value")]) });
+      qty: +f[col("Quantity")], price: +f[col("Price")], mv: impAmt(f[col("Market Value")]),
+      book: col("Book Cost") >= 0 ? impAmt(f[col("Book Cost")]) : null });
   }
   return { kind: "holdings", asOf: meta("As of Date"), account: meta("Account"), cash: impAmt(meta("Cash")), investments: impAmt(meta("Investments")),
     total: impAmt(meta("Total Value")), rows: rows };
@@ -5871,6 +5895,7 @@ function openTD(td, name) {
 function saveTD() {
   const pl = tdp.pl, total = tdp.td.total;
   if (!applyOps(pl.ops)) return;
+  try { const cur = {}; parseCSV(readFile("rdsp_holdings.csv")).forEach(function (r) { if ((r.ticker || "").trim()) cur[r.ticker.trim().toUpperCase()] = String(r.currency || "").trim(); }); ilFromTD(tdp.td, pl.when, cur); } catch (e) {   }
   closeSheet();
   toast("TD account updated · " + money(total), true, false);
   renderInvest();
@@ -6036,6 +6061,447 @@ function load() {
   if (N && N.takeAct) { try { wact = N.takeAct(); } catch (e) { wact = ""; } }
   if (wact) setTimeout(function () { widgetAct(wact); }, 60);
   checkFileIn();
+}
+
+const IL = "invest_log.csv", UP = "#4FC38A", DOWN = "#FF8F9C", ILREF = "#E8C25A";
+function ilRows() { return rawFile(IL).rows.filter(function (r) { return /^\d{4}-\d\d-\d\d$/.test(r.date) && String(r.account || "").trim(); }); }
+
+function ilSeries(R, acct, ticker) {
+  const by = {};
+  R.forEach(function (r) { if (r.account.trim() === acct && String(r.ticker || "").trim() === (ticker || "")) by[r.date] = r; });
+  return Object.keys(by).sort().map(function (d) {
+    const r = by[d];
+    return { d: d, v: cents(r.value), b: String(r.book || "").trim() ? cents(r.book) : null, sh: num(r.shares), raw: r.raw, note: r.note || "" };
+  });
+}
+
+function ilBook(R, acct, t, shares) {
+  const S = ilSeries(R, acct, t).filter(function (p) { return p.b !== null; });
+  const p = S[S.length - 1];
+  return p && Math.abs(p.sh - shares) < 1e-9 ? p.b : null;
+}
+
+function ilSince(R, acct, t, shares) {
+  const S = ilSeries(R, acct, t);
+  let from = null;
+  for (let i = S.length - 1; i >= 0; i--) { if (Math.abs(S[i].sh - shares) < 1e-9) from = S[i].d; else break; }
+  return from;
+}
+
+function ilWrite(date, list, force) {
+  const F = rawFile(IL);
+  if (!F.ok) return false;
+  const R = ilRows(), day = {}, ops = [];
+  F.rows.forEach(function (r) { if (r.date === date) day[r.account.trim() + "|" + String(r.ticker || "").trim()] = r; });
+  let add = "";
+  list.forEach(function (x) {
+    const key = x.acct + "|" + (x.t || ""), S = ilSeries(R, x.acct, x.t || "").filter(function (p) { return p.d < date; }), last = S[S.length - 1];
+    const old = day[key];
+    let b = x.b === undefined ? null : x.b;
+    if (b === null && old && String(old.book || "").trim()) b = cents(old.book);
+    const same = function (p) { return p && p.v === x.v && (!x.t || Math.abs(p.sh - x.sh) < 1e-9) && (b === null || p.b === b); };
+    if (!old && !force && same(last)) return;
+    const line = [date, noteSafe(x.acct), noteSafe(x.t || ""), x.t ? g(x.sh) : "", x.t ? String(+(+x.px).toFixed(6)) : "", x.cur || "CAD", c2(x.v),
+      b === null ? "" : c2(b), noteSafe(x.note || (old && /^TD export/.test(old.note) && cents(old.value) === x.v ? old.note : "Ratio Vitae"))].join(",");
+    if (!old) add += line + "\n";
+    else if (old.raw !== line) {
+      if (!force && old && /^TD export/.test(old.note || "") && cents(old.value) === x.v) return;
+      ops.push({ f: IL, op: "replace", old: old.raw, rows: line });
+    }
+  });
+  if (add) ops.push({ f: IL, op: "append", rows: add });
+  if (!ops.length) return true;
+  let r;
+  try { r = N && N.apply ? N.apply(JSON.stringify(ops)) : previewApply(ops); } catch (e) { r = String(e); }
+  return r === "ok";
+}
+
+let IVH = null;
+function ilDaily(rows, cashC, total, FX) {
+  IVH = { rows: rows, FX: FX, cash: cashC, total: total };
+  const R = ilRows(), list = [], today = iso(new Date());
+  let bs = 0, bk = rows.length > 0;
+  rows.forEach(function (r) {
+    if (!(r.shares > 0)) return;
+    const b = ilBook(R, "TD account", r.t, r.shares);
+    if (b === null) bk = false; else bs += b;
+    list.push({ acct: "TD account", t: r.t, sh: r.shares, px: r.price, cur: r.cur, v: Math.round(r.v), b: b });
+  });
+  if (rows.length) list.unshift({ acct: "TD account", v: total, b: bk ? bs + cashC : null });
+  const cr = cryptoNow();
+  if (cr.v > 0 || ilSeries(R, "Crypto").length) list.push({ acct: "Crypto", v: cr.v, b: cr.inn });
+  invRows().forEach(function (r) { list.push({ acct: r.name.trim(), v: cents(r.value), b: String(r.money_in || "").trim() ? cents(r.money_in) : null }); });
+  ilWrite(today, list, false);
+}
+function cryptoNow() {
+  const C = parseCSV(readFile("crypto_holdings.csv")).filter(function (r) { return (r.holding || "").trim() && (num(r.quantity) > 0 || num(r.worth_now) > 0); });
+  return { rows: C, v: C.reduce(function (s, r) { return s + cents(r.worth_now); }, 0), inn: C.reduce(function (s, r) { return s + cents(r.money_in); }, 0) };
+}
+
+function ilFromTD(td, when, cur) {
+  const list = [];
+  let bs = 0, bk = true;
+  td.rows.forEach(function (r) {
+    if (!(r.qty > 0)) return;
+    const c = cur[r.sym.toUpperCase()] || (r.market === "US" || /\.U$/i.test(r.sym) ? "USD" : "CAD");
+    if (r.book === null || r.book === undefined) bk = false; else bs += r.book;
+    list.push({ acct: "TD account", t: r.sym, sh: r.qty, px: r.price, cur: c, v: r.mv, b: r.book === undefined ? null : r.book, note: "TD export " + when.label });
+  });
+  list.unshift({ acct: "TD account", v: td.total, b: bk && td.cash !== null ? bs + td.cash : null, note: "TD export " + when.label });
+  ilWrite(when.iso, list, true);
+}
+
+function ySym(t, cur) {
+  t = String(t).trim().toUpperCase();
+  if (/\.U$/.test(t)) return t.replace(/\.U$/, "-U") + ".TO";
+  if (String(cur).trim().toUpperCase() === "CAD") return t.replace(/\./g, "-") + ".TO";
+  return t.replace(/\./g, "-");
+}
+function pxGet(t) { return store.get("px." + t, null); }
+let pxAsked = 0, pxRedraw = 0;
+function pxFetch(list) {
+  if (!N || !N.prices) return;
+  const today = iso(new Date());
+  const want = list.filter(function (x) { const p = pxGet(x.t); return !p || p.at !== today; });
+  if (!want.length || Date.now() - pxAsked < 120000) return;
+  pxAsked = Date.now();
+  try { N.prices(JSON.stringify(want.map(function (x) { return { t: x.t, y: ySym(x.t, x.cur), r: "2y" }; }))); } catch (e) {   }
+}
+
+window.priceIn = function (t, body) {
+  try {
+    const j = JSON.parse(body), R = j.chart.result[0], ts = R.timestamp || [], cl = ((R.indicators.quote || [])[0] || {}).close || [], off = (R.meta && R.meta.gmtoffset) || 0;
+    const d = [];
+    for (let i = 0; i < ts.length; i++) if (cl[i] !== null && cl[i] !== undefined && isFinite(cl[i])) {
+      const day = new Date((ts[i] + off) * 1000).toISOString().slice(0, 10);
+      if (d.length && d[d.length - 1][0] === day) d[d.length - 1][1] = +(+cl[i]).toFixed(4); else d.push([day, +(+cl[i]).toFixed(4)]);
+    }
+    if (d.length > 1) store.set("px." + t, { at: iso(new Date()), cur: (R.meta && R.meta.currency) || "", d: d });
+  } catch (e) { return; }
+  clearTimeout(pxRedraw);
+  pxRedraw = setTimeout(function () { document.querySelectorAll(".crd.full [data-hxc]").forEach(function (el) { el.innerHTML = holdChartsHTML(el.getAttribute("data-hxc")); }); }, 500);
+};
+
+function udLine(pts, o) {
+  o = o || {};
+  if (!pts || pts.length < 2) return "";
+  const W = 330, Hh = o.h || 120, L = 4, Rr = 4, T = 14, B = 16;
+  const vs = pts.map(function (p) { return p[1]; }).concat(o.ref !== undefined && o.ref !== null ? [o.ref] : []);
+  let lo = Math.min.apply(null, vs), hi = Math.max.apply(null, vs);
+  if (hi === lo) { hi += 1; lo -= 1; }
+  const pad = (hi - lo) * .08; lo -= pad; hi += pad;
+  const t0 = Date.parse(pts[0][0]), t1 = Math.max(t0 + 1, Date.parse(pts[pts.length - 1][0]));
+  const X = function (d) { return L + (Date.parse(d) - t0) / (t1 - t0) * (W - L - Rr); }, Y = function (v) { return T + (1 - (v - lo) / (hi - lo)) * (Hh - T - B); };
+  const fmt = o.fmt || function (v) { return money(Math.round(v)); };
+  let s = '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="udsvg" aria-hidden="true">';
+  if (o.zero && lo < 0 && hi > 0) s += '<line x1="' + L + '" x2="' + (W - Rr) + '" y1="' + Y(0).toFixed(1) + '" y2="' + Y(0).toFixed(1) + '" stroke="#5D6383" stroke-width="1"/>';
+  if (o.ref !== undefined && o.ref !== null) s += '<line x1="' + L + '" x2="' + (W - Rr) + '" y1="' + Y(o.ref).toFixed(1) + '" y2="' + Y(o.ref).toFixed(1) + '" stroke="' + ILREF + '" stroke-width="1.2" stroke-dasharray="5 4"/>' +
+    '<text x="' + (W - Rr) + '" y="' + (Y(o.ref) - 4).toFixed(1) + '" font-size="9.5" text-anchor="end" fill="' + ILREF + '">' + esc(o.refLabel || "") + '</text>';
+
+  let run = [[X(pts[0][0]), Y(pts[0][1])]], dir = null;
+  const flush = function () { if (run.length > 1) s += '<polyline fill="none" stroke="' + (dir === "d" ? DOWN : UP) + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" points="' + run.map(function (q) { return q[0].toFixed(1) + "," + q[1].toFixed(1); }).join(" ") + '"/>'; };
+  for (let i = 1; i < pts.length; i++) {
+    const d = pts[i][1] < pts[i - 1][1] ? "d" : pts[i][1] > pts[i - 1][1] ? "u" : (dir || "u"), q = [X(pts[i][0]), Y(pts[i][1])];
+    if (dir !== null && d !== dir) { flush(); run = [run[run.length - 1]]; }
+    dir = d; run.push(q);
+  }
+  flush();
+  let ih = 0, il = 0;
+  pts.forEach(function (p, i) { if (p[1] > pts[ih][1]) ih = i; if (p[1] < pts[il][1]) il = i; });
+  const mark = function (i, col, up) {
+    const x = X(pts[i][0]), y = Y(pts[i][1]), anc = x < 60 ? "start" : x > W - 60 ? "end" : "middle";
+    return '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="3.2" fill="' + col + '"/><text x="' + x.toFixed(1) + '" y="' + (up ? y - 6 : y + 13).toFixed(1) + '" font-size="9.5" text-anchor="' + anc + '" fill="' + col + '">' + esc(fmt(pts[i][1])) + '</text>';
+  };
+  if (ih !== il) s += mark(ih, UP, true) + mark(il, DOWN, false);
+  const lx = X(pts[pts.length - 1][0]), ly = Y(pts[pts.length - 1][1]);
+  s += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.4" fill="#fff"/>';
+  s += '<text x="' + L + '" y="' + (Hh - 3) + '" font-size="9" fill="#8E93B3">' + esc(isoShort(pts[0][0])) + (pts[0][0].slice(0, 4) !== pts[pts.length - 1][0].slice(0, 4) ? " " + pts[0][0].slice(0, 4) : "") + '</text>' +
+    '<text x="' + (W - Rr) + '" y="' + (Hh - 3) + '" font-size="9" text-anchor="end" fill="#8E93B3">' + esc(isoShort(pts[pts.length - 1][0])) + '</text>';
+  return s + '</svg>';
+}
+
+function udBars(pts, o) {
+  o = o || {};
+  if (!pts || !pts.length) return "";
+  const W = 330, Hh = o.h || 84, T = 12, B = 14, n = pts.length, bw = (W - 8) / n;
+  let mx = 1;
+  pts.forEach(function (p) { mx = Math.max(mx, Math.abs(p[1])); });
+  const mid = T + (Hh - T - B) / 2, sc = (Hh - T - B) / 2 / mx;
+  let s = '<svg viewBox="0 0 ' + W + ' ' + Hh + '" class="udsvg" aria-hidden="true"><line x1="4" x2="' + (W - 4) + '" y1="' + mid.toFixed(1) + '" y2="' + mid.toFixed(1) + '" stroke="#5D6383" stroke-width="1"/>';
+  pts.forEach(function (p, i) {
+    const h = Math.max(1, Math.abs(p[1]) * sc), x = 4 + i * bw + bw * .14;
+    s += '<rect x="' + x.toFixed(1) + '" y="' + (p[1] >= 0 ? mid - h : mid).toFixed(1) + '" width="' + Math.max(1, bw * .72).toFixed(1) + '" height="' + h.toFixed(1) + '" rx="1" fill="' + (p[1] >= 0 ? UP : DOWN) + '"/>';
+  });
+  const fmt = o.fmt || function (v) { return money(Math.round(v), true); };
+  s += '<text x="4" y="9" font-size="9" fill="' + UP + '">+' + esc(fmt(mx).replace(/^\+/, "")) + '</text><text x="4" y="' + (Hh - 3) + '" font-size="9" fill="#8E93B3">' + esc(isoShort(pts[0][0])) + '</text>' +
+    '<text x="' + (W - 4) + '" y="' + (Hh - 3) + '" font-size="9" text-anchor="end" fill="#8E93B3">' + esc(isoShort(pts[n - 1][0])) + '</text>';
+  return s + '</svg>';
+}
+function glTxt(c, base) { return '<em style="color:' + (c >= 0 ? UP : DOWN) + '">' + (c >= 0 ? "+" : "−") + money(Math.abs(c)) + (base ? " (" + (c >= 0 ? "+" : "−") + Math.abs(c / base * 100).toFixed(2) + "%)" : "") + '</em>'; }
+
+function ilAccounts() {
+  const L = [];
+  if (IVH && IVH.rows.length) L.push({ name: "TD account", sub: "TD Direct Investing" });
+  invRows().forEach(function (r) { L.push({ name: r.name.trim(), sub: String(r.kind || "").trim() || "investment" }); });
+  const R = ilRows();
+  if (cryptoNow().v > 0 || ilSeries(R, "Crypto").length) L.push({ name: "Crypto", sub: "KOHO · Kraken" });
+  return L;
+}
+function ilAccountsHTML() {
+  const R = ilRows(), A = ilAccounts(), today = iso(new Date());
+  if (!A.length) return "";
+  let h = '<div class="sec">Each account over time</div>';
+  A.forEach(function (a) {
+    const S = ilSeries(R, a.name), id = "ila:" + a.name, last = S[S.length - 1];
+    h += '<section class="hc ilc"><div class="t"><b>' + esc(a.name) + '<small> · ' + esc(a.sub) + '</small></b><span>' + (last ? money(last.v) : "") + '</span></div>';
+    if (S.length < 2) h += '<div class="s">The line starts ' + (S.length ? esc(isoShort(S[0].d)) : "today") + ' - a point each time it changes (a TD import, a new value, a price).</div>';
+    else {
+      const P = S.map(function (p) { return [p.d, p.v]; });
+      if (P[P.length - 1][0] < today) P.push([today, P[P.length - 1][1]]);
+      const up = S[S.length - 1].v - S[0].v;
+      h += '<div class="ilk">Value</div>' + udLine(P) + '<div class="s">' + esc(isoShort(S[0].d)) + ' → now · ' + (up >= 0 ? "up " : "down ") + money(Math.abs(up)) + ' · ' + S.length + ' readings</div>';
+    }
+
+    const G = S.filter(function (p) { return p.b !== null; });
+    if (last && last.b !== null) h += '<div class="ilk">Since you bought</div><div class="ilg">' + glTxt(last.v - last.b, last.b) + '<small>value ' + money(last.v) + ' · cost ' + money(last.b) + '</small></div>';
+    if (G.length >= 2) {
+      const GP = G.map(function (p) { return [p.d, p.v - p.b]; });
+      h += udLine(GP, { zero: true, h: 100 });
+      const D = []; for (let i = 1; i < G.length; i++) D.push([G[i].d, (G[i].v - G[i].b) - (G[i - 1].v - G[i - 1].b)]);
+      h += '<div class="ilk">Gain / loss each reading <small>price moves only - money put in is not counted</small></div>' + udBars(D.slice(-40));
+    } else if (S.length) h += '<div class="s">' + (a.name === "TD account" ? "Gain / loss over time fills in with each TD import (it carries your book cost)." : "Put in what you paid (Money put in) to see the gain or loss.") + '</div>';
+    h += '<div class="r tap ilpdf" data-ipdf="' + esc(a.name) + '"><div class="l">PDF of ' + esc(a.name) + ' ›<small>' + esc(ipTheme(a.name).say) + ' · Save as PDF</small></div><div class="a">⎙</div></div>';
+    h += '</section>';
+  });
+  return h;
+}
+
+function holdChartsHTML(t) {
+  if (!IVH) return "";
+  const r = IVH.rows.filter(function (x) { return x.t === t; })[0];
+  if (!r) return "";
+  const rate = String(r.cur).toUpperCase() === "USD" && IVH.FX ? IVH.FX : 1, R = ilRows(), book = r.shares > 0 ? ilBook(R, "TD account", t, r.shares) : null;
+  const px = pxGet(t), cur = esc(r.cur || "");
+  let h = "";
+  if (book !== null) h += '<div class="ilk">Since you bought</div><div class="ilg">' + glTxt(Math.round(r.v) - book, book) + '<small>cost ' + money(book) + ' · ' + g(r.shares) + ' shares at ' + (book / 100 / r.shares).toFixed(2) + ' CAD each</small></div>';
+  else if (r.shares > 0) h += '<div class="s">Your cost shows after the next TD import.</div>';
+  if (!px || !px.d || px.d.length < 2) return h + '<div class="s">Price a share over time - fills in by itself when the phone is online.</div>';
+  const yr = iso(new Date(Date.now() - 365 * 864e5)), P = px.d.filter(function (p) { return p[0] >= yr; });
+  const avg = book !== null && r.shares > 0 ? book / 100 / r.shares / rate : null;
+  const f2 = function (v) { return (+v).toFixed(v < 1 ? 4 : 2); };
+  h += '<div class="ilk">Price a share · 12 months <small>' + cur + '</small></div>' + udLine(P, { ref: avg, refLabel: avg !== null ? "your cost " + f2(avg) : "", fmt: f2 });
+  const last = P[P.length - 1], first = P[0], ch = last[1] - first[1];
+  h += '<div class="s">now ' + f2(last[1]) + ' ' + cur + ' · ' + (ch >= 0 ? "up " : "down ") + Math.abs(ch / first[1] * 100).toFixed(1) + '% in a year' + (avg !== null ? ' · ' + (last[1] >= avg ? '<em style="color:' + UP + '">above</em>' : '<em style="color:' + DOWN + '">below</em>') + ' your cost' : "") + '</div>';
+
+  if (r.shares > 0) {
+    const D = [];
+    for (let i = Math.max(1, P.length - 30); i < P.length; i++) D.push([P[i][0], (P[i][1] - P[i - 1][1]) * r.shares * rate * 100]);
+    if (D.length) {
+      const day = D[D.length - 1][1];
+      h += '<div class="ilk">Gain / loss by day <small>your ' + g(r.shares) + ' shares · last 30 market days</small></div>' + udBars(D) +
+        '<div class="s">last day ' + glTxt(Math.round(day)) + ' · 30 days ' + glTxt(Math.round(D.reduce(function (s, x) { return s + x[1]; }, 0))) + '</div>';
+    }
+
+    const since = book !== null ? ilSince(R, "TD account", t, r.shares) : null;
+    if (since) {
+      const SP = px.d.filter(function (p) { return p[0] >= since; }).map(function (p) { return [p[0], p[1] * r.shares * rate * 100 - book]; });
+      if (SP.length >= 2) h += '<div class="ilk">Since you bought, over time <small>from ' + esc(isoShort(since)) + ' · at today’s USD rate</small></div>' + udLine(SP, { zero: true, h: 100 });
+    }
+  }
+  return h;
+}
+document.addEventListener("click", function (e) {
+  const c = e.target.closest("[data-crd]");
+  if (!c) return;
+  const el = c.querySelector("[data-hxc]");
+  if (el && c.classList.contains("full")) el.innerHTML = holdChartsHTML(el.getAttribute("data-hxc"));
+});
+
+const IP_CAT = { "International Index": "#CCE0F0", "Income": "#D7EAD8", "Clean Energy ETF": "#C2DCD1", "Energy/Income": "#C4DFDD", "Multifactor ETF": "#DDEAED",
+  "Global Index": "#D3DFE8", "Financials": "#C9CFDE", "Defense": "#B0C2D4", "Index Value": "#C1B8D9", "Index Growth": "#DECAE2", "Healthcare Growth": "#DEC2D2",
+  "Canadian Index": "#DFC6C9", "Semiconductor ETF": "#E8DBD9", "Real Estate ETF": "#D3C9C1", "Consumer": "#EDE8E0", "Consumer Growth": "#DCD6BF",
+  "Farmland REIT": "#E4E7D2", "Nuclear ETF": "#D2DDC3", "Value/Conglomerate": "#DBBEB0", "Cash Management": "#D6D6D6" };
+const IP_TIERS = [["Garnet", 0, 250000], ["Amethyst", 250000, 500000], ["Aquamarine", 500000, 1000000], ["Emerald", 1000000, 2500000], ["Ruby", 2500000, 5000000],
+  ["Blue Sapphire", 5000000, 10000000], ["Padparadscha Sapphire", 10000000, 25000000], ["Cashmere Sapphire", 25000000, Infinity]];
+function ipTheme(name) {
+  const n = String(name).toLowerCase(), k = (invRows().filter(function (r) { return r.name.trim() === name; })[0] || {}).kind || "";
+  if (n === "td account") return { title: "#24485A", h1: "#24485A", head: "#24485A", bar: "#3A9A72", last: "#24485A", gold: "#E8A93A", border: "", alt: "#D4C4E2", say: "TD green" };
+  if (n === "crypto" || /crypto|kraken|ndax|coinbase|bitcoin/.test(n)) return { title: "#6B4FA0", h1: "#A8517A", head: "#000000", bar: "#8267B8", last: "#6B4FA0", gold: "#E8A93A", border: "#8267B8", alt: "#EFE3F1", say: "purple + rose" };
+  if (/wealthsimple/.test(n)) return { title: "#1A1A1A", h1: "#3A3A3A", head: "#1A1A1A", bar: "#6E6E6E", last: "#1A1A1A", gold: "#A0A0A0", border: "#3A3A3A", alt: "#E8E8E8", say: "grey + black (Wealthsimple)" };
+  return { title: "#1A3A5C", h1: "#1A3A5C", head: "#1A3A5C", bar: "#4A7FB0", last: "#1A3A5C", gold: "#E8A93A", border: "", alt: "#DCE6F0", say: "your PDFs' layout" + (k ? " · " + k : "") };
+}
+
+function ipBars(S, th) {
+  const P = S.slice(-48);
+  if (!P.length) return "";
+  const W = 540, Hh = 220, L = 50, Rr = 10, T = 26, B = 30, n = P.length, bw = (W - L - Rr) / n;
+  let lo = Math.min.apply(null, P.map(function (p) { return p.v; })), hi = Math.max.apply(null, P.map(function (p) { return p.v; }));
+  const pad = Math.max(100, (hi - lo) * .15); lo = Math.max(0, lo - pad); hi += pad;
+  const Y = function (v) { return T + (1 - (v - lo) / (hi - lo)) * (Hh - T - B); };
+  let s = '<svg viewBox="0 0 ' + W + ' ' + Hh + '" width="100%" style="max-width:7.15in" xmlns="http://www.w3.org/2000/svg" font-family="Carlito,Calibri,Arial,sans-serif">';
+  for (let k = 0; k <= 4; k++) { const v = lo + (hi - lo) * k / 4, y = Y(v).toFixed(1); s += '<line x1="' + L + '" x2="' + (W - Rr) + '" y1="' + y + '" y2="' + y + '" stroke="#E6ECEF" stroke-width=".8"/><text x="' + (L - 4) + '" y="' + y + '" dy="3" font-size="8" text-anchor="end" fill="#555">$' + esc(Math.round(v / 100).toLocaleString("en-CA")) + '</text>'; }
+  let ath = -Infinity, prevM = "";
+  P.forEach(function (p, i) {
+    const x = L + i * bw + bw * .12, w = bw * .76, y = Y(p.v), isAth = p.v > ath, lastOne = i === n - 1;
+    if (isAth) ath = p.v;
+    const col = lastOne ? th.last : isAth && i > 0 ? th.gold : th.bar;
+    s += '<rect x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" width="' + w.toFixed(1) + '" height="' + (Hh - B - y).toFixed(1) + '" fill="' + col + '"/>';
+    s += '<text x="' + (x + w / 2).toFixed(1) + '" y="' + (Hh - B + 9) + '" font-size="7" text-anchor="middle" fill="#555">' + (+p.d.slice(8)) + '</text>';
+    const m = p.d.slice(0, 7);
+    if (m !== prevM) { s += '<text x="' + x.toFixed(1) + '" y="' + (Hh - B + 20) + '" font-size="8" font-weight="700" fill="' + th.title + '">' + esc(MONTHS[+m.slice(5) - 1]) + '</text>'; prevM = m; }
+    if (lastOne) s += '<text x="' + Math.min(W - Rr, x + w).toFixed(1) + '" y="' + (y - 6).toFixed(1) + '" font-size="9" font-weight="700" text-anchor="end" fill="' + th.last + '">' + esc(brM(p.v)) + '</text>';
+  });
+  if (isFinite(ath)) s += '<line x1="' + L + '" x2="' + (W - Rr) + '" y1="' + Y(ath).toFixed(1) + '" y2="' + Y(ath).toFixed(1) + '" stroke="' + th.gold + '" stroke-width="1" stroke-dasharray="4 3"/><text x="' + (L + 4) + '" y="' + (Y(ath) - 4).toFixed(1) + '" font-size="8" fill="#B07818">All-time high ' + esc(brM(ath)) + '</text>';
+  return s + '</svg>';
+}
+function investRecordHTML(name) {
+  const th = ipTheme(name), R = ilRows(), S = ilSeries(R, name), now = new Date(), isR = name === "TD account", isC = name === "Crypto";
+  const made = now.toLocaleDateString("en-CA", { month: "long", day: "numeric", year: "numeric" }) + " " + timeLabel(now);
+  const inv = invRows().filter(function (r) { return r.name.trim() === name; })[0];
+  const fill = function (cat) { return IP_CAT[cat] || "#F2F2F2"; };
+  let h = (th.border ? '<div class="ir-border"></div>' : "") + '<div class="ir-hd">' + esc(name) + ' Investment Portfolio</div><div class="ir-in">';
+  h += '<div class="ir-title">' + esc(name) + ' Investment Portfolio</div>';
+  const last = S[S.length - 1];
+  let value = last ? last.v : 0, cost = last ? last.b : null;
+  const goal = parseCSV(readFile("goals.csv")).filter(function (r) { return String(r.what || "").trim() === name; })[0];
+  h += '<p>' + esc(isR ? "TD Direct Investing" : isC ? "KOHO + Kraken" : (inv && inv.kind) || "Investment account") + '<br>Made ' + esc(made) + ' · Ratio Vitae' +
+    (goal ? '  |  Goal: ' + esc(brM(cents(goal.target))) + (goal.by ? ' by ' + esc(goal.by) : "") : "") + '</p>';
+  let rows = [], cats = [];
+  if (isR && IVH) {
+    rows = IVH.rows.filter(function (r) { return r.shares > 0; }).map(function (r) { const b = ilBook(R, "TD account", r.t, r.shares); return Object.assign({}, r, { b: b, gl: b === null ? null : Math.round(r.v) - b }); });
+    const cm = {}; rows.forEach(function (r) { cm[r.cat] = (cm[r.cat] || 0) + r.v; });
+    cats = Object.keys(cm).map(function (k) { return { n: k, c: Math.round(cm[k]) }; }).sort(function (a, b) { return b.c - a.c; });
+    h += '<div class="ir-key"><span style="color:#999">■ Holdings - by category:</span>' + cats.map(function (c) { return '<span><i style="background:' + fill(c.n) + '"></i>' + esc(c.n) + '</span>'; }).join("") + '</div>';
+    value = IVH.total;
+  }
+
+  h += '<h1>' + esc(name) + ' Account Summary</h1><p class="ir-sub">Live from the app’s files, ' + esc(made) + '.</p>';
+  const prev = S.length > 1 ? S[S.length - 2] : null, sum = [];
+  sum.push({ c: ["<b>Portfolio value</b>", "<b>" + brM(value) + "</b>", isR && IVH ? "Invested " + brM(IVH.total - IVH.cash) + " + cash " + brM(IVH.cash) : inv ? "As of " + esc(inv.date || "") : ""] });
+  if (prev) sum.push({ c: ["<b>Change since " + esc(isoShort(prev.d)) + "</b>", (value - prev.v >= 0 ? "+" : "") + brM(value - prev.v), "The reading before this one"] });
+  if (cost !== null && cost !== undefined) sum.push({ c: ["<b>Book cost</b>", brM(cost), isR ? "What the holdings cost + the cash" : "Money put in"] }, { c: ["<b>Unrealized</b>", (value - cost >= 0 ? "+" : "") + brM(value - cost) + " (" + ((value - cost) / Math.max(1, cost) * 100).toFixed(2) + "%)", value >= cost ? "Above book cost" : "Below book cost"] });
+  if (isR) {
+    const green = rows.filter(function (r) { return r.gl !== null && r.gl >= 0; }).length, known = rows.filter(function (r) { return r.gl !== null; });
+    sum.push({ c: ["<b>Positions</b>", rows.length + (known.length ? " - " + green + " green" : ""), ""] });
+    if (known.length) {
+      const pc = function (r) { return r.gl / Math.max(1, r.b); }, best = known.slice().sort(function (a, b) { return pc(b) - pc(a); })[0], worst = known.slice().sort(function (a, b) { return pc(a) - pc(b); })[0];
+      sum.push({ c: ["<b>Best / worst</b>", esc(best.t) + " " + (best.gl >= 0 ? "+" : "") + brM(best.gl) + " / " + esc(worst.t) + " " + brM(worst.gl), (pc(best) * 100 >= 0 ? "+" : "") + (pc(best) * 100).toFixed(2) + "% / " + (pc(worst) * 100).toFixed(2) + "%"] });
+    }
+    if (IVH && IVH.FX) sum.push({ c: ["<b>USD / CAD</b>", IVH.FX.toFixed(4), "From fx.txt (the last TD import)"] });
+    const dv = rows.reduce(function (s, r) { return s + r.div; }, 0);
+    if (dv) sum.push({ c: ["<b>Dividends a year</b>", brM(Math.round(dv)), "About " + brM(Math.round(dv / 12)) + " a month"] });
+  }
+  if (goal) sum.push({ c: ["<b>Goal</b>", brM(cents(goal.target)) + (goal.by ? " by " + esc(goal.by) : ""), (value / Math.max(1, cents(goal.target)) * 100).toFixed(1) + "% of the way"] });
+  const tierNow = IP_TIERS.filter(function (t) { return value >= t[1] && value < t[2]; })[0];
+  if (tierNow) sum.push({ c: ["<b>Tier</b>", esc(tierNow[0]), "Next: " + esc((IP_TIERS[IP_TIERS.indexOf(tierNow) + 1] || ["-"])[0])] });
+  h += brT(["Figure", "Value", "Note"], [2, 2.2, 4.6], sum, [-1]);
+
+  h += '<div class="ir-br"></div><h1>Balance Snapshot Log</h1><p class="ir-sub">' + esc(name) + ' value over time - most recent first.</p>';
+  if (S.length) h += ipBars(S, th);
+  const GP = S.filter(function (p) { return p.b !== null; }).map(function (p) { return [Date.parse(p.d), (p.v - p.b) / 100]; });
+  const GD = S.filter(function (p) { return p.b !== null; });
+  if (GP.length >= 2) h += '<h2>Gain / loss since bought, over time · ' + esc(isoShort(GD[0].d)) + ' – ' + esc(isoShort(GD[GD.length - 1].d)) + '</h2>' +
+    brChart([{ pts: GP, col: th.bar, dots: true }], { h: 170, zero: true, fmt: function (v) { return (v < 0 ? "−$" : "$") + Math.abs(v).toFixed(0); } });
+  const LR = S.slice().reverse().slice(0, 60).map(function (p, i, a) {
+    const nx = a[i + 1];
+    return { c: ["<b>" + esc(longDate(new Date(p.d + "T12:00:00"))) + "</b>", "<b>" + brM(p.v) + "</b>", nx ? (p.v - nx.v >= 0 ? "+" : "") + brM(p.v - nx.v) : "", p.b !== null ? (p.v - p.b >= 0 ? "+" : "") + brM(p.v - p.b) : ""],
+      f: i % 2 ? undefined : th.alt, n: p.note && p.note !== "Ratio Vitae" && !/balance log$/.test(p.note) ? p.note : "" };
+  });
+  const old = S.filter(function (p) { return /balance log$/.test(p.note); });
+  if (LR.length) h += brT(["Date", "Value", "Change", "Unrealized"], [3, 2, 2, 2], LR, [1, 2, 3]) +
+    (old.length ? '<p class="ir-sub">Readings ' + esc(isoShort(old[0].d)) + ' – ' + esc(isoShort(old[old.length - 1].d)) + ' come from an earlier balance log. Unrealized = value minus book cost, where the book cost was known.</p>' : "");
+  else h += '<p>No readings yet - the log starts the first time the Invest page opens.</p>';
+
+  if (isR && rows.length) {
+    h += '<div class="ir-br"></div><h1>Current Holdings</h1>';
+    const inv2 = rows.reduce(function (s, r) { return s + r.v; }, 0);
+    h += '<h2>Asset Allocation</h2>' + brT(["Category", "Market value", "Share"], [4, 2, 1.4], cats.map(function (c) { return { c: ["<b>" + esc(c.n) + "</b>", brM(c.c), (c.c / Math.max(1, inv2) * 100).toFixed(2) + "%"], f: fill(c.n) }; }), [1, 2]);
+    const byCat = rows.slice().sort(function (a, b) { return (a.cat < b.cat ? -1 : a.cat > b.cat ? 1 : 0) || b.v - a.v; });
+    h += brT(["Ticker", "Name", "Price", "Shares", "Category", "Value", "Cost", "Gain / loss", "Target"], [1.1, 2.6, 1.2, .9, 1.9, 1.3, 1.3, 1.5, .9],
+      byCat.map(function (r) {
+        return { c: ["<b>" + esc(r.t) + "</b>", esc(r.name), r.price.toFixed(r.price < 1 ? 4 : 2) + " " + esc(r.cur), g(r.shares), esc(r.cat), brM(Math.round(r.v)), r.b !== null ? brM(r.b) : "—",
+          r.gl !== null ? (r.gl >= 0 ? "+" : "") + brM(r.gl) + " (" + (r.gl / Math.max(1, r.b) * 100).toFixed(1) + "%)" : "—", esc(r.target || "")], f: fill(r.cat) };
+      }), [2, 3, 5, 6, 7, 8]);
+
+    const GL = rows.filter(function (r) { return r.gl !== null; }).sort(function (a, b) { return b.gl / Math.max(1, b.b) - a.gl / Math.max(1, a.b); });
+    if (GL.length) {
+      h += '<h1>Gain / Loss by Holding</h1><p class="ir-sub">Since bought = value now minus TD’s book cost. Last day = your shares × the last market day’s move (prices filled in by the app).</p>';
+      h += brT(["Ticker", "Cost", "Value", "Since bought", "%", "Last day"], [1.2, 1.6, 1.6, 1.7, 1, 1.6], GL.map(function (r) {
+        const px = pxGet(r.t), rate = String(r.cur).toUpperCase() === "USD" && IVH.FX ? IVH.FX : 1;
+        const ld = px && px.d.length > 1 ? Math.round((px.d[px.d.length - 1][1] - px.d[px.d.length - 2][1]) * r.shares * rate * 100) : null;
+        return { c: ["<b>" + esc(r.t) + "</b>", brM(r.b), brM(Math.round(r.v)), (r.gl >= 0 ? "+" : "") + brM(r.gl), (r.gl / Math.max(1, r.b) * 100).toFixed(2) + "%", ld === null ? "—" : (ld >= 0 ? "+" : "") + brM(ld)],
+          f: r.gl >= 0 ? "#D7EAD8" : "#EEC7C7" };
+      }), [1, 2, 3, 4, 5]);
+    }
+
+    const DV = rows.filter(function (r) { return r.div > 0; }).sort(function (a, b) { return b.div - a.div; });
+    if (DV.length) h += '<h1>Projected Dividend Income</h1>' + brT(["Ticker", "Name", "Shares", "Yield", "Pays", "A year"], [1.1, 3.2, 1, 1, 1.3, 1.4], DV.map(function (r) {
+      return { c: ["<b>" + esc(r.t) + "</b>", esc(r.name), g(r.shares), r.yld ? r.yld.toFixed(2) + "%" : "", ({ M: "Monthly", Q: "Quarterly", S: "Twice a year", A: "Once a year" }[r.freq] || r.freq || ""), brM(Math.round(r.div))], f: fill(r.cat) };
+    }).concat([{ c: ["Total", "", "", "", "", brM(Math.round(DV.reduce(function (s, r) { return s + r.div; }, 0)))], dk: true }]), [2, 3, 5]);
+
+    const TG = rows.filter(function (r) { return +r.target > r.shares; });
+    if (TG.length) h += '<h1>Priority Buy Targets</h1>' + brT(["Ticker", "Have", "Target", "Need", "Cost to reach it"], [1.3, 1, 1, 1, 2], TG.map(function (r) {
+      const need = +r.target - r.shares, rate = String(r.cur).toUpperCase() === "USD" && IVH.FX ? IVH.FX : 1;
+      return { c: ["<b>" + esc(r.t) + "</b>", g(r.shares), esc(r.target), g(+need.toFixed(4)), brM(Math.round(need * r.price * rate * 100))], f: fill(r.cat) };
+    }), [1, 2, 3, 4]);
+  }
+  if (isC) {
+    const C = parseCSV(readFile("crypto_holdings.csv")).filter(function (r) { return (r.holding || "").trim(); });
+    const held = C.filter(function (r) { return num(r.quantity) > 0 || num(r.worth_now) > 0; });
+    h += '<div class="ir-br"></div><h1>Holdings</h1>';
+    if (held.length) h += brT(["Platform", "Holding", "Amount held", "Money in", "Worth now", "Difference"], [1.3, 2.6, 1.8, 1.3, 1.3, 1.3], held.map(function (r) {
+      const d = cents(r.worth_now) - cents(r.money_in);
+      return { c: ["<b>" + esc(r.platform) + "</b>", esc(r.holding), esc(r.quantity), brM(cents(r.money_in)), brM(cents(r.worth_now)), (d >= 0 ? "+" : "") + brM(d)], f: /koho/i.test(r.platform) ? "#F3DCE7" : "#E4DDF2", n: r.note || "" };
+    }).concat([{ c: ["Total", "", "", brM(cryptoNow().inn), brM(cryptoNow().v), brM(cryptoNow().v - cryptoNow().inn)], dk: true }]), [3, 4, 5]);
+    else h += '<p>Nothing held right now. ' + (C.length ? C.length + " past positions, all sold (zero)." : "") + '</p>';
+  }
+
+  h += '<h1>' + esc(name) + ' - Color Tiers</h1>' + brT(["Tier", "Range"], [3, 3], IP_TIERS.map(function (t) {
+    const on = tierNow && tierNow[0] === t[0];
+    return { c: ["<b>" + esc(t[0]) + "</b>" + (on ? " ← now, " + brM(value) : ""), brM(t[1]) + (isFinite(t[2]) ? " – " + brM(t[2]) : "+")], f: on ? th.alt : "#C0D1E4" };
+  }), [-1]);
+  h += '<p class="ir-sub">' + esc(name) + ' Portfolio - made by Ratio Vitae from invest_log.csv' + (isR ? ", rdsp_holdings.csv, rdsp_cash.csv, dividends.csv" : isC ? ", crypto_holdings.csv" : ", investments.csv") + '.</p>';
+  return h + '</div>';
+}
+document.addEventListener("click", function (e) {
+  const b = e.target.closest("[data-ipdf]");
+  if (!b) return;
+  const name = b.getAttribute("data-ipdf"), th = ipTheme(name);
+  let pv = $("printv");
+  if (!pv) { pv = document.createElement("div"); pv.id = "printv"; document.body.appendChild(pv); }
+  pv.className = "irec";
+  pv.style.cssText = "--it:" + th.title + ";--ih:" + th.h1 + ";--ihd:" + th.head + ";--ibd:" + (th.border || "transparent");
+  try { pv.innerHTML = investRecordHTML(name); } catch (er) { toast("The PDF could not be made: " + ((er && er.message) || er), false, true); return; }
+  const title = name.replace(/[^A-Za-z0-9]+/g, "_") + "_Portfolio";
+  setTimeout(function () { if (N && N.printPdf) { try { N.printPdf(title); return; } catch (er) {   } } window.print(); }, 120);
+});
+
+function openImport() {
+  openSheet('<div class="grab"></div><h2 class="mh">Import</h2><p class="tabhint">A receipt, a screenshot of a loan’s app, a card statement or TD files - the right form opens filled in.</p>' +
+    '<div class="imrow2"><button class="imrow" data-camera="1">📷 Take a photo <small>a receipt - now</small></button>' +
+    '<button class="imrow" data-pickfile="rc">⇪ Pick a file <small>picture · screenshot · PDF · TD csv / zip</small></button></div>');
+}
+function topCats(n) {
+
+  const cats = loadCats(parseCSV(readFile("categories.csv"))).filter(function (c) { return c.kind === "expense"; });
+  if (!cats.length) return [];
+  const rows = parseCSV(readFile("budget_log.csv")).filter(function (r) { return r.kind === "expense" && cents(r.amount) > 0; });
+  const mk = {}; rows.forEach(function (r) { mk[r.month] = 1; });
+  const keep = Object.keys(mk).sort().slice(-3), cnt = {};
+  const catOf = function (label) { const f = findSub(cats, "expense", label); return f ? f.cat : findCat(cats, "expense", label); };
+  rows.forEach(function (r) {
+    if (keep.indexOf(r.month) < 0 || r.group !== "variable") return;
+    const c = catOf(r.label); if (c) cnt[c] = (cnt[c] || 0) + 1;
+  });
+  const since = iso(new Date(Date.now() - 92 * 864e5));
+  const fc = catOf("Food - fast food and takeout") || "Food", gc = catOf("Groceries") || "Food";
+  parseCSV(readFile("food_log.csv")).forEach(function (r) { if (String(r.date || "") >= since) cnt[fc] = (cnt[fc] || 0) + 1; });
+  parseCSV(readFile("groceries_trips.csv")).forEach(function (r) { if (String(r.date || "") >= since) cnt[gc] = (cnt[gc] || 0) + 1; });
+  const pref = ["Food", "Shopping", "Transport", "Games and apps", "Health", "Gift", "Other"];
+  const rank = function (c) { const k = pref.indexOf(c.name); return k < 0 ? 99 : k; };
+  const notQuick = /^(liabilities|transfers?|investments?|housing|subscriptions)$/i;
+  return cats.filter(function (c) { return !notQuick.test(c.name) && (cnt[c.name] || rank(c) < 99); })
+    .sort(function (a, b) { return (cnt[b.name] || 0) - (cnt[a.name] || 0) || rank(a) - rank(b); }).slice(0, n).map(function (c) { return { n: c.name, col: c.col }; });
 }
 
 window.onResumeApp = load;

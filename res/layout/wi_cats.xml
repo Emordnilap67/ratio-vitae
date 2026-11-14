@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingBottom="6dp">
+<LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+    <TextView android:id="@+id/w_c1" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:layout_marginEnd="5dp"
+        android:gravity="center" android:background="@drawable/wbtn" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" android:ellipsize="end" android:paddingStart="4dp" android:paddingEnd="4dp" />
+    <TextView android:id="@+id/w_c2" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:layout_marginEnd="5dp"
+        android:gravity="center" android:background="@drawable/wbtn" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" android:ellipsize="end" android:paddingStart="4dp" android:paddingEnd="4dp" />
+    <TextView android:id="@+id/w_c3" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1" android:layout_marginEnd="5dp"
+        android:gravity="center" android:background="@drawable/wbtn" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" android:ellipsize="end" android:paddingStart="4dp" android:paddingEnd="4dp" />
+    <TextView android:id="@+id/w_c4" android:layout_width="0dp" android:layout_height="36dp" android:layout_weight="1"
+        android:gravity="center" android:background="@drawable/wbtn" android:textSize="12.5sp" android:textColor="#FFFFFF" android:maxLines="1" android:ellipsize="end" android:paddingStart="4dp" android:paddingEnd="4dp" />
+</LinearLayout>
+</FrameLayout>
