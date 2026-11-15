@@ -52,7 +52,8 @@ optional import of a TD Direct Investing holdings export (prices, shares,
 cash and the USD rate).
 
 **Health** - your medications as **morning and night sets** with one-tap
-*Take all*, half tablets, injections every N days, what is left in each
+*Take all*, half tablets, injections every N days, **courses** (start a medication
+for so many days, or keep one on standby and start it when you need it), what is left in each
 bottle and when to order, refills and their cost, recounts for a dropped
 pill; weight, blood pressure and pulse, temperature (°C, °F or K), a food
 stock counter, **your own notes** (what happened, any day and hour), and a

@@ -1,3 +1,9 @@
+**New in 1.4:**
+
+- **Start or stop a medication** - on the Health page, tap a medication: **Start taking it** (how many in the morning and at night, and either a course of so many days or every day with no end) or **Stop taking it** (back on standby, kept on hand for next time, or stopped). A course leaves your morning and night sets by itself after its last day, and never tells you to order more
+- **+ Add a medication** can add one as a course or on standby (kept on hand, not taken yet)
+- **Landscape** - the app turns with your phone (when auto-rotate is on); sheets sit in the middle sideways
+
 **New in 1.3:**
 
 - **My notes on the Health page** - write what happened in your own words, for any day and hour (Today, Yesterday or pick the day). The newest three show on the page; tap one to read it whole, change it or delete it. Your notes print in the Health PDF

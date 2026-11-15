@@ -211,6 +211,9 @@ html,body{height:100%;overflow:hidden}
 .rx .s{font-size:12.5px;color:var(--plumq);margin-top:2px}
 .rx .nt{font-size:12px;color:var(--plumq);opacity:.78;margin-top:3px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 .rx.full .nt{display:block}
+.rxact{display:flex;gap:8px;padding:0 14px 12px}.rx:not(.full)+.rxact{display:none}
+.rxact button{flex:1;text-align:center;padding:10px 8px;border-radius:99px;font-size:13px;font-weight:600;color:var(--p);border:1px solid color-mix(in srgb,var(--p) 50%,transparent)}
+@media (orientation:landscape) and (min-width:640px){#sheet{max-width:640px;margin:0 auto;max-height:94vh;border-left:1px solid var(--line2);border-right:1px solid var(--line2)}}
 .rx.off .t b{color:var(--dim)}
 
 #fab{position:fixed;z-index:3;right:18px;bottom:calc(20px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;
@@ -942,6 +945,12 @@ function loadMeds(rows) {
       am: num(r.morning), pm: num(r.night), flex: /^yes$/i.test((r.flex || "").trim()), interval: Math.trunc(num(r.interval_days)),
       status: (r.status || "").trim().toLowerCase(), prescriber: r.prescriber || "", purpose: r.purpose || "", note: r.note || "",
       shot: /^inject/i.test((r.form || "").trim()), daily: num(r.morning) + num(r.night) };
+  }).map(function (m) {
+
+    const c = /\bcourse from (\d{4}-\d\d-\d\d) until (\d{4}-\d\d-\d\d)\b/.exec(m.note);
+    m.from = c ? c[1] : ""; m.until = c ? c[2] : "";
+    if (m.status === "active" && m.until && iso(pillDay(new Date())) > m.until) m.status = "course ended";
+    return m;
   });
 }
 
@@ -1806,6 +1815,10 @@ function renderHealth() {
       const m = x.m, s = x.s, col = pillColour(m.name), unit = m.shot ? "pens" : "tablets";
       let right, sub;
       if (s.left <= 0) { right = '<span style="color:var(--red)">none left</span>'; sub = "nothing left on the logged count"; }
+      else if (m.until) {
+        right = '<span>' + g(s.left) + ' ' + unit + '</span>';
+        sub = "a course until " + esc(shortDate(dateOf(m.until))) + (s.out && iso(s.out) < m.until ? ' · <em style="color:var(--red)">runs out ' + esc(shortDate(s.out)) + ' - before it ends</em>' : " · enough for it");
+      }
       else {
         const c = s.slack <= 0 ? "var(--red)" : s.slack <= 7 ? "var(--gold)" : "var(--ink)";
         right = '<span>' + g(s.left) + ' ' + unit + '</span>';
@@ -1845,7 +1858,7 @@ function renderHealth() {
 
   h += healthMoreHTML(today);
 
-  h += '<div class="sec">Medications</div><section class="grp open" style="--c:var(--red)"><div class="rows" style="display:block;border-top:0">';
+  h += '<div class="sec">Medications · tap one to start or stop it</div><section class="grp open" style="--c:var(--red)"><div class="rows" style="display:block;border-top:0">';
   const order = M.filter(function (m) { return m.status === "active"; }).concat(M.filter(function (m) { return m.status !== "active"; }));
   order.forEach(function (m, k) {
     const col = pillColour(m.name), id = "rx" + k;
@@ -1853,8 +1866,10 @@ function renderHealth() {
       : [m.am ? "morning " + g(m.am) : "", m.pm ? "night " + g(m.pm) : ""].filter(Boolean).join(" · ");
     h += '<button class="rx' + (m.status === "active" ? "" : " off") + (state.full[id] ? " full" : "") + '" data-rx="' + id + '" style="--p:' + col + '">' +
       '<div class="t"><b>' + esc(m.name) + '</b><span>' + esc(g(m.strength)) + ' ' + esc(m.unit) + (m.status === "active" ? "" : " · " + esc(m.status)) + '</span></div>' +
-      '<div class="s">' + esc(sched) + (m.flex ? " · flex" : "") + (m.purpose ? " · " + esc(m.purpose) : "") + '</div>' +
+      '<div class="s">' + esc(sched) + (m.flex ? " · flex" : "") + (m.until ? ' · <b style="color:var(--p)">course ' + esc(shortDate(dateOf(m.from))) + ' – ' + esc(shortDate(dateOf(m.until))) + '</b>' : "") + (m.purpose ? " · " + esc(m.purpose) : "") + '</div>' +
       ((m.note || m.prescriber) ? '<div class="nt">' + esc([m.prescriber, m.note].filter(Boolean).join(" · ")) + '</div>' : "") + '</button>';
+    if (!m.shot) h += '<div class="rxact" style="--p:' + col + '">' + (m.status === "active" ? '<button data-rxstop="' + esc(m.name) + '">Stop taking it</button>'
+      : '<button data-rxstart="' + esc(m.name) + '">Start taking it</button>' + (m.status === "course ended" ? '<button data-rxstop="' + esc(m.name) + '">Put it away</button>' : '')) + '</div>';
   });
   h += '</div></section>';
 
@@ -3996,7 +4011,7 @@ function widgetData(now) {
           rows: list.map(function (m) { return tail(m, slot); }), todo: todo.map(function (m) { return tail(m, slot); }) });
       }
       const low = active.filter(function (m) { return !m.shot; }).map(function (m) { return { m: m, s: supply(m, fills, taken, today) }; })
-        .filter(function (x) { return x.s && x.s.slack !== null && x.s.slack <= 7; }).sort(function (a, b) { return a.s.slack - b.s.slack; }).slice(0, 3)
+        .filter(function (x) { return x.s && x.s.slack !== null && x.s.slack <= 7 && !x.m.until; }).sort(function (a, b) { return a.s.slack - b.s.slack; }).slice(0, 3)
         .map(function (x) { return x.m.name.split(" ")[0] + " " + g(x.s.left) + " left · order " + (x.s.slack <= 0 ? "NOW" : "by " + dayLabel(x.s.order)); });
       const shots = active.filter(function (m) { return m.shot; }).map(function (m) { return { m: m, s: shotInfo(m, taken, today) }; })
         .filter(function (x) { return x.s.due; })
@@ -5009,27 +5024,98 @@ function renderMedAdd() {
     (md.f === "injection" ? '<label class="fld"><span>Every how many days</span><input id="mdi" type="text" inputmode="numeric" autocomplete="off" placeholder="28" value="' + esc(md.i) + '"></label>'
       : '<label class="fld"><span>Morning - how many (½ = 0.5)</span><input id="mdam" type="text" inputmode="decimal" autocomplete="off" placeholder="1" value="' + esc(md.am) + '"></label>' +
         '<label class="fld"><span>Night - how many</span><input id="mdpm" type="text" inputmode="decimal" autocomplete="off" placeholder="0" value="' + esc(md.pm) + '"></label>') +
+    (md.f === "injection" ? "" : '<div class="lbl">How you take it</div><div class="chips">' + [["daily", "Every day"], ["course", "A course"], ["standby", "On standby"]].map(function (x) { return chip("mdh", x[1], md.h === x[0]).replace('data-mdh="' + x[1] + '"', 'data-mdh="' + x[0] + '"'); }).join("") + '</div>' +
+      (md.h === "course" ? '<label class="fld"><span>How many days, from today</span><input id="mdd" type="text" inputmode="numeric" autocomplete="off" placeholder="7" value="' + esc(md.d) + '"></label>' : "") +
+      (md.h === "standby" ? '<p class="tabhint">Kept on hand, not taken yet - tap it under Medications and Start taking it when you need it.</p>' : "")) +
     '<label class="fld"><span>What it is for (optional)</span><input id="mdp" type="text" maxlength="60" autocomplete="off" placeholder="" value="' + esc(md.p) + '"></label>' +
     '<button class="go" data-medsave="1">Add it</button>');
 }
 document.addEventListener("input", function (e) {
   if (!md) return;
-  const k = { mdn: "n", mds: "s", mdi: "i", mdam: "am", mdpm: "pm", mdp: "p" }[e.target.id];
+  const k = { mdn: "n", mds: "s", mdi: "i", mdam: "am", mdpm: "pm", mdp: "p", mdd: "d" }[e.target.id];
   if (k) md[k] = e.target.value;
 });
 document.addEventListener("click", function (e) {
   let b;
-  if (e.target.closest("[data-medadd]")) { md = { n: "", f: "tablet", s: "", u: "mg", i: "", am: "", pm: "", p: "" }; renderMedAdd(); return; }
+  if (e.target.closest("[data-medadd]")) { md = { n: "", f: "tablet", s: "", u: "mg", i: "", am: "", pm: "", p: "", h: "daily", d: "7" }; renderMedAdd(); return; }
+  if (md && (b = e.target.closest("[data-mdh]"))) { md.h = b.getAttribute("data-mdh"); renderMedAdd(); return; }
   if (md && (b = e.target.closest("[data-mdf]"))) { md.f = b.getAttribute("data-mdf"); renderMedAdd(); return; }
   if (md && (b = e.target.closest("[data-mdu]"))) { md.u = b.getAttribute("data-mdu"); renderMedAdd(); return; }
   if (md && e.target.closest("[data-medsave]")) {
     const name = clean(md.n), shot = md.f === "injection", am = shot ? 0 : num(md.am || 0), pm = shot ? 0 : num(md.pm || 0), iv = shot ? Math.trunc(num(md.i)) : 0;
     if (!name) { toast("Type the medication's name", false, true); return; }
-    if (loadMeds(parseCSV(readFile("pills_log.csv"))).some(function (m) { return m.name.toLowerCase() === name.toLowerCase() && m.status === "active"; })) { toast(name + " is already on your list", false, true); return; }
+    if (loadMeds(parseCSV(readFile("pills_log.csv"))).some(function (m) { return m.name.toLowerCase() === name.toLowerCase(); })) { toast(name + " is already on your list - tap it under Medications to start or stop it", false, true); return; }
+    const cd = Math.trunc(num(md.d)), course = !shot && md.h === "course", today = iso(pillDay(new Date()));
+    if (course && !(cd >= 1 && cd <= 365)) { toast("Type how many days - like 7", false, true); return; }
     if (shot ? !(iv > 0) : !(am > 0 || pm > 0)) { toast(shot ? "Type every how many days - like 28" : "Type how many in the morning or at night", false, true); return; }
-    const row = [iso(new Date()), name, md.f, String(num(md.s) || ""), md.u, shot ? "0" : String(+am), shot ? "0" : String(+pm), "no", iv ? String(iv) : "", "active", "", clean(md.p), "added in Ratio Vitae"].join(",");
+    const row = [iso(new Date()), name, md.f, String(num(md.s) || ""), md.u, shot ? "0" : String(+am), shot ? "0" : String(+pm), "no", iv ? String(iv) : "", !shot && md.h === "standby" ? "standby" : "active", "", clean(md.p),
+      "added in Ratio Vitae" + (course ? " - course from " + today + " until " + isoPlus(today, cd - 1) + " (Ratio Vitae)" : "")].join(",");
     if (applyOps([{ f: "pills_log.csv", op: "append", rows: row + "\n" }])) { md = null; closeSheet(); toast("Added " + name, true, false); renderHealth(); }
   }
+});
+
+let crs = null;
+const CRS_PIECES = /\s*-\s*(course from \d{4}-\d\d-\d\d until \d{4}-\d\d-\d\d|started again \d{4}-\d\d-\d\d|back on standby \d{4}-\d\d-\d\d|stopped \d{4}-\d\d-\d\d) \(Ratio Vitae\)/g;
+function medRow(name) {
+  const F = rawFile("pills_log.csv"), r = F.rows.filter(function (x) { return (x.medication || "").trim().toLowerCase() === name.toLowerCase(); });
+  return { F: F, r: r.length === 1 ? r[0] : null };
+}
+function isoPlus(isoD, n) { return iso(addDays(dateOf(isoD), n)); }
+function crsDays() { const n = Math.trunc(num(crs.days)); return n >= 1 && n <= 365 ? n : 0; }
+function renderCrs() {
+  const nm = esc(crs.name);
+  if (crs.mode === "stop") {
+    openSheet('<div class="grab"></div><h2 class="mh">Stop taking ' + nm + '</h2>' +
+      '<p class="tabhint">It leaves your morning and night sets. Nothing you logged is lost.</p>' +
+      '<button class="go" data-rcput="standby">Back on standby<small style="display:block;font-weight:400;font-size:12px;opacity:.8">kept on hand for next time</small></button>' +
+      '<button class="go ghost" data-rcput="stopped">Stopped<small style="display:block;font-weight:400;font-size:12px;opacity:.8">not taking it any more</small></button>');
+    return;
+  }
+  const from = iso(pillDay(new Date())), n = crsDays(), am = num(crs.am || 0), pm = num(crs.pm || 0);
+  const span = crs.how === "course" && n ? shortDate(dateOf(from)) + " – " + shortDate(dateOf(isoPlus(from, n - 1))) + " · " + g((am + pm) * n) + " in all" : "";
+  openSheet('<div class="grab"></div><h2 class="mh">Start taking ' + nm + '</h2>' +
+    '<label class="fld"><span>Morning - how many (½ = 0.5)</span><input id="rcam" type="text" inputmode="decimal" autocomplete="off" placeholder="1" value="' + esc(crs.am) + '"></label>' +
+    '<label class="fld"><span>Night - how many</span><input id="rcpm" type="text" inputmode="decimal" autocomplete="off" placeholder="0" value="' + esc(crs.pm) + '"></label>' +
+    '<div class="lbl">For how long</div><div class="chips">' + [["course", "A course"], ["ongoing", "Every day, no end"]].map(function (x) { return '<button data-rchow="' + x[0] + '" class="' + (crs.how === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div>' +
+    (crs.how === "course" ? '<label class="fld"><span>How many days</span><input id="rcd" type="text" inputmode="numeric" autocomplete="off" placeholder="7" value="' + esc(crs.days) + '"></label><p class="tabhint" id="rcspan">' + esc(span || "from today") + '</p>' : '') +
+    '<p class="tabhint">Starts today - it joins your morning and night sets. Log the first one with Take.</p>' +
+    '<button class="go" data-rcgo="1">Start it</button>');
+}
+function crsSpan() { const n = crsDays(), from = iso(pillDay(new Date())), am = num(crs.am || 0), pm = num(crs.pm || 0); return n ? shortDate(dateOf(from)) + " – " + shortDate(dateOf(isoPlus(from, n - 1))) + " · " + g((am + pm) * n) + " in all" : "from today"; }
+document.addEventListener("input", function (e) {
+  if (!crs) return;
+  const k = { rcam: "am", rcpm: "pm", rcd: "days" }[e.target.id];
+  if (k) { crs[k] = e.target.value; const el = $("rcspan"); if (el) el.textContent = crsSpan(); }
+});
+document.addEventListener("click", function (e) {
+  let b;
+  if ((b = e.target.closest("[data-rxstart]"))) {
+    const m = loadMeds(parseCSV(readFile("pills_log.csv"))).filter(function (x) { return x.name === b.getAttribute("data-rxstart"); })[0]; if (!m) return;
+    const d = /(\d+)\s*days\b/i.exec(m.note);
+    crs = { mode: "start", name: m.name, am: m.am ? g(m.am) : "1", pm: m.pm ? g(m.pm) : "", how: "course", days: d ? d[1] : "7" }; renderCrs(); return;
+  }
+  if ((b = e.target.closest("[data-rxstop]"))) { crs = { mode: "stop", name: b.getAttribute("data-rxstop") }; renderCrs(); return; }
+  if (!crs) return;
+  if ((b = e.target.closest("[data-rchow]"))) { crs.how = b.getAttribute("data-rchow"); renderCrs(); return; }
+  const put = e.target.closest("[data-rcput]"), go = e.target.closest("[data-rcgo]");
+  if (!put && !go) return;
+  const X = medRow(crs.name);
+  if (!X.r) { toast(crs.name + " could not be changed here (its row in pills_log.csv is not plain)", false, true); return; }
+  const today = iso(pillDay(new Date())), base = String(X.r.note || "").replace(CRS_PIECES, "").trim();
+  let ch, said;
+  if (put) {
+    const st = put.getAttribute("data-rcput");
+    ch = { status: st, note: clean((base ? base + " - " : "") + (st === "standby" ? "back on standby " : "stopped ") + today + " (Ratio Vitae)") };
+    said = crs.name + (st === "standby" ? " is back on standby" : " stopped");
+  } else {
+    const am = num(crs.am || 0), pm = num(crs.pm || 0), n = crsDays();
+    if (!(am > 0 || pm > 0)) { toast("Type how many in the morning or at night", false, true); return; }
+    if (crs.how === "course" && !n) { toast("Type how many days - like 7", false, true); return; }
+    const piece = crs.how === "course" ? "course from " + today + " until " + isoPlus(today, n - 1) : "started again " + today;
+    ch = { morning: String(+am), night: String(+pm), status: "active", note: clean((base ? base + " - " : "") + piece + " (Ratio Vitae)") };
+    said = crs.name + " started" + (crs.how === "course" ? " · until " + shortDate(dateOf(isoPlus(today, n - 1))) : "");
+  }
+  if (applyOps([{ f: "pills_log.csv", op: "replace", old: X.r.raw, rows: setFields(X.r, X.F.head, ch) }])) { crs = null; closeSheet(); toast(said, true, false); renderHealth(); }
 });
 let tp = null;
 function tempConv() {
@@ -5260,7 +5346,7 @@ function healthRecordHTML() {
           act.filter(function (m) { return !m.shot; }).map(function (m) {
             const s = supply(m, fills, taken, today), lf = lastFillOf(fills, m.name), lc = lf ? fillCost(lf.note) : null;
             return [m.name, [m.am ? "morning " + g(usual(m, "am", taken)) + " " + m.unit : "", m.pm ? "night " + g(usual(m, "pm", taken)) + " " + m.unit : ""].filter(Boolean).join(" · "),
-              s ? g(s.left) : "—", (s && s.order ? shortDate(s.order) : "—") + (lf ? " · refilled " + dshort(lf.date) + (lc !== null ? " " + money(lc) : "") : "")];
+              s ? g(s.left) : "—", (m.until ? "course until " + shortDate(dateOf(m.until)) : s && s.order ? shortDate(s.order) : "—") + (lf ? " · refilled " + dshort(lf.date) + (lc !== null ? " " + money(lc) : "") : "")];
           }).concat(act.filter(function (m) { return m.shot; }).map(function (m) {
             const si = shotInfo(m, taken, today);
             return [m.name, m.interval ? "every " + m.interval + " days" : "injection", "—", (si.last ? "last " + dshort(si.last.date) : "no dose logged") + (si.due ? " · next " + shortDate(si.due) : "")];
