@@ -1,3 +1,8 @@
+**New in 1.3:**
+
+- **My notes on the Health page** - write what happened in your own words, for any day and hour (Today, Yesterday or pick the day). The newest three show on the page; tap one to read it whole, change it or delete it. Your notes print in the Health PDF
+- **Back to main categories** - inside a category, a big button takes you back to the main categories (top, and bottom on long lists), and the phone's back button steps out of the category instead of closing the sheet
+
 **New in 1.2.1:**
 
 - **Every PDF prints all its pages** - the budget, health and investment PDFs could stop after the first page

@@ -252,6 +252,8 @@ html,body{height:100%;overflow:hidden}
 .fld{display:block;margin:0 0 10px}
 .fld span{display:block;font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--mist);margin:0 0 5px}
 .fld input,.fld select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--raise2);color:var(--ink);font:inherit;font-size:16px}
+.fld textarea{width:100%;min-height:150px;padding:12px 14px;border-radius:12px;border:1px solid var(--line2);background:var(--raise2);color:var(--ink);font:inherit;font-size:16px;line-height:1.4;resize:vertical}
+.hnt{white-space:pre-line;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;color:var(--ink);opacity:.86;margin-top:2px}
 #toast{position:fixed;z-index:8;left:16px;right:16px;bottom:calc(92px + env(safe-area-inset-bottom));max-width:528px;margin:0 auto;display:flex;align-items:center;gap:12px;
   padding:12px 14px;border-radius:14px;background:#151A2E;border:1px solid var(--line2);box-shadow:0 10px 30px -10px #000;font-size:13.5px}
 #toast .m{flex:1;min-width:0}
@@ -369,6 +371,7 @@ html,body{height:100%;overflow:hidden}
 .lgrid button.add{border-style:dashed;border-color:color-mix(in srgb,var(--c) 55%,transparent)}
 .lgrid button.add span{color:var(--c);font-weight:600}
 .lgrid.cg button span.ct{display:flex;align-items:center;gap:7px;font-weight:600;color:var(--c)}
+.catret{display:block;width:100%;margin:6px 0 10px;padding:12px 14px;border-radius:14px;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);font-size:15px;font-weight:600;letter-spacing:.02em;text-align:left}
 .lgh.catback button{margin-right:8px;padding:6px 10px;border-radius:99px;border:1px solid var(--line2);font-size:11px;letter-spacing:.05em;text-transform:none;color:var(--mist)}
 .seg4.less{grid-template-columns:repeat(4,1fr)}
 .seg4.less button{padding:7px 2px;font-weight:500}
@@ -427,6 +430,7 @@ html,body{height:100%;overflow:hidden}
 .nwsvg{width:100%;height:110px;display:block;margin:6px 0}
 .gli .qty{display:flex;align-items:center;gap:8px}.gli .qty button,.gladd{width:30px;height:30px;border-radius:9px;border:1px solid var(--line2);background:none;color:inherit;font-size:17px}.gli .qty em{font-style:normal;min-width:16px;text-align:center}
 #printv{display:none}
+@media print{#printv.hrec td,#printv .pv-l .n{white-space:pre-line}}
 @media print{#printv.hrec{font:9pt/1.32 Calibri,Carlito,"Helvetica Neue",Arial,sans-serif!important;color:#000!important;padding:0!important}
 #printv.hrec,#printv.hrec *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 #printv .hr-border{position:fixed;inset:0;border:2pt solid #5C8A82}#printv .hr-top{position:fixed;top:2mm;left:0;right:0;text-align:center;font-size:8pt;color:#7E8994}
@@ -1835,6 +1839,8 @@ function renderHealth() {
 
   h += bpHTML() + tempHTML();
 
+  h += notesHTML();
+
   h += eggsHTML();
 
   h += healthMoreHTML(today);
@@ -2908,7 +2914,9 @@ function lineGrid(lines, kind) {
     return h + '<button class="add" data-newin="@cat" style="--c:#AFAFFF"><span>+ New category</span></button></div>';
   }
   const C = look(ms.cat), mine = W.filter(function (x) { return x.w.cat === ms.cat; });
-  let h = '<div class="lgh catback" style="color:' + C.col + '"><button data-mcat="">‹ All categories</button>' + icon(C.icon, C.col, "ico sm") + esc(ms.cat) + '</div><div class="lgrid">';
+
+  const ret = '<button class="catret" data-mcat="" style="--c:' + C.col + '">‹ Back to main categories</button>';
+  let h = ret + '<div class="lgh" style="color:' + C.col + '">' + icon(C.icon, C.col, "ico sm") + esc(ms.cat) + '</div><div class="lgrid">';
   const subs = C.subs.map(function (s) { return s.name; }).filter(function (v, i, a) { return a.indexOf(v) === i; });
   for (const s of subs) {
     const L = mine.filter(function (x) { return x.w.sub === s; });
@@ -2920,7 +2928,7 @@ function lineGrid(lines, kind) {
   }
   mine.filter(function (x) { return !x.w.sub || subs.indexOf(x.w.sub) < 0; }).forEach(function (x) { h += lineTile(x.r, C.col, ""); });
   if (ms.cat !== "Planned") h += '<button class="add" data-newin="' + esc(ms.cat) + '" style="--c:' + C.col + '"><span>+ New subcategory</span></button>';
-  return h + '</div>';
+  return h + '</div>' + (subs.length + mine.length > 4 ? ret : "");
 }
 
 function newLineFields(kind) {
@@ -5055,6 +5063,80 @@ document.addEventListener("click", function (e) {
     if (applyOps([{ f: "temp_log.csv", op: "append", rows: row + "\n" }])) { tp = null; closeSheet(); toast("Logged " + c.toFixed(1) + "°C" + (c >= 38 ? " · a fever" : ""), true, false); renderHealth(); }
   }
 });
+
+const NOTE_FILE = "health_notes.csv";
+function noteEnc(t) { return String(t || "").replace(/\r/g, "").replace(/[ \t]+\n/g, "\n").trim().replace(/"/g, "”").replace(/,/g, "‚").replace(/\n/g, "\\n"); }
+function noteDec(t) { return String(t || "").replace(/\\n/g, "\n").replace(/‚/g, ","); }
+function noteRows() {
+  const F = rawFile(NOTE_FILE);
+  return (F.ok ? F.rows : []).filter(function (r) { return /^\d{4}-\d\d-\d\d$/.test(r.date || "") && (r.note || "").trim(); })
+    .sort(function (a, b) { return (a.date + a.time) < (b.date + b.time) ? -1 : (a.date + a.time) > (b.date + b.time) ? 1 : 0; });
+}
+function noteWhen(r) { return dshort(r.date) + (r.time ? " · " + hhmm(r.time) : ""); }
+let noteAll = false, nt = null;
+function notesHTML() {
+  const N = noteRows().reverse(), show = noteAll ? N : N.slice(0, 3);
+  let h = '<div class="sec">My notes' + (N.length ? ' · ' + N.length : '') + '</div><section class="hc wt" id="hnotes">' +
+    '<div class="row2"><div class="s">' + (N.length ? 'what happened, in your own words · tap one to read or change it' : 'nothing written yet · what happened, in your own words, any day and time') + '</div><button class="lw" data-note="1" style="white-space:nowrap">+ Note</button></div>';
+  show.forEach(function (r) {
+    h += '<div class="tap" data-noteopen="' + esc(r.raw) + '" style="margin-top:10px;padding-top:8px;border-top:1px solid var(--line)"><b style="color:var(--plum);font-size:13px">' + esc(noteWhen(r)) + '</b><div class="hnt">' + esc(noteDec(r.note)) + '</div></div>';
+  });
+  if (N.length > 3) h += '<button class="go ghost" data-noteall="1" style="margin-top:10px">' + (noteAll ? 'Show less' : 'Show all ' + N.length) + '</button>';
+  return h + '</section>';
+}
+function renderNote() {
+  const t0 = new Date(), td = iso(t0), y0 = new Date(t0.getFullYear(), t0.getMonth(), t0.getDate() - 1), yd = iso(y0), nowH = t0.getHours();
+  const h12 = function (h) { return (h % 12 || 12) + (h < 12 ? " AM" : " PM"); };
+  const day = function (d) { return ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"][d.getDay()] + " " + MSHORT[d.getMonth()] + " " + d.getDate(); };
+  openSheet('<div class="grab"></div><h2 class="mh">' + (nt.old ? 'Your note' : 'A note') + '</h2>' +
+    '<label class="fld"><span>What happened</span><textarea id="ntt" maxlength="3000" placeholder="In your own words">' + esc(nt.t) + '</textarea></label>' +
+    '<div class="lbl">Day</div><div class="chips">' + [[td, "Today · " + day(t0)], [yd, "Yesterday · " + day(y0)]].map(function (x) { return '<button data-ntday="' + x[0] + '" class="' + (nt.d === x[0] ? "on" : "") + '">' + x[1] + '</button>'; }).join("") + '</div>' +
+    '<label class="fld"><span>Or pick the day</span><input id="ntd" type="date" max="' + td + '" value="' + esc(nt.d) + '"></label>' +
+    '<div class="lbl">Hour (24-hour clock) · ' + pad2(nt.hr) + ':00 = ' + h12(nt.hr) + '</div><div class="chips" style="display:grid;grid-template-columns:repeat(6,1fr);gap:6px">' +
+    Array.from({ length: 24 }, function (_, h) { return '<button data-nthr="' + h + '" class="' + (nt.hr === h ? "on" : "") + '"' + (nt.d === td && h > nowH ? " disabled" : "") + '>' + pad2(h) + '</button>'; }).join("") + '</div>' +
+    '<button class="go" data-notesave="1">' + (nt.old ? 'Save the change' : 'Save the note') + '</button>' +
+    (nt.old ? '<button class="go ghost" data-notedel="1">Delete this note</button>' : ''));
+}
+document.addEventListener("input", function (e) {
+  if (!nt) return;
+  if (e.target.id === "ntt") nt.t = e.target.value;
+});
+document.addEventListener("change", function (e) {
+  if (!nt || e.target.id !== "ntd") return;
+  const v = e.target.value, td = iso(new Date());
+  if (/^\d{4}-\d\d-\d\d$/.test(v)) { nt.d = v > td ? td : v; if (nt.d === td) nt.hr = Math.min(nt.hr, new Date().getHours()); renderNote(); }
+});
+document.addEventListener("click", function (e) {
+  let b;
+  if (e.target.closest("[data-noteall]")) { noteAll = !noteAll; renderHealth(); return; }
+  if (e.target.closest("[data-note]")) { nt = { t: "", d: iso(new Date()), hr: new Date().getHours(), old: null }; renderNote(); return; }
+  if ((b = e.target.closest("[data-noteopen]"))) {
+    const raw = b.getAttribute("data-noteopen"), r = noteRows().filter(function (x) { return x.raw === raw; })[0];
+    if (!r) { renderHealth(); return; }
+    const hr = parseInt(String(r.time || "").split(":")[0], 10);
+    nt = { t: noteDec(r.note), d: r.date, hr: hr >= 0 && hr < 24 ? hr : 12, old: raw }; renderNote(); return;
+  }
+  if (!nt) return;
+  if ((b = e.target.closest("[data-ntday]"))) { nt.d = b.getAttribute("data-ntday"); if (nt.d === iso(new Date())) nt.hr = Math.min(nt.hr, new Date().getHours()); renderNote(); return; }
+  if ((b = e.target.closest("[data-nthr]"))) { nt.hr = +b.getAttribute("data-nthr"); renderNote(); return; }
+  if (e.target.closest("[data-notedel]")) {
+    if (applyOps([{ f: NOTE_FILE, op: "delete", old: nt.old, after: lineBefore(NOTE_FILE, nt.old) }])) { nt = null; closeSheet(); toast("Note deleted", true, false); renderHealth(); }
+    return;
+  }
+  if (e.target.closest("[data-notesave]")) {
+    const ta = $("ntt"); if (ta) nt.t = ta.value;
+    const text = noteEnc(nt.t);
+    if (!text) { toast("Write the note first", false, true); return; }
+    if (!rawFile(NOTE_FILE).ok) { toast(NOTE_FILE + " was not found in the Ratio Vitae folder", false, true); return; }
+    if (!/^\d{4}-\d\d-\d\d$/.test(nt.d)) nt.d = iso(new Date());
+    const row = [nt.d, pad2(nt.hr) + ":00", text].join(",");
+    if (nt.old && row === nt.old) { nt = null; closeSheet(); return; }
+    const ops = nt.old ? [{ f: NOTE_FILE, op: "replace", old: nt.old, rows: row }] : [{ f: NOTE_FILE, op: "append", rows: row + "\n" }];
+    const was = nt.old;
+    if (applyOps(ops)) { nt = null; closeSheet(); toast(was ? "Note changed" : "Note saved", true, false); renderHealth(); }
+  }
+});
+function notesPdfRows() { return noteRows().reverse().map(function (r) { return [dshort(r.date) + (r.time ? " " + hhmm(r.time) : ""), noteDec(r.note)]; }); }
 function healthMoreHTML(today) {
   let h = '';
 
@@ -5071,7 +5153,7 @@ function healthMoreHTML(today) {
     h += '<div class="sec">Care schedule</div><section class="hc">' + R.map(function (r) { return '<div class="t"><b style="color:var(--plum)">' + esc(r.label) + '</b><span style="font-weight:400;font-size:12.5px">' + esc(hhmm(r.time)) + '</span></div><div class="s" style="margin-bottom:6px">' + esc(r.days) + '</div>'; }).join("") +
       A.map(function (r) { return '<div class="t"><b style="color:#FFD75F">' + esc(r.label) + '</b><span style="font-weight:400;font-size:12.5px">' + esc(dshort(r.date)) + '</span></div><div class="s">' + esc(hhmm(r.time)) + '</div>'; }).join("") + '</section>';
   }
-  h += '<section class="hc" style="margin-top:12px"><div class="r tap" data-hpdf="1" style="display:flex;justify-content:space-between;align-items:center"><div class="l"><b style="color:var(--plum)">Health PDF ›</b><div class="s">your full Health record in its own look + today’s pills, blood pressure, falls · Save as PDF</div></div><div class="a" style="font-size:20px">⎙</div></div></section>';
+  h += '<section class="hc" style="margin-top:12px"><div class="r tap" data-hpdf="1" style="display:flex;justify-content:space-between;align-items:center"><div class="l"><b style="color:var(--plum)">Health PDF ›</b><div class="s">your full Health record in its own look + today’s pills, blood pressure, falls, your notes · Save as PDF</div></div><div class="a" style="font-size:20px">⎙</div></div></section>';
   return h;
 }
 
@@ -5186,6 +5268,8 @@ function healthRecordHTML() {
       }
     }
   }
+  const NP = notesPdfRows();
+  h += '<h1 style="color:#3E6B63">My Notes</h1>' + (NP.length ? hrLiveTable(["Date", "Note"], [1700, 7948], NP, "DBCFE3") : '<p><i>No notes yet.</i></p>');
   const B = bpRows();
   h += '<h1 style="color:#3E6B63">Blood Pressure</h1>' + (B.length ? hrLiveTable(["Date", "Reading", "Pulse", "Monitor · note"], [1700, 1500, 900, 5548],
     B.slice().reverse().map(function (r) { return [dshort(r.date) + " " + hhmm(r.time), r.systolic + "/" + r.diastolic + " · " + bpBand(num(r.systolic), num(r.diastolic)).w, r.pulse || "—", [r.device, String(r.note || "").replace(/ - Ratio Vitae$/, "")].filter(Boolean).join(" · ")]; }), "E8EEF0")
@@ -5220,6 +5304,8 @@ function healthPrintHTML() {
   if (B.length) h += '<h2>Blood pressure<span>' + B.length + (B.length === 1 ? " reading" : " readings") + '</span></h2><table class="pv-l">' + B.slice().reverse().map(function (r) {
     return '<tr><td><b>' + esc(r.systolic) + '/' + esc(r.diastolic) + '</b> · pulse ' + esc(r.pulse || "—") + ' · ' + bpBand(num(r.systolic), num(r.diastolic)).w + '<div class="n">' + esc(String(r.note || "").replace(/ - Ratio Vitae$/, "")) + '</div></td><td class="n">' + esc(dshort(r.date)) + '<br>' + esc(hhmm(r.time)) + ' · ' + esc(r.device || "") + '</td></tr>'; }).join("") +
     '</table>' + (B.some(function (r) { return /wrist/i.test(r.device || ""); }) ? '<p class="n">Wrist monitor readings: arm angled slightly up (the only way that cuff works for him).</p>' : '');
+  const NP = notesPdfRows();
+  if (NP.length) h += '<h2>My notes<span>' + NP.length + '</span></h2><table class="pv-l">' + NP.map(function (x) { return '<tr><td><b>' + esc(x[0]) + '</b><div class="n">' + esc(x[1]) + '</div></td><td></td></tr>'; }).join("") + '</table>';
   const F = fallRows();
   if (F.length) h += '<h2>Falls<span>' + F.length + '</span></h2><table class="pv-l">' + F.slice().reverse().map(function (r) {
     return '<tr><td><b>' + esc(dshort(r.date)) + (r.time ? ' · ' + esc(hhmm(r.time)) : '') + '</b> · ' + esc(r.severity || "?") + '/10<div class="n">' + esc([r.landed, r.injury, r.help, r.recovery].filter(Boolean).join(" · ")) + '</div></td><td></td></tr>'; }).join("") + '</table>';
@@ -6508,6 +6594,10 @@ function topCats(n) {
 window.onResumeApp = load;
 
 window.appBack = function () {
+  if (sheetOpen() && ms && !ms.pay && !ms.earn && ms.cat) {
+    if (ms.what) ms.what = ""; else ms.cat = "";
+    ms.confirm = false; renderMoney(); return "1";
+  }
   if (sheetOpen()) { closeSheet(); return "1"; }
   if (pageNow() !== 0) { toPage(0, true); return "1"; }
   if (state.month) { go(state.cur); return "1"; }

@@ -55,7 +55,8 @@ cash and the USD rate).
 *Take all*, half tablets, injections every N days, what is left in each
 bottle and when to order, refills and their cost, recounts for a dropped
 pill; weight, blood pressure and pulse, temperature (°C, °F or K), a food
-stock counter, and a **Health PDF** for your doctor.
+stock counter, **your own notes** (what happened, any day and hour), and a
+**Health PDF** for your doctor.
 
 **Also**
 - **Two home-screen widgets**, both scrolling: *Money* (left now, the four

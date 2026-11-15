@@ -80,7 +80,9 @@ public class MainActivity extends Activity {
 
             "temp_log.csv",
 
-            "invest_log.csv"};
+            "invest_log.csv",
+
+            "health_notes.csv"};
 
     static final String[] READ_EXTRA = {"fx.txt"};
 
@@ -311,6 +313,7 @@ public class MainActivity extends Activity {
             {"investments.csv", "name,kind,value,money_in,date,note"},
             {"networth_log.csv", "date,net_worth,have,owe"},
             {"invest_log.csv", "date,account,ticker,shares,price,currency,value,book,note"},
+            {"health_notes.csv", "date,time,note"},
             {"food_log.csv", "month,date,place,item,amount,note"},
             {"weight_log.csv", "month,pounds,note"},
             {"credit_log.csv", "month,equifax,transunion"},
