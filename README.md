@@ -30,7 +30,7 @@ Five pages - swipe between them.
   purchase, a card payment, cash, money you borrowed, your overdraft cover or
   credit line. Several items with their own tax, groceries and takeout,
   "same as last time".
-- Tap any line to pay it, change it or take it off. Tap a past entry to
+- Tap any line to pay it, move its date (**Set date** - it stays unpaid), change it or take it off. Tap a past entry to
   delete it or mark it "not out yet". A later date = a transaction still to
   come.
 - A new month: one tap carries your balance, income and fixed and monthly
@@ -51,7 +51,8 @@ pay first, and buy now / pay later plans.
 optional import of a TD Direct Investing holdings export (prices, shares,
 cash and the USD rate).
 
-**Health** - your medications as **morning and night sets** with one-tap
+**Health** - your medications in **groups** - morning and night, plus your own
+(afternoon, with lunch, bedtime - any name, day, night or any time) - each with one-tap
 *Take all*, half tablets, injections every N days, **courses** (start a medication
 for so many days, or keep one on standby and start it when you need it), what is left in each
 bottle and when to order, refills and their cost, recounts for a dropped
@@ -60,11 +61,15 @@ stock counter, **your own notes** (what happened, any day and hour), and a
 **Health PDF** for your doctor.
 
 **Also**
-- **Two home-screen widgets**, both scrolling: *Money* (left now, the four
-  quick buttons, the next bill, the lowest point) and *Pills* (both sets with
-  big Take buttons, blood pressure, heart rate, temperature, what to order).
+- **Three home-screen widgets**, all scrolling, and they keep up by themselves:
+  *Money* (left now, the four quick buttons, the next bill, the lowest point),
+  *Pills* (every group with a big Take button, blood pressure, heart rate,
+  temperature, what to order) and *Investments* (the total and its line over
+  time, every holding - and each copy shows the account you pick, so put one
+  copy per account on your home screen if you like).
 - **Notifications**: bills the day before, a daily pills reminder, and a note
-  each time a set is logged.
+  each time a group is logged.
+- **Sideways**: on a wide screen held sideways the pages go two columns.
 - **Read it for me**: a photo or screenshot of a receipt fills in the
   purchase; a card statement (PDF - Triangle, BMO, Capital One, Simplii) or
   a screenshot of a loan's app fills in that card or loan; share a file to

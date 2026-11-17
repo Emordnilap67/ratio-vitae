@@ -7,7 +7,13 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.LinearGradient;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Shader;
 import android.widget.RemoteViews;
 
 import org.json.JSONArray;
@@ -62,6 +68,7 @@ public class Wid {
         AppWidgetManager m = AppWidgetManager.getInstance(c);
         for (int w : m.getAppWidgetIds(new ComponentName(c, MoneyWidget.class))) m.updateAppWidget(w, moneyNow(c));
         for (int w : m.getAppWidgetIds(new ComponentName(c, PillsWidget.class))) m.updateAppWidget(w, pillsNow(c));
+        for (int w : m.getAppWidgetIds(new ComponentName(c, InvestWidget.class))) m.updateAppWidget(w, investNow(c, w));
     }
 
     static boolean scrolls() {
@@ -219,7 +226,7 @@ public class Wid {
             } else {
                 v.setTextViewText(btn, left < count ? "Take the rest" : "Take all");
                 v.setInt(btn, "setBackgroundResource", res(c, "wtake", "drawable"));
-                v.setTextColor(btn, 0xFF1A0606);
+                v.setTextColor(btn, 0xFF15181F);
                 v.setOnClickPendingIntent(btn, cast(c, 400 + k, TAKE, slots[k]));
             }
         }
@@ -391,6 +398,7 @@ public class Wid {
         } finally {
             out.close();
         }
+        MainActivity.touched(f);
     }
 
     static String take(Context c, String slot) {
@@ -597,11 +605,20 @@ public class Wid {
         String pday = pillDay();
         boolean sameDay = p != null && pday.equals(p.optString("day"));
         RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(6);
-        String[] slots = {"am", "pm"}, icons = {"☀", "☾"};
-        int[] icol = {0xFFFFD75F, 0xFFAFAFFF};
-        for (int k = 0; k < 2; k++) {
+
+        JSONArray all = p == null ? null : p.optJSONArray("sets");
+        int ns = all == null ? 0 : Math.min(10, all.length());
+        String[] slots = new String[ns], icons = new String[ns];
+        int[] icol = new int[ns];
+        for (int k = 0; k < ns; k++) {
+            JSONObject o = all.optJSONObject(k);
+            slots[k] = o == null ? "" : o.optString("slot");
+            icons[k] = o == null ? "☀" : o.optString("icon", "am".equals(slots[k]) ? "☀" : "☾");
+            icol[k] = "☾".equals(icons[k]) ? 0xFFAFAFFF : "◷".equals(icons[k]) ? 0xFF87D7D7 : 0xFFFFD75F;
+        }
+        for (int k = 0; k < ns; k++) {
             JSONObject s = set(p, slots[k]);
-            if (s == null) continue;
+            if (s == null || slots[k].isEmpty()) continue;
             RemoteViews v = item(c, "wi_set");
             String took = sp.getString("took_" + pday + "_" + slots[k], "");
             boolean undo = slots[k].equals(sp.getString("undo_slot", "")) && System.currentTimeMillis() < sp.getLong("undo_until", 0);
@@ -627,7 +644,7 @@ public class Wid {
             } else {
                 v.setTextViewText(btn, left < count ? "Take the rest" : "Take all");
                 v.setInt(btn, "setBackgroundResource", res(c, "wtake", "drawable"));
-                v.setTextColor(btn, 0xFF1A0606);
+                v.setTextColor(btn, 0xFF15181F);
                 v.setOnClickFillInIntent(btn, doIt("take", slots[k]));
             }
             v.setOnClickFillInIntent(id(c, "wi_root"), goTo(4, "health"));
@@ -658,5 +675,165 @@ public class Wid {
         }
         String title = p == null ? "Pills - open Ratio Vitae once" : "Pills · " + (sameDay ? p.optString("dayText", "") : "a new day");
         return frame(c, "w_pills2", title, 600, b.build(), open(c, 430, 4, "health"));
+    }
+
+    static String investKey(Context c, int wid) {
+        String k = prefs(c).getString("inv_" + wid, null);
+        if (k != null) return k;
+        JSONObject iv = data(c).optJSONObject("invest");
+        JSONArray K = iv == null ? null : iv.optJSONArray("keys");
+        return K != null && K.length() > 0 ? K.optString(0, "") : "";
+    }
+
+    static void investKey(Context c, int wid, String key) {
+        prefs(c).edit().putString("inv_" + wid, key == null ? "" : key).apply();
+    }
+
+    static void investForget(Context c, int wid) {
+        prefs(c).edit().remove("inv_" + wid).apply();
+    }
+
+    static JSONObject investBlock(JSONObject iv, String key) {
+        if (iv == null || key == null || key.isEmpty()) return iv;
+        JSONObject by = iv.optJSONObject("by"), b = by == null ? null : by.optJSONObject(key);
+        return b == null ? iv : b;
+    }
+
+    static PendingIntent investPick(Context c, int wid) {
+        Intent i = new Intent(c, InvestPick.class).putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, wid)
+                .setData(android.net.Uri.parse("ratiovitae://invpick/" + wid)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        return PendingIntent.getActivity(c, 5000 + wid, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    static RemoteViews investNow(Context c, int wid) {
+        if (scrolls()) {
+            try {
+                return invest2(c, wid);
+            } catch (Throwable t) {
+
+            }
+        }
+        JSONObject d = data(c);
+        RemoteViews v = investTop(c, investBlock(d.optJSONObject("invest"), investKey(c, wid)), d.has("at"));
+        v.setOnClickPendingIntent(id(c, "wi_root"), open(c, 460, 3, "invest"));
+        return v;
+    }
+
+    static RemoteViews investTop(Context c, JSONObject iv, boolean opened) {
+        RemoteViews v = item(c, "wi_ivtop");
+        if (iv == null) {
+            v.setTextViewText(id(c, "iv_total"), opened ? "0.00" : "—");
+            v.setTextViewText(id(c, "iv_ch"), opened ? "No investments yet - tap Import or + Account" : "open Ratio Vitae once");
+            v.setTextColor(id(c, "iv_ch"), 0xFF9AA0C0);
+            v.setViewVisibility(id(c, "iv_chart"), android.view.View.GONE);
+            v.setViewVisibility(id(c, "iv_gain"), android.view.View.GONE);
+            return v;
+        }
+        int col = colour(iv.optString("changeHex"), 0xFF4FC38A);
+        v.setTextViewText(id(c, "iv_total"), iv.optString("total", "—"));
+        v.setTextViewText(id(c, "iv_ch"), iv.optString("change", ""));
+        v.setTextColor(id(c, "iv_ch"), col);
+        JSONArray P = iv.optJSONArray("pts");
+        if (P != null && P.length() > 1) {
+            v.setImageViewBitmap(id(c, "iv_chart"), chart(P, col));
+            v.setTextViewText(id(c, "iv_from"), iv.optString("from", ""));
+            v.setTextViewText(id(c, "iv_to"), "today");
+        } else v.setViewVisibility(id(c, "iv_chart"), android.view.View.GONE);
+        String ga = iv.optString("gainAll", "");
+        v.setTextViewText(id(c, "iv_gain"), ga);
+        v.setTextColor(id(c, "iv_gain"), colour(iv.optString("gainAllHex"), 0xFF4FC38A));
+        v.setViewVisibility(id(c, "iv_gain"), ga.isEmpty() ? android.view.View.GONE : android.view.View.VISIBLE);
+        return v;
+    }
+
+    static Bitmap chart(JSONArray P, int col) {
+        int W = 560, H = 140, n = P.length();
+        float pad = 12f;
+        Bitmap bm = Bitmap.createBitmap(W, H, Bitmap.Config.ARGB_8888);
+        Canvas cv = new Canvas(bm);
+        double lo = Double.MAX_VALUE, hi = -Double.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            double x = P.optDouble(i, 0);
+            lo = Math.min(lo, x);
+            hi = Math.max(hi, x);
+        }
+        if (hi - lo < 1e-6) { hi += 1; lo -= 1; }
+        Path line = new Path(), fill = new Path();
+        float lx = pad, ly = H / 2f;
+        for (int i = 0; i < n; i++) {
+            float x = pad + (W - 2 * pad) * i / (float) (n - 1);
+            float y = pad + (H - 2 * pad) * (float) (1 - (P.optDouble(i, 0) - lo) / (hi - lo));
+            if (i == 0) { line.moveTo(x, y); fill.moveTo(x, H); fill.lineTo(x, y); }
+            else { line.lineTo(x, y); fill.lineTo(x, y); }
+            lx = x; ly = y;
+        }
+        fill.lineTo(lx, H);
+        fill.close();
+        Paint g = new Paint();
+        g.setColor(0x14FFFFFF);
+        g.setStrokeWidth(1.5f);
+        for (int k = 1; k <= 3; k++) cv.drawLine(0, H * k / 4f, W, H * k / 4f, g);
+        Paint f = new Paint(Paint.ANTI_ALIAS_FLAG);
+        f.setShader(new LinearGradient(0, 0, 0, H, (col & 0x00FFFFFF) | 0x5A000000, col & 0x00FFFFFF, Shader.TileMode.CLAMP));
+        cv.drawPath(fill, f);
+        Paint s = new Paint(Paint.ANTI_ALIAS_FLAG);
+        s.setStyle(Paint.Style.STROKE);
+        s.setStrokeWidth(4.5f);
+        s.setStrokeJoin(Paint.Join.ROUND);
+        s.setStrokeCap(Paint.Cap.ROUND);
+        s.setColor(col);
+        cv.drawPath(line, s);
+        Paint d = new Paint(Paint.ANTI_ALIAS_FLAG);
+        d.setColor((col & 0x00FFFFFF) | 0x55000000);
+        cv.drawCircle(lx, ly, 11f, d);
+        d.setColor(0xFFFFFFFF);
+        cv.drawCircle(lx, ly, 5f, d);
+        return bm;
+    }
+
+    static RemoteViews invest2(Context c, int wid) {
+        JSONObject d = data(c), all = d.optJSONObject("invest");
+        String key = investKey(c, wid);
+        JSONObject iv = investBlock(all, key);
+        RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(5);
+        RemoteViews T = investTop(c, iv, d.has("at"));
+        T.setOnClickFillInIntent(id(c, "wi_root"), goTo(3, "acct:" + key));
+        b.addItem(1, T);
+        RemoteViews B = item(c, "wi_ivbtns");
+        B.setOnClickFillInIntent(id(c, "w_b1"), goTo(3, "invimport"));
+        B.setOnClickFillInIntent(id(c, "w_b2"), goTo(3, key.isEmpty() || "TD account".equals(key) ? "invest" : "acct:" + key));
+        B.setOnClickFillInIntent(id(c, "w_b3"), goTo(3, "invadd"));
+        b.addItem(2, B);
+        if (iv != null) {
+            JSONArray A = iv.optJSONArray("accounts");
+            for (int k = 0; A != null && k < A.length(); k++) {
+                JSONObject a = A.optJSONObject(k);
+                if (a == null) continue;
+                b.addItem(100 + k, line(c, "◆", 0xFF4FC38A, a.optString("n").toUpperCase(Locale.US), a.optString("v"), Color.WHITE,
+                        a.optString("s"), goTo(3, "acct:" + a.optString("n")), null, null));
+            }
+            JSONArray H = iv.optJSONArray("hold");
+            for (int k = 0; H != null && k < H.length(); k++) {
+                JSONObject h = H.optJSONObject(k);
+                if (h == null) continue;
+                RemoteViews v = item(c, "wi_hold");
+                int cc = colour(h.optString("col"), 0xFF4FC38A);
+                v.setInt(id(c, "h_bar"), "setBackgroundColor", cc);
+                v.setTextViewText(id(c, "h_t"), h.optString("t"));
+                v.setTextColor(id(c, "h_t"), cc);
+                v.setTextViewText(id(c, "h_n"), h.optString("n"));
+                v.setTextViewText(id(c, "h_s"), h.optString("sh") + " × " + h.optString("px"));
+                v.setTextViewText(id(c, "h_v"), h.optString("v"));
+                String gn = h.optString("gain", "");
+                v.setTextViewText(id(c, "h_g"), gn.isEmpty() ? h.optString("share", "") : gn);
+                v.setTextColor(id(c, "h_g"), gn.isEmpty() ? 0xFF9AA0C0 : colour(h.optString("gainHex"), 0xFF9AA0C0));
+                v.setOnClickFillInIntent(id(c, "wi_root"), goTo(3, "hold:" + h.optString("t")));
+                b.addItem(1000 + k, v);
+            }
+        }
+        String t = iv == null && !d.has("at") ? "Investments - open Ratio Vitae once" : key.isEmpty() ? "Investments · all" : key;
+        RemoteViews F = frame(c, "w_invest2", t, 700, b.build(), open(c, 460, 3, "invest"));
+        F.setOnClickPendingIntent(id(c, "w_cfg"), investPick(c, wid));
+        return F;
     }
 }

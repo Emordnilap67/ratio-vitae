@@ -82,7 +82,9 @@ public class MainActivity extends Activity {
 
             "invest_log.csv",
 
-            "health_notes.csv"};
+            "health_notes.csv",
+
+            "pill_groups.csv"};
 
     static final String[] READ_EXTRA = {"fx.txt"};
 
@@ -157,6 +159,7 @@ public class MainActivity extends Activity {
         pendingAct = getIntent() == null || getIntent().getStringExtra("act") == null ? "" : getIntent().getStringExtra("act");
         takeIntentFile(getIntent());
         web.loadUrl(ORIGIN);
+        Fresh.schedule(this);
     }
 
     @Override
@@ -314,6 +317,7 @@ public class MainActivity extends Activity {
             {"networth_log.csv", "date,net_worth,have,owe"},
             {"invest_log.csv", "date,account,ticker,shares,price,currency,value,book,note"},
             {"health_notes.csv", "date,time,note"},
+            {"pill_groups.csv", "name,time,meds,note"},
             {"food_log.csv", "month,date,place,item,amount,note"},
             {"weight_log.csv", "month,pounds,note"},
             {"credit_log.csv", "month,equifax,transunion"},
@@ -393,6 +397,24 @@ public class MainActivity extends Activity {
             }
             tmp.delete();
         }
+        touched(f);
+    }
+
+    static String readSafe(String name) {
+        boolean extra = false;
+        for (String x : READ_EXTRA) if (x.equals(name)) extra = true;
+        if (!okName(name) && !extra) return "";
+        File f = new File(folder(), name);
+        if (!f.isFile()) return "";
+        try {
+            return readText(f);
+        } catch (Exception e) {
+            return "";
+        }
+    }
+
+    static void touched(File f) {
+        try { f.setLastModified(System.currentTimeMillis()); } catch (Exception ignored) { }
     }
 
     static String readText(File f) throws java.io.IOException {
@@ -443,16 +465,7 @@ public class MainActivity extends Activity {
 
         @JavascriptInterface
         public String read(String name) {
-            boolean extra = false;
-            for (String x : READ_EXTRA) if (x.equals(name)) extra = true;
-            if (!okName(name) && !extra) return "";
-            File f = new File(folder(), name);
-            if (!f.isFile()) return "";
-            try {
-                return readText(f);
-            } catch (Exception e) {
-                return "";
-            }
+            return readSafe(name);
         }
 
         @JavascriptInterface
@@ -475,6 +488,7 @@ public class MainActivity extends Activity {
                 } finally {
                     out.close();
                 }
+                touched(f);
                 return "ok";
             } catch (Exception e) {
                 return "could not write " + name + ": " + e.getMessage();
@@ -574,6 +588,7 @@ public class MainActivity extends Activity {
                 } finally {
                     r.close();
                 }
+                touched(f);
                 return "ok";
             } catch (Exception e) {
                 return "could not undo: " + e.getMessage();
@@ -612,6 +627,7 @@ public class MainActivity extends Activity {
         @JavascriptInterface
         public void widget(String json) {
             Wid.setData(MainActivity.this, json);
+            Fresh.mark(MainActivity.this);
         }
 
         @JavascriptInterface

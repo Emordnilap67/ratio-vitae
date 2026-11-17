@@ -21,7 +21,7 @@
         </LinearLayout>
         <TextView android:id="@+id/w_t1" android:layout_width="104dp" android:layout_height="36dp"
             android:gravity="center" android:background="@drawable/wtake" android:text="Take all"
-            android:textSize="13sp" android:textStyle="bold" android:textColor="#1A0606" android:maxLines="1" />
+            android:textSize="13sp" android:textStyle="bold" android:textColor="#15181F" android:maxLines="1" />
     </LinearLayout>
     <LinearLayout android:id="@+id/w_r2" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp">
@@ -36,7 +36,7 @@
         </LinearLayout>
         <TextView android:id="@+id/w_t2" android:layout_width="104dp" android:layout_height="36dp"
             android:gravity="center" android:background="@drawable/wtake" android:text="Take all"
-            android:textSize="13sp" android:textStyle="bold" android:textColor="#1A0606" android:maxLines="1" />
+            android:textSize="13sp" android:textStyle="bold" android:textColor="#15181F" android:maxLines="1" />
     </LinearLayout>
     <LinearLayout android:id="@+id/w_re" android:layout_width="match_parent" android:layout_height="wrap_content"
         android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp">

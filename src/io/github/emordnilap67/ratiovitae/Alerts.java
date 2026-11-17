@@ -28,6 +28,7 @@ public class Alerts extends BroadcastReceiver {
     public void onReceive(Context c, Intent i) {
         if (FIRE.equals(i.getAction())) fire(c);
         schedule(c);
+        Fresh.schedule(c);
     }
 
     static SharedPreferences prefs(Context c) {

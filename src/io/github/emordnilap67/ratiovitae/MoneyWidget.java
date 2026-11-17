@@ -8,5 +8,7 @@ public class MoneyWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context c, AppWidgetManager m, int[] ids) {
         for (int w : ids) m.updateAppWidget(w, Wid.moneyNow(c));
+        Fresh.schedule(c);
+        Fresh.kick(c);
     }
 }

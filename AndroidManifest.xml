@@ -59,6 +59,19 @@
             </intent-filter>
             <meta-data android:name="android.appwidget.provider" android:resource="@xml/w_pills_info" />
         </receiver>
+        <receiver android:name=".InvestWidget" android:exported="false" android:label="Investments">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider" android:resource="@xml/w_invest_info" />
+        </receiver>
+        <activity android:name=".InvestPick" android:exported="true" android:label="Investments widget"
+            android:theme="@android:style/Theme.Material.Dialog.NoActionBar" android:excludeFromRecents="true" android:taskAffinity="">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+        <receiver android:name=".Fresh" android:exported="false" />
         <receiver android:name=".Alerts" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

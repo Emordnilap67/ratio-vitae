@@ -1,3 +1,14 @@
+**New in 2.0:**
+
+Alright, so this one's a big one - the widgets, the pills and a couple of things for the bills and all.
+
+- **Set date on a bill** - tap a bill you haven't paid yet and there's a blue **Set date** next to Paid. Say it was supposed to come out on the 16th but it's really coming out on the 18th or 19th - pick the day, press Set date, and it moves there and stays unpaid, so Coming up and your lowest point stay accurate. **Paid is red now**, because it's money going out
+- **Your own medication groups** - Morning and Night are still there, but now you can make your own: **+ New group** in the + sheet, give it a name, pick Day, Night or Any time, and pick its medications and how much. Say you take something three times a day - morning, afternoon and night, each its own group. Every group gets its own **Take all / Take the rest**, and the ✎ on any group lets you put a medication in or take one out. The Take all buttons are **silver** now
+- **An Investments widget** - your total, its line over time, what your holdings made, every holding with its shares and price. And it's **one widget, any account**: put as many copies on your home screen as you want, each one asks which account it shows (your TD account, a TFSA, crypto, whatever - or all of them added up). Change it later with the **⇄ account** chip or hold the widget
+- **The widgets keep up by themselves** - they check every so often and update when your files change, and they got a new look and all
+- **Real landscape** - on a wide screen held sideways it goes two columns instead of one skinny one
+- **Ready for any phone** - the widgets say Main account and Import, and a phone with no investments just says so
+
 **New in 1.4:**
 
 - **Start or stop a medication** - on the Health page, tap a medication: **Start taking it** (how many in the morning and at night, and either a course of so many days or every day with no end) or **Stop taking it** (back on standby, kept on hand for next time, or stopped). A course leaves your morning and night sets by itself after its last day, and never tells you to order more

@@ -161,8 +161,13 @@ html,body{height:100%;overflow:hidden}
 .sh .n{flex:1;min-width:0}
 .sh .n b{display:block;font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
 .sh .n small{display:block;font-size:12px;color:var(--mist);margin-top:2px}
-.bigtake{flex:none;padding:12px 18px;border-radius:99px;font-weight:600;font-size:14px;letter-spacing:.02em;color:#1A0606;
-  background:linear-gradient(180deg,#FF8787,#FF5F5F);box-shadow:0 4px 18px -6px color-mix(in srgb,var(--red1) 70%,transparent)}
+
+.bigtake{flex:none;padding:12px 18px;border-radius:99px;font-weight:600;font-size:14px;letter-spacing:.02em;color:#15181F;
+  background:linear-gradient(180deg,#F7F9FC 0%,#D9DEE7 45%,#B3BAC6 100%);box-shadow:0 4px 18px -6px rgba(205,214,230,.55),inset 0 1px 0 rgba(255,255,255,.85)}
+.gedit{flex:none;width:34px;height:34px;border-radius:99px;font-size:15px;color:var(--mist);border:1px solid var(--line)}
+.seg.s3{grid-template-columns:1fr 1fr 1fr}
+.quick .pgnew{color:#87D7D7;border-color:color-mix(in srgb,#87D7D7 45%,transparent)}
+.pgerr{margin:10px 2px 0;font-size:13px;color:var(--gold)}
 .bigtake:active{transform:scale(.97)}
 .done{flex:none;display:flex;align-items:center;gap:6px;padding:10px 14px;border-radius:99px;font-weight:600;font-size:13.5px;color:#87D787;
   background:color-mix(in srgb,#87D787 12%,transparent)}
@@ -214,6 +219,19 @@ html,body{height:100%;overflow:hidden}
 .rxact{display:flex;gap:8px;padding:0 14px 12px}.rx:not(.full)+.rxact{display:none}
 .rxact button{flex:1;text-align:center;padding:10px 8px;border-radius:99px;font-size:13px;font-weight:600;color:var(--p);border:1px solid color-mix(in srgb,var(--p) 50%,transparent)}
 @media (orientation:landscape) and (min-width:640px){#sheet{max-width:640px;margin:0 auto;max-height:94vh;border-left:1px solid var(--line2);border-right:1px solid var(--line2)}}
+
+@media (orientation:landscape) and (min-width:760px){
+  .wrap{max-width:1240px;padding-left:24px;padding-right:24px}
+  .wide2{display:flex;flex-wrap:wrap;align-items:flex-start;column-gap:28px}
+  .wide2>.month,.wide2>.hhead,.wide2>.srhead{flex:0 0 100%}
+  .wide2>.wcol{flex:1 1 0;min-width:0}
+}
+@media (orientation:landscape) and (min-width:760px) and (max-height:520px){
+  .wrap{padding-top:8px}
+  .tabs{margin-top:6px}
+  .month,.hhead{margin-top:10px}
+  .month h1,.hhead h1{font-size:26px}
+}
 .rx.off .t b{color:var(--dim)}
 
 #fab{position:fixed;z-index:3;right:18px;bottom:calc(20px + env(safe-area-inset-bottom));width:60px;height:60px;border-radius:50%;
@@ -234,8 +252,8 @@ html,body{height:100%;overflow:hidden}
 .seg button.on{color:var(--ink);border-color:color-mix(in srgb,var(--red) 60%,transparent);background:color-mix(in srgb,var(--red) 12%,transparent)}
 .seg.pv{margin:0 0 12px}
 .seg.pv button.on{border-color:color-mix(in srgb,var(--tier,#AFAFFF) 60%,transparent);background:color-mix(in srgb,var(--tier,#AFAFFF) 12%,transparent)}
-.quick{display:flex;gap:6px;margin:0 0 10px}
-.quick button{flex:1;padding:9px 4px;border-radius:99px;border:1px solid var(--line2);font-size:12.5px;font-weight:600;color:var(--plum);text-align:center}
+.quick{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.quick button{flex:1 1 28%;white-space:nowrap;padding:9px 8px;border-radius:99px;border:1px solid var(--line2);font-size:12.5px;font-weight:600;color:var(--plum);text-align:center}
 .pk{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent);min-height:56px}
 .pkn{flex:1;min-width:0;display:flex;align-items:center;gap:12px;padding:4px 0}
 .pkn .box{width:24px;height:24px;flex:none;border-radius:8px;border:2px solid color-mix(in srgb,var(--p) 70%,transparent);display:flex;align-items:center;justify-content:center}
@@ -548,6 +566,11 @@ b.in{color:#FF9A9A;font-weight:600}
 .row .nl li::before{background:var(--mist)}
 
 #sheet.money .go.pay{background:linear-gradient(180deg,#9BE89B,#5FC25F);color:#06200A;font-size:17px}
+
+#sheet.money .go.pay.out{background:linear-gradient(180deg,#FF8F8F,#E05555);color:#2A0606}
+#sheet.money .gorow{display:flex;gap:10px;align-items:stretch}
+#sheet.money .gorow .go{flex:1.35;min-width:0;padding-left:10px;padding-right:10px}
+#sheet.money .gorow .go.setd{flex:1;background:linear-gradient(180deg,#9FBFFF,#5F87FF);color:#06102A;font-size:15.5px}
 .payhd{display:flex;align-items:baseline;gap:10px;margin:6px 0 4px}
 .payhd b{flex:1;min-width:0;font-size:20px;color:var(--ink)}
 .payhd span{font-size:20px;font-weight:600;color:var(--exp)}
@@ -571,6 +594,7 @@ b.in{color:#FF9A9A;font-weight:600}
 #sheet .chips.c5 button{text-align:center;padding:10px 4px}
 #sheet .chips.c5 button small{display:block;font-size:9px;color:var(--dim)}
 .tag.ok{color:#87D787;border-color:color-mix(in srgb,#87D787 45%,transparent)}
+.tag.out{color:#FF8787;border-color:color-mix(in srgb,#FF8787 45%,transparent)}
 .act{border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--raise) 90%,transparent);overflow:hidden}
 .act .ar{display:flex;align-items:baseline;gap:10px;padding:9px 12px;border-top:1px solid color-mix(in srgb,var(--line) 60%,transparent)}
 .act .ar:first-child{border-top:0}
@@ -940,7 +964,7 @@ function g(x) { return String(+(+x).toFixed(4)); }
 function clean(s) { return String(s || "").replace(/[\r\n]+/g, " ").replace(/"/g, "'").replace(/,/g, " -").trim(); }
 
 function loadMeds(rows) {
-  return rows.filter(function (r) { return (r.medication || "").trim(); }).map(function (r) {
+  return groupDaily(rows.filter(function (r) { return (r.medication || "").trim(); }).map(function (r) {
     return { name: r.medication.trim(), form: r.form || "", strength: num(r.strength), unit: (r.unit || "").trim(),
       am: num(r.morning), pm: num(r.night), flex: /^yes$/i.test((r.flex || "").trim()), interval: Math.trunc(num(r.interval_days)),
       status: (r.status || "").trim().toLowerCase(), prescriber: r.prescriber || "", purpose: r.purpose || "", note: r.note || "",
@@ -951,7 +975,57 @@ function loadMeds(rows) {
     m.from = c ? c[1] : ""; m.until = c ? c[2] : "";
     if (m.status === "active" && m.until && iso(pillDay(new Date())) > m.until) m.status = "course ended";
     return m;
+  }));
+}
+
+const GROUP_FILE = "pill_groups.csv";
+const GROUP_NOTE = /(?:^|\s-\s)group (.+?)(?=\s-\s|$)/;
+function readGroups() {
+  const F = rawFile(GROUP_FILE);
+  if (!F.ok) return [];
+  return F.rows.filter(function (r) { return (r.name || "").trim(); }).map(function (r) {
+    const items = String(r.meds || "").split("|").map(function (p) { const k = p.lastIndexOf("="); return k > 0 ? { name: p.slice(0, k).trim(), amount: num(p.slice(k + 1)) } : null; })
+      .filter(function (x) { return x && x.name && x.amount > 0; });
+    const t = (r.time || "").trim().toLowerCase();
+    return { key: "g:" + r.name.trim(), name: r.name.trim(), time: t === "day" || t === "night" ? t : "any", items: items, row: r };
   });
+}
+function groupDaily(M) {
+  const by = {};
+  for (const m of M) by[m.name] = m;
+  for (const G of readGroups()) for (const it of G.items) { const m = by[it.name]; if (m && !m.shot && m.strength) m.daily += it.amount / m.strength; }
+  return M;
+}
+
+function allGroups(G) {
+  const own = function (t) { return G.filter(function (x) { return x.time === t; }).map(function (x) { return { key: x.key, name: x.name, time: x.time, own: x }; }); };
+  return [{ key: "am", name: "Morning", time: "day" }].concat(own("day"), [{ key: "pm", name: "Night", time: "night" }], own("night"), own("any"));
+}
+
+function groupList(grp, M, taken) {
+  if (grp.key === "am" || grp.key === "pm") {
+    const slot = grp.key;
+    return M.filter(function (m) { return m.status === "active" && !m.shot && (slot === "am" ? m.am : m.pm) > 0; })
+      .sort(function (a, b) { return (slot === "am" ? b.am : b.pm) * b.strength - (slot === "am" ? a.am : a.pm) * a.strength; })
+      .map(function (m) { return { m: m, amount: usual(m, slot, taken), note: "" }; });
+  }
+  const by = {};
+  for (const m of M) by[m.name] = m;
+  return grp.own.items.map(function (it) { return { m: by[it.name], amount: it.amount, note: "group " + grp.name }; })
+    .filter(function (x) { return x.m && x.m.status === "active" && !x.m.shot; });
+}
+
+function ownDoses(m, tabs) {
+  return readGroups().map(function (G) {
+    const it = G.items.filter(function (x) { return x.name === m.name; })[0];
+    return it ? G.name.toLowerCase() + " " + (tabs ? g(m.strength ? it.amount / m.strength : it.amount) : g(it.amount) + " " + m.unit) : "";
+  }).filter(Boolean);
+}
+
+function takenIn(S, name, key) {
+  const s = S[name];
+  if (!s) return null;
+  return key === "am" || key === "pm" ? s[key] : (s.g && s.g[key.slice(2)]) || null;
 }
 
 function slotOf(t) {
@@ -970,7 +1044,9 @@ function slotsFor(day, taken, M) {
   }).sort(function (x, y) { return x.a - y.a; });
   for (const x of rows) {
     const name = x.t.medication, med = byName[name];
-    const s = res[name] || (res[name] = { am: null, pm: null, extra: [] });
+    const s = res[name] || (res[name] = { am: null, pm: null, extra: [], g: {} });
+    const gm = GROUP_NOTE.exec(x.t.note || "");
+    if (gm && med && !med.shot) { if (s.g[gm[1]]) s.extra.push(x.t); else s.g[gm[1]] = x.t; continue; }
     if (!med || med.shot) { s.extra.push(x.t); continue; }
     let slot = slotOf(x.t.time);
     if (slot === "either" || slot === null) slot = (med.am > 0 && !s.am) ? "am" : "pm";
@@ -986,7 +1062,7 @@ function usual(med, slot, taken) {
   for (let i = taken.length - 1; i >= 0; i--) {
     const t = taken[i];
     if (t.medication !== med.name) continue;
-    if (slotOf(t.time) !== slot || !(num(t.amount) > 0)) continue;
+    if (slotOf(t.time) !== slot || !(num(t.amount) > 0) || GROUP_NOTE.test(t.note || "")) continue;
 
     const twice = taken.filter(function (x) { return x.medication === med.name && x.date === t.date && slotOf(x.time) === slot; }).length > 1;
     if (!twice) return num(t.amount);
@@ -994,9 +1070,9 @@ function usual(med, slot, taken) {
   const n = slot === "am" ? med.am : med.pm;
   return (n || med.am || med.pm || 1) * med.strength;
 }
-function takenRow(day, time, med, amount) {
+function takenRow(day, time, med, amount, note) {
   const tabs = med.shot || !med.strength ? 1 : amount / med.strength;
-  return [day, time, clean(med.name), g(amount), clean(med.unit), g(tabs), ""].join(",");
+  return [day, time, clean(med.name), g(amount), clean(med.unit), g(tabs), clean(note || "")].join(",");
 }
 
 function supply(med, fills, taken, today) {
@@ -1497,7 +1573,7 @@ function paidOf(note) {
 }
 function paidTag(it) {
   const p = paidOf(it.note);
-  if (p) { it.tag = p.word + " " + p.day; it.tagCls = "ok"; }
+  if (p) { it.tag = p.word + " " + p.day; it.tagCls = p.word === "received" ? "ok" : "out"; }
 }
 function activityOf(note, wallet) {
   const out = [];
@@ -1736,6 +1812,11 @@ function moonIcon() {
     '<circle cx="26" cy="9" r="1" fill="#AFAFFF"/><circle cx="29" cy="15" r=".7" fill="#AFAFFF"/></svg>';
 }
 
+function clockIcon() {
+  return '<svg class="ic" viewBox="0 0 34 34" aria-hidden="true"><g fill="none" stroke="#87D7D7" stroke-width="1.6" stroke-linecap="round">' +
+    '<circle cx="17" cy="17" r="11"/><path d="M17 10v7l5 3"/></g></svg>';
+}
+function groupIcon(grp) { return grp.time === "night" ? moonIcon() : grp.time === "any" ? clockIcon() : sunIcon(); }
 let HD = null;
 
 function renderHealth() {
@@ -1746,7 +1827,8 @@ function renderHealth() {
   const fills = parseCSV(readFile("pills_fills.csv")).filter(function (f) { return (f.medication || "").trim(); });
   const W = loadWeights(parseCSV(readFile("weight_log.csv")));
   const now = new Date(), today = pillDay(now), day = iso(today);
-  HD = { M: M, taken: taken, today: today };
+  HD = { M: M, taken: taken, today: today, G: readGroups() };
+  HD.GR = allGroups(HD.G);
   const S = slotsFor(day, taken, M);
   const active = M.filter(function (m) { return m.status === "active"; });
   let h = "";
@@ -1754,25 +1836,25 @@ function renderHealth() {
   h += '<section class="hhead"><h1>Health</h1><p>' + esc(longDate(today)) +
     (now.getHours() < DAY_ROLL_HOUR ? '<small>until 4 AM this still counts as ' + esc(DAYS[today.getDay()]) + '</small>' : "") + '</p></section>';
 
-  for (const slot of ["am", "pm"]) {
-    const list = active.filter(function (m) { return !m.shot && (slot === "am" ? m.am : m.pm) > 0; })
-      .sort(function (a, b) { return (slot === "am" ? b.am : b.pm) * b.strength - (slot === "am" ? a.am : a.pm) * a.strength; });
-    if (!list.length) continue;
-    const done = list.filter(function (m) { return S[m.name] && S[m.name][slot]; });
-    const all = done.length === list.length;
-    h += '<section class="set' + (all ? " all" : "") + '"><div class="sh">' + (slot === "am" ? sunIcon() : moonIcon()) +
-      '<span class="n"><b>' + (slot === "am" ? "Morning" : "Night") + '</b><small>' +
-      (all ? "all " + list.length + " taken" : done.length + " of " + list.length + " taken") + '</small></span>' +
-      (all ? '<span class="done">✓ Done</span>' : '<button class="bigtake" data-takeset="' + slot + '">Take ' + (done.length ? "the rest" : "all " + list.length) + '</button>') +
+  for (const grp of HD.GR) {
+    const list = groupList(grp, M, taken);
+    if (!list.length && !grp.own) continue;
+    const done = list.filter(function (x) { return takenIn(S, x.m.name, grp.key); });
+    const all = list.length > 0 && done.length === list.length;
+    h += '<section class="set' + (all ? " all" : "") + '"><div class="sh">' + groupIcon(grp) +
+      '<span class="n"><b>' + esc(grp.name) + '</b><small>' + (!list.length ? "nothing in it" : all ? "all " + list.length + " taken" : done.length + " of " + list.length + " taken") +
+      (grp.own ? " · " + (grp.time === "any" ? "any time" : grp.time) : "") + '</small></span>' +
+      '<button class="gedit" data-pgedit="' + esc(grp.key) + '" aria-label="Change ' + esc(grp.name) + '">✎</button>' +
+      (!list.length ? "" : all ? '<span class="done">✓ Done</span>' : '<button class="bigtake" data-takeset="' + esc(grp.key) + '">Take ' + (done.length ? "the rest" : "all " + list.length) + '</button>') +
       '</div>';
-    for (const m of list) {
-      const r = S[m.name] && S[m.name][slot];
-      const amt = r ? num(r.amount) : usual(m, slot, taken);
+    for (const x of list) {
+      const m = x.m, r = takenIn(S, m.name, grp.key);
+      const amt = r ? num(r.amount) : x.amount;
       const col = pillColour(m.name);
       h += '<div class="med' + (r ? " did" : "") + '" style="--p:' + col + '">' + pillIcon(col, false) +
         '<span class="n"><b>' + esc(m.name) + '</b><small>' + doseText(m, amt) + '</small></span>' +
         (r ? '<button class="st undo" data-undodose="' + esc(takenRaw(r)) + '">✓ ' + clock(r.time) + '<i>undo</i></button>'
-          : '<button class="one" data-take="' + esc(m.name) + '" data-slot="' + slot + '">Take</button>') + '</div>';
+          : '<button class="one" data-take="' + esc(m.name) + '" data-slot="' + esc(grp.key) + '">Take</button>') + '</div>';
     }
     h += '</section>';
   }
@@ -1863,7 +1945,7 @@ function renderHealth() {
   order.forEach(function (m, k) {
     const col = pillColour(m.name), id = "rx" + k;
     const sched = m.shot ? (m.interval ? "every " + m.interval + " days" : "injection")
-      : [m.am ? "morning " + g(m.am) : "", m.pm ? "night " + g(m.pm) : ""].filter(Boolean).join(" · ");
+      : [m.am ? "morning " + g(m.am) : "", m.pm ? "night " + g(m.pm) : ""].concat(ownDoses(m, true)).filter(Boolean).join(" · ");
     h += '<button class="rx' + (m.status === "active" ? "" : " off") + (state.full[id] ? " full" : "") + '" data-rx="' + id + '" style="--p:' + col + '">' +
       '<div class="t"><b>' + esc(m.name) + '</b><span>' + esc(g(m.strength)) + ' ' + esc(m.unit) + (m.status === "active" ? "" : " · " + esc(m.status)) + '</span></div>' +
       '<div class="s">' + esc(sched) + (m.flex ? " · flex" : "") + (m.until ? ' · <b style="color:var(--p)">course ' + esc(shortDate(dateOf(m.from))) + ' – ' + esc(shortDate(dateOf(m.until))) + '</b>' : "") + (m.purpose ? " · " + esc(m.purpose) : "") + '</div>' +
@@ -1945,21 +2027,21 @@ function toast(msg, canUndo, bad) {
 function takeNow(list) {
   if (!list.length) return;
   const now = new Date(), day = iso(pillDay(now)), time = hm(now);
-  const lines = list.map(function (x) { return takenRow(day, time, x.m, x.amount); });
+  const lines = list.map(function (x) { return takenRow(day, time, x.m, x.amount, x.note); });
   const said = list.length === 1 ? "Logged " + list[0].m.name + " " + g(list[0].amount) + " " + list[0].m.unit
     : "Logged " + list.length + ": " + list.map(function (x) { return x.m.name.split(" ")[0]; }).join(", ");
   writeRows("pills_taken.csv", lines, said);
 }
-function setList(slot, dayStr) {
-  const S = slotsFor(dayStr, HD.taken, HD.M);
-  return HD.M.filter(function (m) { return m.status === "active" && !m.shot && (slot === "am" ? m.am : m.pm) > 0 && !(S[m.name] && S[m.name][slot]); })
-    .map(function (m) { return { m: m, amount: usual(m, slot, HD.taken) }; });
+function setList(key, dayStr) {
+  const S = slotsFor(dayStr, HD.taken, HD.M), grp = (HD.GR || []).filter(function (x) { return x.key === key; })[0];
+  if (!grp) return [];
+  return groupList(grp, HD.M, HD.taken).filter(function (x) { return !takenIn(S, x.m.name, key); });
 }
 
 let pick = null;
 function openPick() {
   const now = new Date(), slot = (now.getHours() >= 18 || now.getHours() < DAY_ROLL_HOUR) ? "pm" : "am";
-  pick = { back: 0, sel: {} };
+  pick = { back: 0, sel: {}, grp: slot };
   for (const x of setList(slot, iso(HD.today))) pick.sel[x.m.name] = x.amount;
   renderPick();
 }
@@ -1970,13 +2052,15 @@ function renderPick() {
   h += '<div class="seg">' + [0, 1].map(function (i) {
     return '<button data-back="' + i + '" class="' + (pick.back === i ? "on" : "") + '">' + (i ? "Yesterday" : "Today") + '<small>' + esc(shortDate(addDays(HD.today, -i))) + '</small></button>';
   }).join("") + '</div>';
-  h += '<div class="quick"><button data-preset="am">☀ Morning set</button><button data-preset="pm">☾ Night set</button><button data-preset="none">Clear</button></div>';
+  h += '<div class="quick">' + (HD.GR || []).map(function (grp) {
+    return '<button data-preset="' + esc(grp.key) + '"' + (pick.grp === grp.key ? ' class="on"' : "") + '>' + (grp.time === "night" ? "☾ " : grp.time === "any" ? "◷ " : "☀ ") + esc(grp.name) + (grp.own ? "" : " set") + '</button>';
+  }).join("") + '<button data-preset="none">Clear</button><button class="pgnew" data-pgnew="1">+ New group</button></div>';
 
   const list = HD.M.filter(function (m) { return m.status === "active" && !m.shot; })
     .concat(HD.M.filter(function (m) { return m.status === "active" && m.shot; }), HD.M.filter(function (m) { return m.status !== "active"; }));
   for (const m of list) {
     const on = pick.sel[m.name] !== undefined, col = pillColour(m.name), s = S[m.name];
-    const had = s ? [s.am, s.pm].concat(s.extra).filter(Boolean) : [];
+    const had = s ? [s.am, s.pm].concat(s.extra, Object.keys(s.g || {}).map(function (k) { return s.g[k]; })).filter(Boolean) : [];
     const info = had.length ? "taken " + had.map(function (t) { return g(num(t.amount)) + " at " + clock(t.time); }).join(", ")
       : (m.status === "active" ? (m.shot ? (m.interval ? "every " + m.interval + " days" : "injection") : g(m.strength) + " " + m.unit + " tablet") : m.status);
     h += '<div class="pk' + (on ? " on" : "") + '" style="--p:' + col + '"><button class="pkn" data-pk="' + esc(m.name) + '"><span class="box"></span>' +
@@ -1996,10 +2080,95 @@ function renderPick() {
 function logPick() {
   const now = new Date(), day = iso(addDays(HD.today, -pick.back)), time = hm(now);
   const lines = [], names = [];
-  for (const m of HD.M) if (pick.sel[m.name] !== undefined) { lines.push(takenRow(day, time, m, pick.sel[m.name])); names.push(m.name.split(" ")[0]); }
+
+  const grp = pick.grp && pick.grp.indexOf("g:") === 0 ? (HD.GR || []).filter(function (x) { return x.key === pick.grp; })[0] : null, inG = {};
+  if (grp) groupList(grp, HD.M, HD.taken).forEach(function (x) { inG[x.m.name] = x.note; });
+  for (const m of HD.M) if (pick.sel[m.name] !== undefined) { lines.push(takenRow(day, time, m, pick.sel[m.name], inG[m.name] || "")); names.push(m.name.split(" ")[0]); }
   if (!lines.length) return;
   closeSheet();
   writeRows("pills_taken.csv", lines, "Logged " + (lines.length === 1 ? names[0] : lines.length + ": " + names.join(", ")) + (pick.back ? " for yesterday" : ""));
+}
+
+let pg = null;
+function openGroupEdit(key) {
+  const grp = key ? (HD.GR || []).filter(function (x) { return x.key === key; })[0] : null;
+  if (key && !grp) return;
+  closeSheet();
+  pg = { key: key, isNew: !key, std: key === "am" || key === "pm", name: grp && grp.own ? grp.name : "", time: grp && grp.own ? grp.time : "day", sel: {}, err: "" };
+
+  if (pg.std) for (const m of HD.M) { const n = key === "am" ? m.am : m.pm; if (m.status === "active" && !m.shot && n > 0) pg.sel[m.name] = n; }
+  else if (grp) for (const it of grp.own.items) { const m = HD.M.filter(function (x) { return x.name === it.name; })[0]; if (m && m.strength) pg.sel[it.name] = +(it.amount / m.strength).toFixed(2); }
+  renderGroupEdit();
+}
+function pgName() { const n = $("pgname"); if (n && pg) pg.name = n.value; }
+function renderGroupEdit() {
+  let h = '<div class="grab"></div><h2>' + (pg.isNew ? "New group" : pg.std ? (pg.key === "am" ? "Morning" : "Night") + " set" : esc(pg.name)) + '</h2>';
+  if (!pg.std) {
+    h += '<label class="fld"><span>Name</span><input id="pgname" type="text" maxlength="28" autocomplete="off" placeholder="Afternoon" value="' + esc(pg.name) + '"></label>';
+    h += '<div class="lbl">When</div><div class="seg s3">' + [["day", "☀ Day"], ["night", "☾ Night"], ["any", "◷ Any time"]].map(function (t) {
+      return '<button data-pgtime="' + t[0] + '" class="' + (pg.time === t[0] ? "on" : "") + '">' + t[1] + '</button>'; }).join("") + '</div>';
+  }
+  h += '<p class="tabhint">' + (pg.std ? "Tick what you take " + (pg.key === "am" ? "in the morning" : "at night") + " and how many tablets. It is the " + (pg.key === "am" ? "morning" : "night") +
+      " column of pills_log.csv. Take all logs what you usually take."
+    : "Pick its medications and how many tablets of each, each time. Take all logs exactly these, and they count in what is left and when to order.") + '</p>';
+  for (const m of HD.M.filter(function (x) { return x.status === "active" && !x.shot; })) {
+    const on = pg.sel[m.name] !== undefined, col = pillColour(m.name);
+    h += '<div class="pk' + (on ? " on" : "") + '" style="--p:' + col + '"><button class="pkn" data-pgpick="' + esc(m.name) + '"><span class="box"></span>' +
+      '<span class="n"><b>' + esc(m.name) + '</b><small>' + esc(g(m.strength) + " " + m.unit + " a tablet") + '</small></span></button>';
+    if (on) { const t = pg.sel[m.name];
+      h += '<span class="step"><button data-pgdec="' + esc(m.name) + '" aria-label="less">−</button><span class="amt">' + tabsText(t) +
+        '<small>' + esc(g(t * m.strength) + " " + m.unit) + '</small></span><button data-pginc="' + esc(m.name) + '" aria-label="more">+</button></span>'; }
+    h += '</div>';
+  }
+  if (pg.err) h += '<p class="pgerr">⚠ ' + esc(pg.err) + '</p>';
+  const n = Object.keys(pg.sel).length;
+  h += '<button class="go" data-pgsave="1">' + (pg.isNew ? "Make the group" + (n ? " · " + n + (n === 1 ? " medication" : " medications") : "") : "Save") + '</button>';
+  if (!pg.std && !pg.isNew) h += '<button class="payx" data-pgdel="1">✕ Take this group away</button>';
+  openSheet(h);
+}
+function saveGroup(del) {
+  pgName();
+  const d = new Date(), when = MONTHS_SHORT[d.getMonth()] + " " + d.getDate() + " " + d.getFullYear(), ops = [];
+  const fail = function (t) { pg.err = t; renderGroupEdit(); };
+  if (pg.std) {
+    const L = rawFile("pills_log.csv"), col = pg.key === "am" ? "morning" : "night";
+    for (const r of L.rows) {
+      const nm = (r.medication || "").trim(), m = HD.M.filter(function (x) { return x.name === nm; })[0];
+      if (!m || m.status !== "active" || m.shot) continue;
+      const was = num(r[col]), now = pg.sel[nm] !== undefined ? pg.sel[nm] : 0;
+      if (Math.abs(was - now) < 1e-9) continue;
+      const piece = (now === 0 ? "taken out of the " + col + " set" : was === 0 ? "put in the " + col + " set - " + g(now) + (now === 1 ? " tablet" : " tablets")
+        : col + " " + g(was) + " to " + g(now) + " tablets") + " " + when + " (Ratio Vitae)";
+      const ch = { note: clean((r.note ? r.note + " - " : "") + piece) }; ch[col] = g(now);
+      ops.push({ f: "pills_log.csv", op: "replace", old: r.raw, rows: setFields(r, L.head, ch) });
+    }
+    if (!ops.length) { closeSheet(); toast("Nothing changed", false, false); return; }
+  } else {
+    const F = rawFile(GROUP_FILE), old = pg.isNew ? null : HD.G.filter(function (x) { return x.key === pg.key; })[0];
+    if (!F.ok) return fail(GROUP_FILE + " was not found in the Ratio Vitae folder");
+    if (del) { if (old) ops.push({ f: GROUP_FILE, op: "delete", old: old.row.raw, after: lineBefore(GROUP_FILE, old.row.raw) }); }
+    else {
+      const name = clean(pg.name).replace(/\s+-\s+/g, " ").replace(/[|=]/g, " ").replace(/\s+/g, " ").trim();
+      if (!name) return fail("Give it a name - Afternoon, Bedtime, With lunch ...");
+      if (/^(morning|night)( set)?$/i.test(name) || HD.G.some(function (x) { return x.name.toLowerCase() === name.toLowerCase() && x.key !== pg.key; }))
+        return fail("There is already a group called " + name);
+      const meds = HD.M.filter(function (m) { return pg.sel[m.name] !== undefined; }).map(function (m) { return clean(m.name).replace(/[|=]/g, " ") + "=" + g(pg.sel[m.name] * m.strength); });
+      if (!meds.length) return fail("Pick at least one medication");
+      if (old) ops.push({ f: GROUP_FILE, op: "replace", old: old.row.raw, rows: setFields(old.row, F.head, { name: name, time: pg.time, meds: meds.join("|"),
+        note: clean((old.row.note ? old.row.note + " - " : "") + "changed " + when + " (Ratio Vitae)") }) });
+      else ops.push({ f: GROUP_FILE, op: "append", rows: [name, pg.time, meds.join("|"), "made " + when + " (Ratio Vitae)"].join(",") + "\n" });
+      pg.name = name;
+    }
+  }
+  let r;
+  if (N && N.apply) { try { r = N.apply(JSON.stringify(ops)); } catch (e) { r = "could not write: " + e; } }
+  else r = previewApply(ops);
+  if (r !== "ok") return fail(r);
+  const said = del ? "Took away " + pg.name : pg.std ? (pg.key === "am" ? "Morning" : "Night") + " set changed" : (pg.isNew ? "Made " : "Saved ") + pg.name;
+  lastWrite = { ops: ops };
+  closeSheet();
+  toast(said, true, false);
+  renderHealth(); alertPlan();
 }
 
 function openWeight() {
@@ -2092,7 +2261,7 @@ function saveEggCount() {
 
 function openSheet(html) { $("sheet").innerHTML = html; $("sheet").classList.remove("hidden"); $("scrim").classList.remove("hidden"); }
 function closeSheet() { if (typeof fileQ !== "undefined" && fileQ && fileQ.length) setTimeout(function () { if (fileQ.length && !sheetOpen()) nextFile(); }, 400);
-  $("sheet").classList.add("hidden"); $("sheet").classList.remove("money"); $("scrim").classList.add("hidden"); pick = null; ms = null; cm = null; up = null; tdp = null; cy = null; shotWait = null; iv = null; }
+  $("sheet").classList.add("hidden"); $("sheet").classList.remove("money"); $("scrim").classList.add("hidden"); pick = null; ms = null; cm = null; up = null; tdp = null; cy = null; shotWait = null; iv = null; pg = null; }
 function sheetOpen() { return !$("sheet").classList.contains("hidden"); }
 
 document.addEventListener("click", function (e) {
@@ -2101,10 +2270,14 @@ document.addEventListener("click", function (e) {
   if ((b = q("[data-page]"))) { toPage(+b.getAttribute("data-page"), true); return; }
   if ((b = q("[data-takeset]"))) { takeNow(setList(b.getAttribute("data-takeset"), iso(HD.today))); return; }
   if ((b = q("[data-take]"))) {
-    const m = HD.M.filter(function (x) { return x.name === b.getAttribute("data-take"); })[0];
-    if (m) takeNow([{ m: m, amount: usual(m, b.getAttribute("data-slot"), HD.taken) }]);
+    const m = HD.M.filter(function (x) { return x.name === b.getAttribute("data-take"); })[0], key = b.getAttribute("data-slot");
+    const grp = (HD.GR || []).filter(function (x) { return x.key === key; })[0];
+    const it = grp && m ? groupList(grp, HD.M, HD.taken).filter(function (x) { return x.m === m; })[0] : null;
+    if (m) takeNow([it || { m: m, amount: usual(m, key, HD.taken), note: "" }]);
     return;
   }
+  if ((b = q("[data-pgedit]"))) { if (HD) openGroupEdit(b.getAttribute("data-pgedit")); return; }
+  if ((b = q("[data-pgnew]"))) { if (HD) openGroupEdit(""); return; }
   if ((b = q("[data-rx]"))) { const id = b.getAttribute("data-rx"); state.full[id] = !state.full[id]; b.classList.toggle("full", !!state.full[id]); return; }
   if ((b = q("[data-weight]"))) { openWeight(); return; }
   if ((b = q("[data-eggs]"))) { setEggs(b.getAttribute("data-eggs")); return; }
@@ -2117,7 +2290,7 @@ document.addEventListener("click", function (e) {
   if ((b = q("[data-back]"))) { pick.back = +b.getAttribute("data-back"); renderPick(); return; }
   if ((b = q("[data-preset]"))) {
     const p = b.getAttribute("data-preset");
-    pick.sel = {};
+    pick.sel = {}; pick.grp = p === "none" ? "" : p;
     if (p !== "none") for (const x of setList(p, iso(addDays(HD.today, -pick.back)))) pick.sel[x.m.name] = x.amount;
     renderPick(); return;
   }
@@ -2134,6 +2307,16 @@ document.addEventListener("click", function (e) {
     renderPick(); return;
   }
   if (q("[data-logpick]")) { logPick(); return; }
+  if (pg) {
+    if ((b = q("[data-pgtime]"))) { pgName(); pg.time = b.getAttribute("data-pgtime"); renderGroupEdit(); return; }
+    if ((b = q("[data-pgpick]"))) { pgName(); const nm = b.getAttribute("data-pgpick"); if (pg.sel[nm] !== undefined) delete pg.sel[nm]; else pg.sel[nm] = 1; pg.err = ""; renderGroupEdit(); return; }
+    if ((b = q("[data-pginc]")) || (b = q("[data-pgdec]"))) {
+      pgName(); const up = b.hasAttribute("data-pginc"), nm = b.getAttribute(up ? "data-pginc" : "data-pgdec");
+      pg.sel[nm] = Math.max(0.5, Math.min(12, +(pg.sel[nm] + (up ? 0.5 : -0.5)).toFixed(2))); renderGroupEdit(); return;
+    }
+    if (q("[data-pgsave]")) { saveGroup(false); return; }
+    if (q("[data-pgdel]")) { saveGroup(true); return; }
+  }
   if (q("[data-logweight]")) { logWeight(); return; }
   if (q("[data-eggsave]")) { saveEggCount(); return; }
 });
@@ -2295,8 +2478,8 @@ function renderPay() {
       openSheet(h); $("sheet").classList.add("money"); return;
     }
     h += '<p class="tabhint">' + (planned ? "Bought it? Type what it cost and press the green button - it moves out of Planned. Not buying it, or a different amount? Change it or take it off below."
-      : inc ? "When this money lands, pick the account it went into and press the green button. A different amount? Type it - the line changes to it."
-      : ms.mode === "paid" ? "When this comes out, pick the account it came out of and press the green button. It turns green and Left now goes down. A different amount? Type it - the line changes to what you paid."
+      : inc ? "When this money lands, pick the account it went into and press the green button. A different amount? Type it - the line changes to it." + (ms.mode === "paid" ? " Coming on another day? Pick it and press the blue Set date." : "")
+      : ms.mode === "paid" ? "When this comes out, pick the account it came out of and press the red Paid button - Left now goes down. A different amount? Type it - the line changes to what you paid. Not coming out on its day? Pick the day it will and press the blue Set date - it stays unpaid, moved to that day."
       : "Type what you paid, pick the account, then press the green button.") + '</p>';
     h += '<label class="amtin"><span>$</span><input id="mamt" type="text" inputmode="decimal" autocomplete="off" placeholder="0.00" value="' + esc(ms.amount) + '"></label>';
     h += acctChips(ms.src, "src", !inc, inc);
@@ -2960,8 +3143,12 @@ function newLineFields(kind) {
 function planHTML() {
   const p = moneyPlan();
   const pm = ms.pay ? ms.mode : "", pl = ms.pay ? pickedLine(moneyCtx()) : null, bought = pl && pl.group === "planned";
-  if (p.err) return '<div class="plan dim">' + esc(p.err) + '</div><button class="go' + (ms.pay ? " pay" : "") + (pm === "remove" ? " del" : "") + '" disabled>' +
-    (pm === "edit" ? "Save" : pm === "remove" ? "Take it off" : ms.pay ? (ms.type === "in" ? "It came in" : bought ? "Bought" : "Paid") : ms.type === "plan" ? "Plan it" : ms.type === "koho" || ms.type === "limit" || ms.type === "cash" ? "Set" : "Add") + '</button>';
+
+  const out = ms.pay && ms.type !== "in" && pm !== "edit" && pm !== "remove" ? " out" : "";
+  const sd = ms.pay && pm === "paid" && pl && !bought && dateOf(ms.date) ? '<button class="go setd" data-setdate="1">Set date · ' + esc(MONTHS_SHORT[dateOf(ms.date).getMonth()] + " " + dateOf(ms.date).getDate()) + '</button>' : "";
+  const two = function (b) { return sd ? '<div class="gorow">' + b + sd + '</div>' : b; };
+  if (p.err) return '<div class="plan dim">' + esc(p.err) + '</div>' + two('<button class="go' + (ms.pay ? " pay" : "") + out + (pm === "remove" ? " del" : "") + '" disabled>' +
+    (pm === "edit" ? "Save" : pm === "remove" ? "Take it off" : ms.pay ? (ms.type === "in" ? "It came in" : bought ? "Bought" : "Paid") : ms.type === "plan" ? "Plan it" : ms.type === "koho" || ms.type === "limit" || ms.type === "cash" ? "Set" : "Add") + '</button>');
   let h = '<div class="plan"><div class="pt">This will change</div>';
   for (const s of p.show) {
     if (ms.pay && typeof s !== "string" && / - stays\)$/.test(s[0])) continue;
@@ -2976,13 +3163,42 @@ function planHTML() {
     }
   }
   for (const w of p.warn) h += '<div class="pw">⚠ Looks already logged: ' + esc(w) + '</div>';
-  h += '</div><button class="go' + (ms.pay ? " pay" : "") + (pm === "remove" ? " del" : "") + '" data-mgo="1">' + (ms.type === "act" ? (ms.actMode === "notout" ? (ms.act.dir === "out" ? "Not out yet · put it back" : "Not in yet · take it back") : "✕ Delete it")
+  h += '</div>';
+  let gb = '<button class="go' + (ms.pay ? " pay" : "") + out + (pm === "remove" ? " del" : "") + '" data-mgo="1">' + (ms.type === "act" ? (ms.actMode === "notout" ? (ms.act.dir === "out" ? "Not out yet · put it back" : "Not in yet · take it back") : "✕ Delete it")
     : p.future ? "Add for " + p.when + " · " + moneyFmt(p.total) : p.warn.length && !ms.confirm ? (ms.pay ? "Pay anyway" : "Add anyway")
     : pm === "edit" ? "Save · " + moneyFmt(p.total) : pm === "remove" ? "Take it off " + monthName(ms.cur).name
     : ms.pay ? (ms.type === "in" ? "✓ It came in · " : bought ? "✓ Bought · " : "✓ Paid · ") + moneyFmt(p.total) : ms.type === "plan" ? "Plan it · " + moneyFmt(p.total)
     : ms.type === "koho" ? (ms.acctRemove ? "Take " + (p.label || MAIN) + " off" : ms.makeMain ? "Make " + (p.label || MAIN) + " my main account" : "Set " + (p.label || MAIN) + " to " + moneyFmt(p.total))
     : ms.type === "limit" ? "Set to " + moneyFmt(p.total) : ms.type === "borrow" ? "Borrowed · " + moneyFmt(p.total) : ms.type === "move" ? "Move " + moneyFmt(p.total) : ms.type === "cash" && ms.cashAct === "count" ? "Set cash to " + moneyFmt(p.total) : "Add " + moneyFmt(p.total)) + '</button>';
-  return h;
+  return h + two(gb);
+}
+
+function movedNote(note, d) {
+  const s = String(note || ""), md = MONTHS_SHORT[d.getMonth()] + " " + d.getDate(), wd = DAYS[d.getDay()].slice(0, 3);
+  for (const re of DUE_RES) {
+    const m = re.exec(s);
+    if (!m) continue;
+    const inner = new RegExp("(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun)[a-z]*\\s+)?" + MONP + "\\s+" + m[2] + "\\b", "i");
+    const seg = m[0].replace(inner, function (all, w) { return (w ? wd + " " : "") + md; });
+    return { note: s.slice(0, m.index) + seg + s.slice(m.index + m[0].length), was: m[1].slice(0, 3) + " " + +m[2] };
+  }
+  return { note: "due " + md + (s ? " - " + s : ""), was: "" };
+}
+function setDateGo() {
+  const x = moneyCtx(), L = pickedLine(x), d = dateOf(ms.date);
+  if (!L || !d) return;
+  const mv = movedNote(L.note, d), md = MONTHS_SHORT[d.getMonth()] + " " + d.getDate();
+  if (mv.was && mv.was === md) { toast(dashes(L.label) + " is already due " + md, false, false); return; }
+  const note = clean(mv.note + " - " + (mv.was ? "moved from " + mv.was + " to " + md : "set to " + md) + " (Ratio Vitae)");
+  const ops = [{ f: "budget_log.csv", op: "replace", old: L.raw, rows: setFields(L, x.B.head, { note: note }) }];
+  let r;
+  if (N && N.apply) { try { r = N.apply(JSON.stringify(ops)); } catch (e) { r = "could not write: " + e; } }
+  else r = previewApply(ops);
+  if (r !== "ok") { toast(r, false, true); return; }
+  lastWrite = { ops: ops };
+  closeSheet();
+  toast("Moved · " + dashes(L.label) + " · " + (mv.was ? mv.was + " → " : "") + md, true, false);
+  render(); renderHealth(); alertPlan();
 }
 function refreshPlan() {
   const el = $("mplan"); if (el) el.innerHTML = planHTML();
@@ -3120,6 +3336,7 @@ document.addEventListener("click", function (e) {
   if ((b = q("[data-card]"))) { ms.card = b.getAttribute("data-card"); renderMoney(); return; }
   if ((b = q("[data-grpick]"))) { ms.group = b.getAttribute("data-grpick"); renderMoney(); return; }
   if ((b = q("[data-dropplan]"))) { ms.dropPlanned = !ms.dropPlanned; renderMoney(); return; }
+  if ((b = q("[data-setdate]"))) { setDateGo(); return; }
   if ((b = q("[data-mgo]"))) {
     const p = moneyPlan();
     if (p.warn && p.warn.length && !ms.confirm) { ms.confirm = true; refreshPlan(); return; }
@@ -3934,20 +4151,23 @@ function buildPlan(now) {
     const taken = parseCSV(readFile("pills_taken.csv")).filter(function (t) { return (t.medication || "").trim(); });
     const fills = parseCSV(readFile("pills_fills.csv")).filter(function (f) { return (f.medication || "").trim(); });
     const today = pillDay(now), active = M.filter(function (m) { return m.status === "active"; });
-    const am = setLine("am", M, taken), pm = setLine("pm", M, taken);
+    const GL = allGroups(readGroups()).map(function (grp) {
+      let tabs = 0;
+      const l = groupList(grp, M, taken), bits = l.map(function (x) { tabs += x.m.strength ? x.amount / x.m.strength : 0; return x.m.name.split(" ")[0] + " " + g(x.amount) + " " + x.m.unit; });
+      return { name: grp.name, n: l.length, tabs: tabs, text: bits.join(" · ") };
+    });
     const sup = active.map(function (m) { return { m: m, s: supply(m, fills, taken, today) }; }).filter(function (x) { return x.s && x.s.days !== null || x.s && x.s.left <= 0; });
     const shots = active.filter(function (m) { return m.shot; }).map(function (m) { return { m: m, s: shotInfo(m, taken, today) }; }).filter(function (x) { return x.s.due; });
     for (let i = 0; i < 14; i++) {
       const d = addDays(today, i), at = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 8, 0);
       if (at <= now) continue;
       const lines = [];
-      if (am.n) lines.push("Morning · " + tabsText(am.tabs) + ": " + am.text);
-      if (pm.n) lines.push("Night · " + tabsText(pm.tabs) + ": " + pm.text);
+      for (const st of GL) if (st.n) lines.push(st.name + " · " + tabsText(st.tabs) + ": " + st.text);
       const order = sup.filter(function (x) { return x.s.left <= 0 || x.s.slack - i <= 0; }).map(function (x) {
         return x.m.name.split(" ")[0] + (x.s.left <= 0 ? " (none left)" : " (runs out " + dayLabel(x.s.out) + ")"); });
       if (order.length) lines.push("Order now: " + order.join(", "));
       shots.forEach(function (x) { if (x.s.due <= d) lines.push(x.m.name.split(" ")[0] + " due " + (+x.s.due === +d ? "today" : "since " + dayLabel(x.s.due))); });
-      out.push({ id: "pills", ch: "pills", at: +at, page: HEALTH, title: "Pills · " + shortDate(d) + " · " + tabsText(am.tabs + pm.tabs), text: lines.join("\n") });
+      out.push({ id: "pills", ch: "pills", at: +at, page: HEALTH, title: "Pills · " + shortDate(d) + " · " + tabsText(GL.reduce(function (t, st) { return t + st.tabs; }, 0)), text: lines.join("\n") });
     }
   }
   return out;
@@ -3998,17 +4218,17 @@ function widgetData(now) {
       const fills = parseCSV(readFile("pills_fills.csv")).filter(function (f) { return (f.medication || "").trim(); });
       const today = pillDay(now), day = iso(today), S = slotsFor(day, taken, M);
       const active = M.filter(function (m) { return m.status === "active"; });
-      const tail = function (m, slot) { return takenRow("D", "T", m, usual(m, slot, taken)).slice(4); };
+      const tail = function (x) { return takenRow("D", "T", x.m, x.amount, x.note).slice(4); };
       const sets = [];
-      for (const slot of ["am", "pm"]) {
-        const list = active.filter(function (m) { return !m.shot && (slot === "am" ? m.am : m.pm) > 0; });
+      for (const grp of allGroups(readGroups())) {
+        const list = groupList(grp, M, taken);
         if (!list.length) continue;
-        const todo = list.filter(function (m) { return !(S[m.name] && S[m.name][slot]); });
-        const times = list.filter(function (m) { return S[m.name] && S[m.name][slot]; }).map(function (m) { return S[m.name][slot].time; }).sort();
-        sets.push({ slot: slot, label: slot === "am" ? "Morning" : "Night", n: list.length, left: todo.length,
+        const todo = list.filter(function (x) { return !takenIn(S, x.m.name, grp.key); });
+        const times = list.map(function (x) { return takenIn(S, x.m.name, grp.key); }).filter(Boolean).map(function (r) { return r.time; }).sort();
+        sets.push({ slot: grp.key, label: grp.name, icon: grp.time === "night" ? "☾" : grp.time === "any" ? "◷" : "☀", n: list.length, left: todo.length,
           done: times.length ? clock(times[times.length - 1]) : "",
-          names: list.map(function (m) { return m.name.split(" ")[0] + " " + g(usual(m, slot, taken)); }).join(" · "),
-          rows: list.map(function (m) { return tail(m, slot); }), todo: todo.map(function (m) { return tail(m, slot); }) });
+          names: list.map(function (x) { return x.m.name.split(" ")[0] + " " + g(x.amount); }).join(" · "),
+          rows: list.map(tail), todo: todo.map(tail) });
       }
       const low = active.filter(function (m) { return !m.shot; }).map(function (m) { return { m: m, s: supply(m, fills, taken, today) }; })
         .filter(function (x) { return x.s && x.s.slack !== null && x.s.slack <= 7 && !x.m.until; }).sort(function (a, b) { return a.s.slack - b.s.slack; }).slice(0, 3)
@@ -4040,7 +4260,91 @@ function widgetData(now) {
     }
     out.health = hl;
   } catch (e) {   }
+  try { const iw = investWidget(now); if (iw) out.invest = iw; } catch (e) {   }
   return out;
+}
+
+function investWidget(now) {
+  const fxm = /^FX\s*=\s*([\d.]+)/m.exec(readFile("fx.txt")), FX = fxm ? +fxm[1] : 0;
+  const H = parseCSV(readFile("rdsp_holdings.csv")).filter(function (r) { return (r.ticker || "").trim(); });
+  const rate = function (cur) { return String(cur).trim().toUpperCase() === "USD" && FX ? FX : 1; };
+  const R = ilRows();
+  const cashRows = parseCSV(readFile("rdsp_cash.csv")).filter(function (r) { return r.date; });
+  const cashC = cashRows.length ? cents(cashRows[cashRows.length - 1].cash) : 0;
+  const rows = H.map(function (r) {
+    const sh = num(r.shares), px = num(r.price_usd), cur = (r.currency || "").trim();
+    return { t: r.ticker.trim(), name: (r.name || "").trim(), sh: sh, px: px, cur: cur, v: px * sh * rate(cur) * 100, cat: (r.category || "Other").trim() };
+  }).filter(function (r) { return r.sh > 0; }).sort(function (a, b) { return b.v - a.v; });
+  const invested = Math.round(rows.reduce(function (s, r) { return s + r.v; }, 0)), rdsp = H.length ? invested + cashC : 0;
+  const catV = {};
+  rows.forEach(function (r) { catV[r.cat] = (catV[r.cat] || 0) + r.v; });
+  const colOf = {};
+  Object.keys(catV).sort(function (a, b) { return catV[b] - catV[a]; }).forEach(function (k, i) { colOf[k] = INV_COLS[i % INV_COLS.length]; });
+  const pct = function (d, b) { return b ? " (" + (d >= 0 ? "+" : "−") + Math.abs(d / b * 100).toFixed(1) + "%)" : ""; };
+  let bookAll = 0, bookKnown = true;
+  const hold = rows.map(function (r) {
+    const v = Math.round(r.v), b = ilBook(R, "TD account", r.t, r.sh);
+    if (b === null) bookKnown = false; else bookAll += b;
+    return { t: r.t, n: r.name, cat: r.cat, col: colOf[r.cat] || "#4FC38A",
+      sh: g(r.sh) + (r.sh === 1 ? " share" : " shares"),
+      px: r.px.toFixed(r.px > 0 && r.px < 1 ? 4 : 2) + " " + r.cur + (rate(r.cur) !== 1 ? " · " + money(Math.round(r.px * rate(r.cur) * 100)) + " CAD" : ""),
+      v: money(v), share: invested ? (r.v / invested * 100).toFixed(1) + "%" : "",
+      gain: b === null ? "" : (v - b >= 0 ? "+" : "−") + money(Math.abs(v - b)) + pct(v - b, b), gainHex: b === null ? "#9AA0C0" : v - b >= 0 ? UP : DOWN };
+  });
+  const acc = [];
+  if (H.length) acc.push({ n: "TD account", s: "TD Direct Investing · " + rows.length + " holdings · cash " + money(cashC), c: rdsp, key: "TD account" });
+  invRows().forEach(function (r) { acc.push({ n: r.name.trim(), s: (String(r.kind || "").trim() || "investment") + (r.date ? " · as of " + isoShort(r.date) : ""), c: cents(r.value), key: r.name.trim() }); });
+  const cr = cryptoNow();
+  if (cr.v > 0) acc.push({ n: "Crypto", s: cr.rows.length + " held", c: cr.v, key: "Crypto" });
+  if (!acc.length) return null;
+  const total = acc.reduce(function (s, a) { return s + a.c; }, 0);
+
+  const per = {}, dates = {};
+  R.forEach(function (r) { if (String(r.ticker || "").trim()) return; dates[r.date] = 1; });
+  const days = Object.keys(dates).sort(), last = {};
+  const keys = acc.map(function (a) { return a.key; });
+  keys.forEach(function (k) { per[k] = {}; ilSeries(R, k).forEach(function (p) { per[k][p.d] = p.v; }); });
+  const pts = [];
+  days.forEach(function (d) {
+    keys.forEach(function (k) { if (per[k][d] !== undefined) last[k] = per[k][d]; });
+    pts.push({ d: d, v: keys.reduce(function (s, k) { return s + (last[k] || 0); }, 0) });
+  });
+  const today = iso(now);
+  if (!pts.length || pts[pts.length - 1].d !== today) pts.push({ d: today, v: total }); else pts[pts.length - 1].v = total;
+  const P = pts.slice(-90), first = P[0], ch = total - first.v;
+
+  const by = {};
+  acc.forEach(function (a) {
+    const S = ilSeries(R, a.key).map(function (p) { return { d: p.d, v: p.v }; });
+    if (!S.length || S[S.length - 1].d !== today) S.push({ d: today, v: a.c }); else S[S.length - 1].v = a.c;
+    const Q = S.slice(-90), f0 = Q[0], c0 = a.c - f0.v;
+    let hl = [], ga = "", gh = UP;
+    const gain = function (d0, base, what) { ga = (d0 >= 0 ? "+" : "−") + money(Math.abs(d0)) + pct(d0, base) + " " + what; gh = d0 >= 0 ? UP : DOWN; };
+    if (a.key === "TD account") { hl = hold; if (bookKnown && bookAll) gain(invested - bookAll, bookAll, "on what the holdings cost"); }
+    else if (a.key === "Crypto") {
+      hl = cr.rows.map(function (r, i) {
+        const v = cents(r.worth_now), inn = cents(r.money_in), q = num(r.quantity);
+        return { t: String(r.holding).trim(), n: "", cat: "Crypto", col: INV_COLS[i % INV_COLS.length], sh: g(q) + (q === 1 ? " unit" : " units"), px: "",
+          v: money(v), share: cr.v ? (v / cr.v * 100).toFixed(1) + "%" : "", gain: inn ? (v - inn >= 0 ? "+" : "−") + money(Math.abs(v - inn)) + pct(v - inn, inn) : "",
+          gainHex: v - inn >= 0 ? UP : DOWN };
+      });
+      if (cr.inn) gain(cr.v - cr.inn, cr.inn, "on what you put in");
+    } else {
+      const r = invRows().filter(function (x) { return x.name.trim() === a.key; })[0], inn = r ? cents(r.money_in) : 0;
+      if (inn > 0) gain(a.c - inn, inn, "on what you put in");
+    }
+    by[a.key] = { total: money(a.c), totalC: a.c, accounts: [{ n: a.n, s: a.s, v: money(a.c) }],
+      change: Q.length > 1 ? (c0 >= 0 ? "+" : "−") + money(Math.abs(c0)) + pct(c0, f0.v) + " since " + isoShort(f0.d) : "",
+      changeHex: c0 >= 0 ? UP : DOWN, pts: Q.map(function (p) { return Math.round(p.v) / 100; }), from: isoShort(f0.d), to: isoShort(today),
+      gainAll: ga, gainAllHex: gh, hold: hl };
+  });
+  return { total: money(total), totalC: total, accounts: acc.map(function (a) { return { n: a.n, s: a.s, v: money(a.c) }; }),
+    change: P.length > 1 ? (ch >= 0 ? "+" : "−") + money(Math.abs(ch)) + pct(ch, first.v) + " since " + isoShort(first.d) : "",
+    changeHex: ch >= 0 ? UP : DOWN, pts: P.map(function (p) { return Math.round(p.v) / 100; }),
+    from: isoShort(first.d), to: isoShort(today),
+    gainAll: bookKnown && bookAll ? (invested - bookAll >= 0 ? "+" : "−") + money(Math.abs(invested - bookAll)) + pct(invested - bookAll, bookAll) + " on what the holdings cost" : "",
+    gainAllHex: invested - bookAll >= 0 ? UP : DOWN,
+    hold: hold, fx: FX ? FX.toFixed(4) : "", by: by, keys: acc.map(function (a) { return a.key; }) };
 }
 function widgetPush() {
   if (!N || !N.widget) return;
@@ -4056,6 +4360,25 @@ function widgetAct(act) {
   if (act === "bp") { toPage(HEALTH, false); bp = Object.assign({ s: "", d: "", p: "", n: "", dev: "upper-arm cuff" }, whenNew()); renderBP(); return; }
   if (act === "temp") { toPage(HEALTH, false); tp = Object.assign({ c: "", n: "" }, whenNew()); renderTemp(); return; }
   if (act === "budget") { toPage(0, false); return; }
+
+  if (act === "invest" || act === "invadd" || act === "invimport" || act.indexOf("hold:") === 0 || act.indexOf("acct:") === 0) {
+    toPage(3, false);
+    if (act === "invadd") { openInv(""); return; }
+    if (act === "invimport") { rcWant = false; pickFile(); return; }
+    const find = function () {
+      if (act.indexOf("acct:") === 0) {
+        const nm = act.slice(5);
+        const one = nm ? [].filter.call(document.querySelectorAll(".ilc"), function (x) { const b = x.querySelector(".t b"); return b && b.firstChild && b.firstChild.textContent.trim() === nm; })[0] : null;
+        return one || document.querySelector(".ilc") || document.querySelector(".ainv");
+      }
+      const t = act.slice(5);
+      return [].filter.call(document.querySelectorAll("#iview .hcards .crd"), function (x) { const k = x.querySelector(".tk"); return k && k.textContent.trim() === t; })[0];
+    };
+    const b = find();
+    if (b && act.indexOf("hold:") === 0 && !b.classList.contains("full")) b.click();
+    setTimeout(function () { const b2 = find(); if (b2) b2.scrollIntoView({ block: "center" }); }, 80);
+    return;
+  }
   toPage(0, false);
   if (act === "spent") openMoney();
   else if (act === "in") openMoney(function (m) { m.type = "in"; });
@@ -4077,11 +4400,11 @@ function notifyLogged(lines) {
   if (!N || !N.postNote || !HD || !lines.length) return;
   const now = new Date(), dstr = lines[0].split(",")[0], S = slotsFor(dstr, HD.taken, HD.M);
   const what = lines.map(function (l) { const f = l.split(","); return f[2].split(" ")[0] + " " + f[3] + " " + f[4]; }).join(" · ");
-  const sets = ["am", "pm"].map(function (slot) {
-    const list = HD.M.filter(function (m) { return m.status === "active" && !m.shot && (slot === "am" ? m.am : m.pm) > 0; });
+  const sets = (HD.GR || allGroups(readGroups())).map(function (grp) {
+    const list = groupList(grp, HD.M, HD.taken);
     if (!list.length) return "";
-    const done = list.filter(function (m) { return S[m.name] && S[m.name][slot]; }).length;
-    return (slot === "am" ? "Morning " : "Night ") + (done === list.length ? "✓ all " + list.length : done + " of " + list.length + " taken");
+    const done = list.filter(function (x) { return takenIn(S, x.m.name, grp.key); }).length;
+    return grp.name + " " + (done === list.length ? "✓ all " + list.length : done + " of " + list.length + " taken");
   }).filter(Boolean).join(" · ");
   const d = dateOf(dstr);
   try { N.postNote("pilltook", "logged", "Logged · " + (lines.length === 1 ? lines[0].split(",")[2].split(" ")[0] : lines.length + " pills") + " · " + timeLabel(now),
@@ -5345,7 +5668,7 @@ function healthRecordHTML() {
         h += '<h2 style="color:#4F7A6B">Today — from Ratio Vitae</h2>' + hrLiveTable(["Medication", "Takes", "Left", "Order by · last refill"], [2300, 2600, 1300, 3448],
           act.filter(function (m) { return !m.shot; }).map(function (m) {
             const s = supply(m, fills, taken, today), lf = lastFillOf(fills, m.name), lc = lf ? fillCost(lf.note) : null;
-            return [m.name, [m.am ? "morning " + g(usual(m, "am", taken)) + " " + m.unit : "", m.pm ? "night " + g(usual(m, "pm", taken)) + " " + m.unit : ""].filter(Boolean).join(" · "),
+            return [m.name, [m.am ? "morning " + g(usual(m, "am", taken)) + " " + m.unit : "", m.pm ? "night " + g(usual(m, "pm", taken)) + " " + m.unit : ""].concat(ownDoses(m)).filter(Boolean).join(" · "),
               s ? g(s.left) : "—", (m.until ? "course until " + shortDate(dateOf(m.until)) : s && s.order ? shortDate(s.order) : "—") + (lf ? " · refilled " + dshort(lf.date) + (lc !== null ? " " + money(lc) : "") : "")];
           }).concat(act.filter(function (m) { return m.shot; }).map(function (m) {
             const si = shotInfo(m, taken, today);
@@ -5378,7 +5701,7 @@ function healthPrintHTML() {
   h += '<h2>Medications<span>' + act.filter(function (m) { return !m.shot; }).length + '</span></h2><table class="pv-l">' + act.filter(function (m) { return !m.shot; }).map(function (m) {
     const s = supply(m, fills, taken, today), lf = lastFillOf(fills, m.name), lc = lf ? fillCost(lf.note) : null;
 
-    const sched = [m.am ? "morning " + g(usual(m, "am", taken)) + " " + m.unit : "", m.pm ? "night " + g(usual(m, "pm", taken)) + " " + m.unit : ""].filter(Boolean).join(" · ") + (m.flex ? " · flex" : "");
+    const sched = [m.am ? "morning " + g(usual(m, "am", taken)) + " " + m.unit : "", m.pm ? "night " + g(usual(m, "pm", taken)) + " " + m.unit : ""].concat(ownDoses(m)).filter(Boolean).join(" · ") + (m.flex ? " · flex" : "");
     return '<tr><td><b>' + esc(m.name) + '</b> ' + esc(g(m.strength)) + ' ' + esc(m.unit) + '<div class="n">' + esc(sched) + (m.purpose ? ' · ' + esc(m.purpose) : '') + (m.prescriber ? ' · ' + esc(m.prescriber) : '') + '</div></td>' +
       '<td class="n">' + (s ? g(s.left) + ' left' + (s.order ? ' · order by ' + esc(shortDate(s.order)) : '') : '') + (lf ? '<br>refilled ' + esc(dshort(lf.date)) + (lc !== null ? ' · ' + money(lc) : '') : '') + '</td></tr>'; }).join("") + '</table>';
   const shots = act.filter(function (m) { return m.shot; });
@@ -5765,7 +6088,7 @@ function printHTML(month) {
   const M = loadMeds(parseCSV(readFile("pills_log.csv"))).filter(function (m) { return m.status === "active"; });
   if (M.length) {
     h += '<h2 class="pv-br">Medications<span>' + M.length + '</span></h2><table class="pv-l">' + M.map(function (m) {
-      return '<tr><td>' + esc(m.name) + '</td><td class="n">' + esc([m.form, m.shot ? "injection" : (m.am ? "morning " + g(m.am) : "") + (m.am && m.pm ? " · " : "") + (m.pm ? "night " + g(m.pm) : "")].filter(Boolean).join(" · ")) + '</td><td class="a">' + esc(m.strength ? g(m.strength) + " " + (m.unit || "") : "") + '</td></tr>'; }).join("") + '</table>';
+      return '<tr><td>' + esc(m.name) + '</td><td class="n">' + esc([m.form, m.shot ? "injection" : [m.am ? "morning " + g(m.am) : "", m.pm ? "night " + g(m.pm) : ""].concat(ownDoses(m, true)).filter(Boolean).join(" · ")].filter(Boolean).join(" · ")) + '</td><td class="a">' + esc(m.strength ? g(m.strength) + " " + (m.unit || "") : "") + '</td></tr>'; }).join("") + '</table>';
   }
   return h;
 }
@@ -6692,9 +7015,65 @@ window.appBack = function () {
 
 let skyTimer = 0;
 window.addEventListener("resize", function () { clearTimeout(skyTimer); skyTimer = setTimeout(drawSky, 150); });
+
+const WIDE = window.matchMedia ? matchMedia("(orientation:landscape) and (min-width:760px)") : null;
+const WIDE_VIEWS = ["view", "sview", "cview", "iview", "hview"];
+const WIDE_OBS = {};
+function wideFlat(v) {
+  [].slice.call(v.children).forEach(function (c) {
+    if (!c.classList.contains("wcol")) return;
+    while (c.firstChild) v.insertBefore(c.firstChild, c);
+    v.removeChild(c);
+  });
+  v.classList.remove("wide2");
+}
+function wideSplit(v) {
+  if (!v) return;
+  wideFlat(v);
+  if (WIDE && WIDE.matches) {
+    const head = [].filter.call(v.children, function (x) { return x.matches(".month,.hhead,.srhead"); });
+    const kids = [].filter.call(v.children, function (x) { return head.indexOf(x) < 0; });
+    if (kids.length >= 2) {
+      const L = document.createElement("div"), R = document.createElement("div");
+      L.className = "wcol wl"; R.className = "wcol wr";
+      v.classList.add("wide2");
+      v.appendChild(L); v.appendChild(R);
+      kids.forEach(function (x) { L.appendChild(x); });
+      const h = kids.map(function (x) {
+        const cs = getComputedStyle(x);
+        return x.offsetHeight + (parseFloat(cs.marginTop) || 0) + (parseFloat(cs.marginBottom) || 0);
+      });
+      const total = h.reduce(function (a, b) { return a + b; }, 0);
+      let acc = h[0], best = -1, bestD = Infinity;
+      for (let i = 1; i < kids.length; i++) {
+        if (!kids[i - 1].classList.contains("sec")) {
+          const d = Math.abs(acc - total / 2);
+          if (d < bestD) { bestD = d; best = i; }
+        }
+        acc += h[i];
+      }
+      if (best > 0) for (let i = best; i < kids.length; i++) R.appendChild(kids[i]);
+    }
+  }
+  if (WIDE_OBS[v.id]) WIDE_OBS[v.id].takeRecords();
+}
+function wideAll() { WIDE_VIEWS.forEach(function (id) { wideSplit($(id)); }); }
+if (window.MutationObserver) WIDE_VIEWS.forEach(function (id) {
+  const v = $(id);
+  if (!v) return;
+  WIDE_OBS[id] = new MutationObserver(function () { wideSplit(v); });
+  WIDE_OBS[id].observe(v, { childList: true });
+});
+if (WIDE) { if (WIDE.addEventListener) WIDE.addEventListener("change", wideAll); else if (WIDE.addListener) WIDE.addListener(wideAll); }
+
+function widgetOnly() {
+  try { alertPlan(); } catch (e) {   }
+  widgetPush();
+  try { if (N && N.done) N.done(); } catch (e) {   }
+}
 drawLogos();
 drawSky();
-load();
+if (location.hash === "#widget") widgetOnly(); else load();
 </script>
 </body>
 </html>
