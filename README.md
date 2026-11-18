@@ -53,7 +53,7 @@ cash and the USD rate).
 
 **Health** - your medications in **groups** - morning and night, plus your own
 (afternoon, with lunch, bedtime - any name, day, night or any time) - each with one-tap
-*Take all*, half tablets, injections every N days, **courses** (start a medication
+*Take all*, half tablets, **change a dose** any time (the Take buttons follow it), injections every N days, **courses** (start a medication
 for so many days, or keep one on standby and start it when you need it), what is left in each
 bottle and when to order, refills and their cost, recounts for a dropped
 pill; weight, blood pressure and pulse, temperature (°C, °F or K), a food

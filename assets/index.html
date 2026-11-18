@@ -973,6 +973,9 @@ function loadMeds(rows) {
 
     const c = /\bcourse from (\d{4}-\d\d-\d\d) until (\d{4}-\d\d-\d\d)\b/.exec(m.note);
     m.from = c ? c[1] : ""; m.until = c ? c[2] : "";
+
+    const dc = String(m.note).match(/\bdose changed (\d{4}-\d\d-\d\d) (\d\d?:\d\d)\b/g);
+    m.doseAt = dc ? dc[dc.length - 1].replace(/^dose changed /, "") : "";
     if (m.status === "active" && m.until && iso(pillDay(new Date())) > m.until) m.status = "course ended";
     return m;
   }));
@@ -1063,6 +1066,7 @@ function usual(med, slot, taken) {
     const t = taken[i];
     if (t.medication !== med.name) continue;
     if (slotOf(t.time) !== slot || !(num(t.amount) > 0) || GROUP_NOTE.test(t.note || "")) continue;
+    if (med.doseAt && doseStamp(t.date, t.time) < doseStamp(med.doseAt.slice(0, 10), med.doseAt.slice(11))) continue;
 
     const twice = taken.filter(function (x) { return x.medication === med.name && x.date === t.date && slotOf(x.time) === slot; }).length > 1;
     if (!twice) return num(t.amount);
@@ -1950,7 +1954,7 @@ function renderHealth() {
       '<div class="t"><b>' + esc(m.name) + '</b><span>' + esc(g(m.strength)) + ' ' + esc(m.unit) + (m.status === "active" ? "" : " · " + esc(m.status)) + '</span></div>' +
       '<div class="s">' + esc(sched) + (m.flex ? " · flex" : "") + (m.until ? ' · <b style="color:var(--p)">course ' + esc(shortDate(dateOf(m.from))) + ' – ' + esc(shortDate(dateOf(m.until))) + '</b>' : "") + (m.purpose ? " · " + esc(m.purpose) : "") + '</div>' +
       ((m.note || m.prescriber) ? '<div class="nt">' + esc([m.prescriber, m.note].filter(Boolean).join(" · ")) + '</div>' : "") + '</button>';
-    if (!m.shot) h += '<div class="rxact" style="--p:' + col + '">' + (m.status === "active" ? '<button data-rxstop="' + esc(m.name) + '">Stop taking it</button>'
+    if (!m.shot) h += '<div class="rxact" style="--p:' + col + '">' + (m.status === "active" ? '<button data-rxdose="' + esc(m.name) + '">Change the dose</button><button data-rxstop="' + esc(m.name) + '">Stop taking it</button>'
       : '<button data-rxstart="' + esc(m.name) + '">Start taking it</button>' + (m.status === "course ended" ? '<button data-rxstop="' + esc(m.name) + '">Put it away</button>' : '')) + '</div>';
   });
   h += '</div></section>';
@@ -2261,7 +2265,7 @@ function saveEggCount() {
 
 function openSheet(html) { $("sheet").innerHTML = html; $("sheet").classList.remove("hidden"); $("scrim").classList.remove("hidden"); }
 function closeSheet() { if (typeof fileQ !== "undefined" && fileQ && fileQ.length) setTimeout(function () { if (fileQ.length && !sheetOpen()) nextFile(); }, 400);
-  $("sheet").classList.add("hidden"); $("sheet").classList.remove("money"); $("scrim").classList.add("hidden"); pick = null; ms = null; cm = null; up = null; tdp = null; cy = null; shotWait = null; iv = null; pg = null; }
+  $("sheet").classList.add("hidden"); $("sheet").classList.remove("money"); $("scrim").classList.add("hidden"); pick = null; ms = null; cm = null; up = null; tdp = null; cy = null; shotWait = null; iv = null; pg = null; dz = null; }
 function sheetOpen() { return !$("sheet").classList.contains("hidden"); }
 
 document.addEventListener("click", function (e) {
@@ -5379,6 +5383,69 @@ document.addEventListener("click", function (e) {
 
 let crs = null;
 const CRS_PIECES = /\s*-\s*(course from \d{4}-\d\d-\d\d until \d{4}-\d\d-\d\d|started again \d{4}-\d\d-\d\d|back on standby \d{4}-\d\d-\d\d|stopped \d{4}-\d\d-\d\d) \(Ratio Vitae\)/g;
+
+let dz = null;
+function doseStamp(d, t) { const m = minutes(t); return String(d) + " " + String(10000 + (m === null ? 0 : m < DAY_ROLL_HOUR * 60 ? m + 1440 : m)).slice(1); }
+function openDose(name) {
+  const M = loadMeds(parseCSV(readFile("pills_log.csv"))), m = M.filter(function (x) { return x.name === name; })[0];
+  if (!m || m.shot) return;
+  const taken = parseCSV(readFile("pills_taken.csv")).filter(function (t) { return (t.medication || "").trim(); });
+  dz = { name: name, strength: m.strength, unit: m.unit, rows: [] };
+  dz.rows.push({ key: "am", label: "Morning", v: m.am > 0 ? usual(m, "am", taken) : 0, was: m.am > 0 ? usual(m, "am", taken) : 0 });
+  dz.rows.push({ key: "pm", label: "Night", v: m.pm > 0 ? usual(m, "pm", taken) : 0, was: m.pm > 0 ? usual(m, "pm", taken) : 0 });
+  readGroups().forEach(function (G) { const it = G.items.filter(function (x) { return x.name === name; })[0]; if (it) dz.rows.push({ key: G.key, label: G.name, v: it.amount, was: it.amount, G: G }); });
+  renderDose();
+}
+function renderDose() {
+  const st = dz.strength || 1;
+  let h = '<div class="grab"></div><h2>Change the dose</h2><p class="paynote"><b>' + esc(dz.name) + '</b> · ' + esc(g(dz.strength) + " " + dz.unit) + ' a tablet</p>';
+  h += '<p class="tabhint">What you take now, each time. From now on Take and Take all log these - doses logged before today\'s change are not used any more. 0 = not then.</p>';
+  dz.rows.forEach(function (r, i) {
+    h += '<div class="pk on" style="--p:' + pillColour(dz.name) + '"><span class="pkn"><span class="n"><b>' + esc(r.label) + '</b><small>' +
+      (Math.abs(r.v - r.was) < 1e-9 ? (r.was ? "now " + g(r.was) + " " + esc(dz.unit) : "not then") : "was " + (r.was ? g(r.was) + " " + esc(dz.unit) : "not then")) + '</small></span></span>' +
+      '<span class="step"><button data-dzdec="' + i + '" aria-label="less">−</button><span class="amt">' + (r.v ? g(r.v) + " " + esc(dz.unit) : "none") +
+      '<small>' + (r.v ? tabsText(r.v / st) : "not then") + '</small></span><button data-dzinc="' + i + '" aria-label="more">+</button></span></div>';
+  });
+  const ch = dz.rows.some(function (r) { return Math.abs(r.v - r.was) > 1e-9; });
+  h += '<button class="go" data-dzsave="1"' + (ch ? "" : " disabled") + '>' + (ch ? "Save the new dose" : "Change an amount first") + '</button>';
+  openSheet(h);
+}
+function saveDose() {
+  const X = medRow(dz.name);
+  if (!X.r) { toast(dz.name + " could not be changed here (its row in pills_log.csv is not plain)", false, true); return; }
+  const now = new Date(), day = iso(pillDay(now)), st = dz.strength || 1, ops = [];
+  const word = function (r) { return r.label.toLowerCase() + " " + (r.v ? g(r.v) + " " + dz.unit : "none"); };
+  const changed = dz.rows.filter(function (r) { return Math.abs(r.v - r.was) > 1e-9; });
+  if (!changed.length) return;
+  const am = dz.rows[0], pm = dz.rows[1];
+
+  const piece = "dose changed " + day + " " + hm(now) + " - " + [am, pm].concat(changed.filter(function (r) { return r.G; })).map(word).join(" - ") + " (Ratio Vitae)";
+  ops.push({ f: "pills_log.csv", op: "replace", old: X.r.raw, rows: setFields(X.r, X.F.head, { morning: g(am.v / st), night: g(pm.v / st), note: clean((X.r.note ? X.r.note + " - " : "") + piece) }) });
+  const GF = rawFile(GROUP_FILE);
+  changed.filter(function (r) { return r.G; }).forEach(function (r) {
+    const items = r.G.items.map(function (it) { return it.name === dz.name ? (r.v ? it.name + "=" + g(r.v) : "") : it.name + "=" + g(it.amount); }).filter(Boolean);
+    ops.push({ f: GROUP_FILE, op: "replace", old: r.G.row.raw, rows: setFields(r.G.row, GF.head, { meds: items.join("|"), note: clean((r.G.row.note ? r.G.row.note + " - " : "") + dz.name + " " + (r.v ? g(r.v) + " " + dz.unit : "out") + " " + day + " (Ratio Vitae)") }) });
+  });
+  let res;
+  if (N && N.apply) { try { res = N.apply(JSON.stringify(ops)); } catch (e) { res = "could not write: " + e; } }
+  else res = previewApply(ops);
+  if (res !== "ok") { toast(res, false, true); return; }
+  lastWrite = { ops: ops };
+  const said = "New dose · " + dz.name.split(" ")[0] + " · " + changed.map(word).join(" · ");
+  closeSheet();
+  toast(said, true, false);
+  renderHealth(); alertPlan();
+}
+document.addEventListener("click", function (e) {
+  let b;
+  if ((b = e.target.closest("[data-rxdose]"))) { openDose(b.getAttribute("data-rxdose")); return; }
+  if (!dz || !e.target.closest("#sheet")) return;
+  if ((b = e.target.closest("[data-dzinc]")) || (b = e.target.closest("[data-dzdec]"))) {
+    const up = b.hasAttribute("data-dzinc"), r = dz.rows[+b.getAttribute(up ? "data-dzinc" : "data-dzdec")], step = (dz.strength || 1) / 2;
+    r.v = Math.max(0, Math.min((dz.strength || 1) * 12, +(r.v + (up ? step : -step)).toFixed(4))); renderDose(); return;
+  }
+  if (e.target.closest("[data-dzsave]")) { saveDose(); return; }
+});
 function medRow(name) {
   const F = rawFile("pills_log.csv"), r = F.rows.filter(function (x) { return (x.medication || "").trim().toLowerCase() === name.toLowerCase(); });
   return { F: F, r: r.length === 1 ? r[0] : null };

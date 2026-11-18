@@ -1,3 +1,9 @@
+**New in 2.1:**
+
+Small one, but a useful one.
+
+- **Change the dose** - say your doctor changes your dose. Tap the medication under Medications on the Health page and press **Change the dose**: set what you take now in the morning, at night and in any of your own groups (half a tablet at a time, 0 = not then), and save. From then on the **Take** and **Take all** buttons log the new amount - the old doses don't count anymore. Undo puts it back if you messed up
+
 **New in 2.0:**
 
 Alright, so this one's a big one - the widgets, the pills and a couple of things for the bills and all.
