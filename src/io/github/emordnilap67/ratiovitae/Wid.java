@@ -501,7 +501,7 @@ public class Wid {
 
     static RemoteViews money2(Context c) {
         JSONObject d = data(c), m = d.optJSONObject("money");
-        RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(7);
+        RemoteViews.RemoteCollectionItems.Builder b = new RemoteViews.RemoteCollectionItems.Builder().setHasStableIds(true).setViewTypeCount(8);
 
         RemoteViews L = item(c, "wi_left");
         if (m == null) {
@@ -552,10 +552,40 @@ public class Wid {
                     colour(m.optString("lowHex"), 0xFFD8D4F0), "before the next payday", goTo(0, "bills"), null, null));
         }
 
+        RemoteViews CR = creditItem(c, d.optJSONObject("credit"));
+        if (CR != null) b.addItem(7, CR);
+
         RemoteViews E = eggsItem(c, d.optJSONObject("eggs"));
         if (E != null) b.addItem(5, E);
         String month = m == null ? "" : m.optString("month", "");
         return frame(c, "w_money2", "Money" + (month.isEmpty() ? "" : " · " + month), 500, b.build(), open(c, 300, 0, ""));
+    }
+
+    static RemoteViews creditItem(Context c, JSONObject cr) {
+        if (cr == null) return null;
+        RemoteViews v = item(c, "wi_credit");
+        String[][] ks = {{"equifax", "w_ceq"}, {"transunion", "w_ctu"}};
+        for (String[] k : ks) {
+            JSONObject o = cr.optJSONObject(k[0]);
+            if (o == null) {
+                v.setTextViewText(id(c, k[1]), "—");
+                v.setTextViewText(id(c, k[1] + "_s"), "no score yet");
+                v.setTextViewText(id(c, k[1] + "_w"), "");
+                continue;
+            }
+            v.setTextColor(id(c, k[1] + "_n"), colour(o.optString("name"), 0xFF9AA0C0));
+            v.setTextViewText(id(c, k[1]), o.optString("v", "—"));
+            v.setTextColor(id(c, k[1]), colour(o.optString("hex"), Color.WHITE));
+            String band = o.optString("band", ""), ch = o.optString("ch", "");
+            android.text.SpannableString sp = new android.text.SpannableString(band + "  " + ch);
+            sp.setSpan(new android.text.style.ForegroundColorSpan(colour(o.optString("hex"), Color.WHITE)), 0, band.length(), 0);
+            sp.setSpan(new android.text.style.ForegroundColorSpan(colour(o.optString("chHex"), 0xFF9AA0C0)), band.length() + 2, sp.length(), 0);
+            v.setTextViewText(id(c, k[1] + "_s"), sp);
+            v.setTextViewText(id(c, k[1] + "_w"), o.optString("when", ""));
+        }
+        v.setOnClickFillInIntent(id(c, "wi_root"), goTo(2, "credit"));
+        v.setOnClickFillInIntent(id(c, "w_cadd"), goTo(2, "score"));
+        return v;
     }
 
     static RemoteViews eggsItem(Context c, JSONObject e) {

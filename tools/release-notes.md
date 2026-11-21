@@ -1,3 +1,20 @@
+**New in 2.2:**
+
+Alright, so this one's about making the Budget page yours, plus a couple of fixes that needed doing.
+
+- **Roundups** - tap **+ Add** at the bottom of the Budget page and pick **Roundups**. Every purchase out of your main account rounds up to the next $1, $2, $5 or $10, and the app counts it for you - whether your bank does roundups or not. Turn it **On** and it counts from that moment; turn it **Off** and it stops. Press **Add** and it moves what's counted in one tap
+- **Goals** - give it a name and a target if you want one (a vacation, a new phone, whatever). Put money in or take it out with **Move money**
+- **Savings pots** - same idea, just no target. Rainy day money and whatnot
+- **New categories** - make your own category right from **+ Add**, with an icon and a colour
+- **Edit list** - move any row on the Budget page up or down, or hide what you don't need. Tap **Done** when you're finished
+- **Credit score on the Money widget** - your Equifax and TransUnion scores, how much they moved, and a **+ New score** button
+- **Refresh button** - top right, reloads everything. It fades away once you scroll so it's not sitting on your numbers
+- **Calmer buttons** - the + and the Add button got toned down. It's a budgeting app, not a candy store
+- **One colour per title** - every sheet's title is one solid colour now instead of the rainbow
+- **Fixed: picking several statements** - only the first one used to go in, now they all do
+- **Fixed: a statement's balance** - it adds what went on the card after the statement and takes off what you paid since
+- **Fixed: logging pills for yesterday** - it didn't save anything before. Now it does, and it counts in yesterday's set
+
 **New in 2.1:**
 
 Small one, but a useful one.

@@ -281,8 +281,9 @@ html,body{height:100%;overflow:hidden}
 #toast.bad{border-color:color-mix(in srgb,var(--red) 70%,transparent)}
 #toast button{flex:none;font-weight:700;letter-spacing:.12em;font-size:12px;text-transform:uppercase;color:var(--redv);padding:6px 4px}
 
-#fab.money{color:#0B0E1C;background:linear-gradient(135deg,#FFD75F,#FFAFD7 45%,#AFAFFF 75%,#7FE6E6);box-shadow:0 8px 26px -8px rgba(175,175,255,.8)}
-#sheet h2.mh{background:var(--gemgrad);-webkit-background-clip:text;background-clip:text;color:transparent}
+#fab.money{color:#1A1E2A;background:radial-gradient(circle at 35% 30%,#FFFFFF 0%,#F2EFE8 45%,#D9D6CF 100%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.35) inset,0 8px 26px -10px rgba(235,232,224,.55),0 0 22px -6px rgba(235,232,224,.35)}
+#sheet h2.mh{color:#AFAFFF}
 .seg4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:0 0 12px}
 .seg4 button{padding:9px 2px;border-radius:12px;border:1px solid var(--line);text-align:center;font-size:12.5px;font-weight:600;color:var(--mist)}
 .seg4 button small{display:block;font-size:10px;font-weight:400;color:var(--dim)}
@@ -314,7 +315,7 @@ html,body{height:100%;overflow:hidden}
 .pl2 b{font-weight:600;white-space:nowrap}
 .pl1{padding:3px 0;color:var(--plumq)}
 .pw{margin-top:6px;padding:7px 9px;border-radius:10px;color:var(--gold);background:color-mix(in srgb,var(--gold) 10%,transparent);font-size:12.5px}
-#sheet.money .go{background:linear-gradient(90deg,#FFD75F,#FFAFD7 40%,#AFAFFF 75%,#7FE6E6);color:#0B0E1C}
+#sheet.money .go{background:linear-gradient(90deg,#3B4A63,#5D7695);color:#EEF2FA;box-shadow:0 0 0 1px rgba(160,180,210,.18) inset}
 
 .seg4{grid-template-columns:repeat(3,1fr)}
 .seg4.less{grid-template-columns:repeat(4,1fr)}
@@ -338,7 +339,7 @@ html,body{height:100%;overflow:hidden}
 .tabs button.on.s{color:var(--ink);border-color:#AFAFFF;background:color-mix(in srgb,#AFAFFF 12%,var(--raise2))}
 .tabs button.on.c{color:#FFE0E4;border-color:#FF8F9C;background:color-mix(in srgb,#FF8F9C 14%,var(--raise2))}
 .tabs button.on.i{color:#DDFBEA;border-color:#4FC38A;background:color-mix(in srgb,#4FC38A 14%,var(--raise2))}
-.sth{background:var(--gemgrad);-webkit-background-clip:text;background-clip:text;color:transparent!important}
+.sth{color:#AFAFFF!important}
 .st3{margin:14px 0 6px;grid-template-columns:repeat(3,1fr)}
 .stnav h2{flex:1;margin:0;text-align:center;font-family:var(--display);font-weight:300;font-size:24px;letter-spacing:.08em}
 .stnav h2 small{display:block;font-family:var(--body);font-size:11.5px;letter-spacing:.04em;color:var(--mist)}
@@ -662,6 +663,38 @@ b.in{color:#FF9A9A;font-weight:600}
 .planbtn{display:block;width:100%;margin:10px 0 0;padding:12px 14px;border-radius:14px;border:1px dashed color-mix(in srgb,#D9D2A0 55%,transparent);color:#D9D2A0;font-weight:600;font-size:14px;text-align:center}
 .planbtn small{display:block;font-weight:400;font-size:11.5px;color:var(--dim);margin-top:2px}
 .paypend{margin:8px 0 0;text-align:center;font-size:12.5px;color:var(--gold)}
+
+.refresh{position:fixed;top:calc(10px + env(safe-area-inset-top));right:12px;z-index:4;width:38px;height:38px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:19px;line-height:1;color:#E8ECF6;background:rgba(18,22,34,.72);
+  border:1px solid rgba(255,255,255,.18);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.refresh:active{transform:scale(.92)}
+.refresh.spin{animation:rfspin .6s ease-out}
+.refresh{transition:opacity .2s}
+.refresh.away{opacity:0;pointer-events:none}
+@keyframes rfspin{to{transform:rotate(360deg)}}
+
+.slim .r.ed{align-items:center}
+.slim .r.ed.hid .l{opacity:.45}
+.slim .eb{display:flex;gap:6px;flex-shrink:0}
+.slim .eb button{min-width:38px;height:34px;border-radius:10px;border:1px solid var(--line2);background:var(--raise2);color:var(--ink);font:inherit;font-size:14px;padding:0 10px}
+.slim .eb button[disabled]{opacity:.3}
+.slim .r.slfoot{gap:8px;align-items:center}
+.slim .slb{flex:1;min-height:38px;border-radius:11px;border:1px dashed #4A4F7A;background:none;color:#C9C9FF;font:inherit;font-size:13px;padding:6px 10px}
+.slim .slb.ed{flex:0 0 auto;border-style:solid;border-color:var(--line2);color:var(--mist)}
+.pbar{display:block;height:5px;border-radius:3px;background:var(--line2);margin-top:7px;overflow:hidden}
+.pbar.big{height:9px;border-radius:5px;margin:10px 0 2px}
+.pbar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#4FB98A,#8FE3A0)}
+.addgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0}
+.addgrid button{text-align:left;padding:12px;border-radius:14px;border:1px solid var(--line2);background:var(--raise2);color:var(--ink);font:inherit}
+.addgrid button.on{border-color:#AFAFFF;box-shadow:0 0 0 1px #AFAFFF inset}
+.addgrid b{display:block;font-size:14px}
+.addgrid small{display:block;color:var(--mist);font-size:11.5px;margin-top:3px;line-height:1.3}
+.icpick{display:grid;grid-template-columns:repeat(8,1fr);gap:6px;margin:6px 0 10px}
+.icpick button{aspect-ratio:1;border-radius:10px;border:1px solid var(--line2);background:none;display:flex;align-items:center;justify-content:center;padding:0}
+.icpick button.on{border-color:#AFAFFF;background:rgba(175,175,255,.12)}
+.colpick{display:flex;gap:9px;flex-wrap:wrap;margin:6px 0 12px}
+.colpick button{width:32px;height:32px;border-radius:50%;border:2px solid transparent;padding:0}
+.colpick button.on{border-color:#fff}
 </style>
 </head>
 <body>
@@ -1475,20 +1508,21 @@ function render(dir) {
 
   const U = live ? comingUp(rows, new Date()) : null, hasDay = !!(U && U.start !== null && U.steps.length);
   let slim = "";
-  if (hasDay) slim += lowHTML(U);
-  if (live) slim += '<div class="r"><div class="l">after the bills still to pay<small>' + money(P.toPay) + ' to pay' + (P.inLater ? ' · ' + money(P.inLater) + ' still to come' : "") + ' · ' + esc(tier(P.bottom).name) + '</small></div>' +
-    '<div class="a" style="color:' + tier(P.bottom).hex + '">' + money(P.bottom) + '</div></div>';
-  if (P.plannedCount) slim += '<div class="r"><div class="l">after everything planned<small>' + P.plannedCount + (P.plannedCount === 1 ? " item, " : " items, ") + money(P.plannedSum) + ' · ' + esc(tAfter.name) + '</small></div>' +
-    '<div class="a" style="color:' + tAfter.hex + '">' + money(P.afterPlanned) + '</div></div>';
-  if (P.cover) slim += '<div class="r"><div class="l" style="color:var(--gold)">' + esc(P.cover.label) + '<small>not counted · with it ' + money(P.bottom + P.cover.c) + '</small></div>' +
-    '<div class="a" style="color:var(--gold)">' + money(P.cover.c) + '</div></div>';
-  for (const a of P.accounts) slim += '<div class="r"><div class="l">' + esc(a.label) + '<small>' + esc(a.group || "account") + ' · apart from ' + esc(P.main) +
-    (a.month !== month ? " · carried from " + esc(monthName(a.month).name) : "") + '</small></div><div class="a">' + money(a.c) + '</div></div>';
-  if (P.cash) slim += '<div class="r"><div class="l">' + esc(P.cash.label) + '<small>in your wallet · apart from ' + esc(P.main) +
-    (P.cash.month !== month ? " · carried from " + esc(monthName(P.cash.month).name) : "") + '</small></div><div class="a">' + money(P.cash.c) + '</div></div>';
-  if (live) slim += earnRows(rows, month);
-  slim += subsRow(parseCSV(readFile("budget_log.csv")), month);
-  slim += groceryRow(month) + pdfRow(month);
+  const parts = [], part = function (k, n, x) { if (x) parts.push({ k: k, n: n, h: x }); };
+  if (hasDay) part("low", "Lowest point", lowHTML(U));
+  if (live) part("after", "After the bills still to pay", '<div class="r"><div class="l">after the bills still to pay<small>' + money(P.toPay) + ' to pay' + (P.inLater ? ' · ' + money(P.inLater) + ' still to come' : "") + ' · ' + esc(tier(P.bottom).name) + '</small></div>' +
+    '<div class="a" style="color:' + tier(P.bottom).hex + '">' + money(P.bottom) + '</div></div>');
+  if (P.plannedCount) part("planned", "After everything planned", '<div class="r"><div class="l">after everything planned<small>' + P.plannedCount + (P.plannedCount === 1 ? " item, " : " items, ") + money(P.plannedSum) + ' · ' + esc(tAfter.name) + '</small></div>' +
+    '<div class="a" style="color:' + tAfter.hex + '">' + money(P.afterPlanned) + '</div></div>');
+  if (P.cover) part("cover", P.cover.label, '<div class="r"><div class="l" style="color:var(--gold)">' + esc(P.cover.label) + '<small>not counted · with it ' + money(P.bottom + P.cover.c) + '</small></div>' +
+    '<div class="a" style="color:var(--gold)">' + money(P.cover.c) + '</div></div>');
+  for (const a of P.accounts) part("a:" + a.label.toLowerCase(), a.label, potRow(a, P, month, live));
+  if (P.cash) part("cash", P.cash.label, '<div class="r"><div class="l">' + esc(P.cash.label) + '<small>in your wallet · apart from ' + esc(P.main) +
+    (P.cash.month !== month ? " · carried from " + esc(monthName(P.cash.month).name) : "") + '</small></div><div class="a">' + money(P.cash.c) + '</div></div>');
+  if (live) { part("cb", "Cash back", earnRows(rows, month, "cb")); part("it", "Interest", earnRows(rows, month, "it")); }
+  part("subs", "Subscriptions", subsRow(parseCSV(readFile("budget_log.csv")), month));
+  part("glist", "Grocery list", groceryRow(month)); part("pdf", "PDF of this month", pdfRow(month));
+  slim = slimHTML(parts, live);
   if (slim) h += '<section class="slim">' + slim + '</section>';
 
   if (shut) {
@@ -2082,15 +2116,18 @@ function renderPick() {
   openSheet(h);
 }
 function logPick() {
-  const now = new Date(), day = iso(addDays(HD.today, -pick.back)), time = hm(now);
+
+  const back = pick.back, set = pick.grp, now = new Date(), day = iso(addDays(HD.today, -back));
+  const time = back && set === "am" ? "09:00" : back && set === "pm" ? "23:00" : hm(now);
+  const late = back && (set === "am" || set === "pm") ? "logged " + MONTHS_SHORT[now.getMonth()] + " " + now.getDate() + " " + hm(now) + " for yesterday (Ratio Vitae)" : "";
   const lines = [], names = [];
 
   const grp = pick.grp && pick.grp.indexOf("g:") === 0 ? (HD.GR || []).filter(function (x) { return x.key === pick.grp; })[0] : null, inG = {};
   if (grp) groupList(grp, HD.M, HD.taken).forEach(function (x) { inG[x.m.name] = x.note; });
-  for (const m of HD.M) if (pick.sel[m.name] !== undefined) { lines.push(takenRow(day, time, m, pick.sel[m.name], inG[m.name] || "")); names.push(m.name.split(" ")[0]); }
+  for (const m of HD.M) if (pick.sel[m.name] !== undefined) { lines.push(takenRow(day, time, m, pick.sel[m.name], inG[m.name] || late)); names.push(m.name.split(" ")[0]); }
   if (!lines.length) return;
   closeSheet();
-  writeRows("pills_taken.csv", lines, "Logged " + (lines.length === 1 ? names[0] : lines.length + ": " + names.join(", ")) + (pick.back ? " for yesterday" : ""));
+  writeRows("pills_taken.csv", lines, "Logged " + (lines.length === 1 ? names[0] : lines.length + ": " + names.join(", ")) + (back ? " for yesterday" : ""));
 }
 
 let pg = null;
@@ -2263,7 +2300,32 @@ function saveEggCount() {
   setEggs(v);
 }
 
-function openSheet(html) { $("sheet").innerHTML = html; $("sheet").classList.remove("hidden"); $("scrim").classList.remove("hidden"); }
+function openSheet(html) {
+  $("sheet").innerHTML = html; $("sheet").classList.remove("hidden"); $("scrim").classList.remove("hidden");
+
+  const t = $("sheet").querySelector("h2.mh, .payhd b");
+  if (t && !t.style.color) t.style.color = mhColour(t.textContent);
+}
+const MH_PAL = ["#8FB4FF", "#FF9A9A", "#8FE3A0", "#87D7FF", "#FFB86B", "#C9A7FF", "#FF8FC8", "#E8C25A", "#6FE0D2", "#AFAFFF"];
+const MH_FIX = { "i spent money": "#FF9A9A", "money came in": "#8FE3A0", "move my money": "#87D7FF", "my accounts": "#8FB4FF", "count my cash": "#9BE38F",
+  "overdraft cover and credit line": "#E8C25A", "i borrowed money": "#FFB86B", "plan something": "#D9D2A0", "add to this list": "#AFAFFF", "subscriptions": "#C9A7FF",
+  "search": "#87D7FF", "grocery list": "#9BE38F", "import": "#AFAFFF", "your categories": "#AFAFFF", "roundups": "#FFB86B", "blood pressure": "#FF8F8F",
+  "temperature": "#FFB86B", "add a medication": "#FF8FC8", "cash back came in": "#8FE3A0", "interest came in": "#6FE0D2" };
+function mhColour(text) {
+  const t = String(text || "").replace(/[^A-Za-z0-9 &'.+-]/g, "").trim(), k = t.toLowerCase();
+  if (MH_FIX[k]) return MH_FIX[k];
+  try {
+    const cats = loadCats(parseCSV(readFile("categories.csv")));
+    for (const kind of ["expense", "income"]) {
+      const sb = findSub(cats, kind, t), c = sb ? sb.cat : findCat(cats, kind, t);
+      const C = c ? cats.filter(function (x) { return x.kind === kind && x.name === c; })[0] : null;
+      if (C && C.col && C.col !== "#9AA0C0") return C.col;
+    }
+  } catch (e) {   }
+  let h = 0;
+  for (let i = 0; i < k.length; i++) h = (h * 31 + k.charCodeAt(i)) >>> 0;
+  return MH_PAL[h % MH_PAL.length];
+}
 function closeSheet() { if (typeof fileQ !== "undefined" && fileQ && fileQ.length) setTimeout(function () { if (fileQ.length && !sheetOpen()) nextFile(); }, 400);
   $("sheet").classList.add("hidden"); $("sheet").classList.remove("money"); $("scrim").classList.add("hidden"); pick = null; ms = null; cm = null; up = null; tdp = null; cy = null; shotWait = null; iv = null; pg = null; dz = null; }
 function sheetOpen() { return !$("sheet").classList.contains("hidden"); }
@@ -4265,6 +4327,18 @@ function widgetData(now) {
     out.health = hl;
   } catch (e) {   }
   try { const iw = investWidget(now); if (iw) out.invest = iw; } catch (e) {   }
+
+  try {
+    const S = parseCSV(readFile("credit_log.csv")).filter(function (r) { return /^\d{4}-\d{2}/.test(r.month || ""); }), cr = {};
+    for (const k of ["equifax", "transunion"]) {
+      const rows = S.filter(function (r) { return num(r[k]); });
+      if (!rows.length) continue;
+      const last = rows[rows.length - 1], v = num(last[k]), d = rows.length > 1 ? v - num(rows[rows.length - 2][k]) : null, band = scoreBand(v);
+      cr[k] = { v: String(v), band: band.name, hex: band.col, name: BUREAU_COL[k],
+        ch: d === null ? "first" : d > 0 ? "▲ " + d : d < 0 ? "▼ " + (-d) : "± 0", chHex: d > 0 ? "#7DDB8A" : d < 0 ? "#FF7A7A" : "#9AA0C0", when: whenLabel(last.month) };
+    }
+    if (cr.equifax || cr.transunion) out.credit = cr;
+  } catch (e) {   }
   return out;
 }
 
@@ -4364,6 +4438,8 @@ function widgetAct(act) {
   if (act === "bp") { toPage(HEALTH, false); bp = Object.assign({ s: "", d: "", p: "", n: "", dev: "upper-arm cuff" }, whenNew()); renderBP(); return; }
   if (act === "temp") { toPage(HEALTH, false); tp = Object.assign({ c: "", n: "" }, whenNew()); renderTemp(); return; }
   if (act === "budget") { toPage(0, false); return; }
+  if (act === "credit") { toPage(2, false); return; }
+  if (act === "score") { toPage(2, false); openScore(); return; }
 
   if (act === "invest" || act === "invadd" || act === "invimport" || act.indexOf("hold:") === 0 || act.indexOf("acct:") === 0) {
     toPage(3, false);
@@ -4483,7 +4559,7 @@ function readStatement(lines) {
   if (!b) return null;
   const P = STMT_PAT[b.bank], one = function (list) { for (const re of list || []) { const m = re.exec(text); if (m) return m[1]; } return null; };
   const myCard = rawFile("cards.csv").rows.filter(function (r) { return b.kw.test(String(r.name || "")); })[0];
-  const st = { card: myCard ? String(myCard.name).trim() : b.name, closing: impDate(one(P.closing)), balance: null, minimum: null, due: "", rate: null, cashRate: null, interest: null, missing: [] };
+  const st = { card: myCard ? String(myCard.name).trim() : b.name, closing: impDate(one(P.closing)), balance: null, minimum: null, due: "", rate: null, cashRate: null, interest: null, missing: [], text: text };
   if (P.stub) {
 
     for (let i = 0; i < lines.length - 1 && st.balance === null; i++) {
@@ -4674,7 +4750,8 @@ function readShot(text, name, today) {
 
 let up = null, tdp = null, cy = null;
 let PDFJS = null;
-async function pdfjsLib() {
+
+async function loadPdfjs() {
 
   if (!PDFJS) {
     if (!globalThis.pdfjsWorker) globalThis.pdfjsWorker = await import("./pdf.worker.min.mjs");
@@ -4683,7 +4760,7 @@ async function pdfjsLib() {
   return PDFJS;
 }
 async function pdfText(bytes) {
-  const lib = await pdfjsLib();
+  const lib = await loadPdfjs();
   const doc = await lib.getDocument({ data: bytes, isEvalSupported: false, disableFontFace: true, useSystemFonts: false }).promise;
   const pages = [];
   for (let p = 1; p <= Math.min(doc.numPages, 12); p++) pages.push((await (await doc.getPage(p)).getTextContent()).items);
@@ -5053,10 +5130,260 @@ function earnInfo(rows, month) {
   }
   return out;
 }
-function earnRows(rows, month) {
+
+var SLIM = [];
+function slimHTML(parts, live) {
+  const L = store.get("slim", {}), ord = L.order || [], hid = L.hidden || [];
+  let prev = -1;
+  parts.forEach(function (p, n) { const i = ord.indexOf(p.k); p.rank = i >= 0 ? i : prev + 0.001 * (n + 1); prev = p.rank; });
+  const S = parts.slice().sort(function (a, b) { return a.rank - b.rank; });
+  SLIM = S.map(function (p) { return p.k; });
+  if (live && state.slimEdit) {
+    return S.map(function (p, n) {
+      const off = hid.indexOf(p.k) >= 0;
+      return '<div class="r ed' + (off ? " hid" : "") + '"><div class="l">' + esc(p.n) + '<small>' + (off ? "hidden" : "shown") + '</small></div><div class="eb">' +
+        '<button data-slmv="' + esc(p.k) + '|-1"' + (n ? "" : " disabled") + ' aria-label="Up">↑</button>' +
+        '<button data-slmv="' + esc(p.k) + '|1"' + (n < S.length - 1 ? "" : " disabled") + ' aria-label="Down">↓</button>' +
+        '<button data-slhide="' + esc(p.k) + '">' + (off ? "Show" : "Hide") + '</button></div></div>';
+    }).join("") + '<div class="r slfoot"><button class="slb" data-sladd="1">+ Add</button><button class="slb ed" data-sledit="0">✓ Done</button></div>';
+  }
+  const shown = S.filter(function (p) { return hid.indexOf(p.k) < 0; }).map(function (p) { return p.h; }).join("");
+  return shown + (live ? '<div class="r slfoot"><button class="slb" data-sladd="1">+ Add a goal, roundups, a category…</button><button class="slb ed" data-sledit="1">✎ Edit list</button></div>' : "");
+}
+function potNote(label) {
+  const lab = String(label).toLowerCase(), R = parseCSV(readFile("budget_log.csv")).filter(function (r) { return r.kind === "account" && String(r.label).toLowerCase() === lab && r.month <= state.cur; });
+  R.sort(function (x, y) { return x.month < y.month ? -1 : x.month > y.month ? 1 : 0; });
+  return R.map(function (r) { return r.note || ""; }).join(" - ");
+}
+function potNum(note, re) { let m, v = null; re.lastIndex = 0; while ((m = re.exec(String(note || "")))) v = cents(m[1]); return v; }
+function potPct(c, t) { return t ? Math.max(0, Math.min(100, Math.round(c / t * 100))) : 0; }
+
+function ruTime(mon, day, tm) {
+  const d = noteDate(mon, day);
+  if (!d) return null;
+  const m = /(\d{1,2}):(\d\d)\s*([AP]M)/i.exec(tm || "");
+  if (m) d.setHours((+m[1] % 12) + (/p/i.test(m[3]) ? 12 : 0), +m[2], 0, 0); else d.setHours(0, 0, 0, 0);
+  return +d;
+}
+function ruEvents(note) {
+  const ev = [], re = /\broundups (on|off|counted to) ([A-Z][a-z]{2}) (\d{1,2}) (\d{1,2}:\d\d [AP]M)/g;
+  let m;
+  while ((m = re.exec(String(note || "")))) ev.push({ k: m[1], t: ruTime(m[2], m[3], m[4]), label: m[2] + " " + m[3] + " " + m[4] });
+  return ev;
+}
+function roundupsNow(P, lv, label) {
+  const ev = ruEvents(potNote(label)), sw = ev.filter(function (e) { return e.k !== "counted to"; }), last = sw[sw.length - 1] || null;
+  const cnt = ev.filter(function (e) { return e.k === "counted to"; }).pop() || null;
+  const onAt = function (t) { let st = false; for (const e of sw) { if (e.t > t) break; st = e.k === "on"; } return st; };
+  const grp = {};
+  parseCSV(readFile("budget_log.csv")).forEach(function (r) { if (r.month === state.cur && r.kind === "expense") grp[String(r.label).toLowerCase()] = r.group; });
+  let est = 0, n = 0;
+  activityOf(P.balance ? P.balance.note : "", "").forEach(function (x) {
+    if (x.dir !== "out") return;
+    if (/round ?ups?/i.test(x.what) || /^(transfer to|cash withdrawal|deposited to|to )/i.test(x.what)) return;
+    if (/\b(rent|loan|repayment|payoff|payment|e-?transfer|transfer|affirm|klarna|pay later|financial|insurance|plan|fee|fees|rdsp|contribution|credit line|cover)\b/i.test(x.what)) return;
+    const w = String(x.what).toLowerCase().replace(/^~?\d{1,2}:\d\d\s*[ap]m\s+/, "");
+    let g = grp[w];
+    if (!g) { const near = Object.keys(grp).filter(function (l) { return l.length > 3 && (l.indexOf(w) >= 0 || w.indexOf(l) >= 0); }); if (near.length === 1) g = grp[near[0]]; }
+    if (g && g !== "variable" && g !== "monthly") return;
+    const dm = /^([A-Z][a-z]{2,3})\s+(\d{1,2})$/.exec(x.day), t = dm ? ruTime(dm[1], dm[2], x.time) : null;
+    if (t === null || (cnt && t <= cnt.t) || !onAt(t)) return;
+    const r = (lv - x.c % lv) % lv;
+    if (r) { est += r; n++; }
+  });
+  const from = cnt && (!last || cnt.t >= last.t) ? cnt.label : last ? last.label : "";
+  return { on: !!last && last.k === "on", since: last ? last.label : "", from: from, est: est, n: n };
+}
+function potRow(a, P, month, live) {
+  const g = String(a.group || "").toLowerCase(), main = esc(P.main), carried = a.month !== month ? " · carried from " + esc(monthName(a.month).name) : "";
+  const open = '<div class="r tap" data-pot="' + esc(a.label) + '"><div class="l">';
+  if (g === "goal") {
+    const t = potNum(potNote(a.label), /\btarget (\d+\.\d\d)/g), pct = potPct(a.c, t);
+    return open + '🎯 ' + esc(a.label) + ' ›<small>' + (t ? money(a.c) + ' of ' + money(t) + ' · ' + pct + '%' : 'a goal · tap to set a target') + ' · apart from ' + main + '</small>' +
+      (t ? '<span class="pbar"><i style="width:' + pct + '%"></i></span>' : "") + '</div><div class="a" style="color:var(--inc)">' + money(a.c) + '</div></div>';
+  }
+  if (g === "roundups") {
+    const lv = potNum(potNote(a.label), /\bround up to (\d+\.\d\d)/g) || 100, R = live ? roundupsNow(P, lv, a.label) : null;
+    return open + '🪙 ' + esc(a.label) + ' ›<small>' + (R ? (R.on ? '<b style="color:var(--inc)">on</b> · ' : 'off · ') : "") + 'to the next $' + (lv / 100) +
+      (R && R.est ? ' · <em style="color:var(--gold)">' + money(R.est) + ' to add</em>' : "") + carried + '</small></div><div class="a" style="color:var(--inc)">' + money(a.c) + '</div></div>';
+  }
+  return open + (g === "savings" ? "💰 " : "") + esc(a.label) + ' ›<small>' + esc(a.group || "account") + ' · apart from ' + main + carried + '</small></div><div class="a">' + money(a.c) + '</div></div>';
+}
+function potApply(ops) {
+  let r;
+  if (N && N.apply) { try { r = N.apply(JSON.stringify(ops)); } catch (x) { r = "could not write: " + x; } } else r = previewApply(ops);
+  if (r !== "ok") { toast(r, false, true); return false; }
+  lastWrite = { ops: ops };
+  return true;
+}
+
+let pot = null;
+function openPot(label) { pot = { label: label, t: "" }; renderPot(); }
+function potNow() {
+  const P = period(parseCSV(readFile("budget_log.csv")), state.cur);
+  return { P: P, a: P.accounts.filter(function (x) { return x.label.toLowerCase() === String(pot.label).toLowerCase(); })[0] };
+}
+function renderPot() {
+  const X = potNow(), a = X.a;
+  if (!a) { closeSheet(); return; }
+  const g = String(a.group || "").toLowerCase(), main = X.P.main;
+  let h = '<div class="grab"></div><h2 class="mh">' + (g === "goal" ? "🎯 " : g === "roundups" ? "🪙 " : g === "savings" ? "💰 " : "") + esc(a.label) + '</h2>' +
+    '<div class="srsum"><b>' + money(a.c) + '</b> · ' + esc(g === "goal" ? "a goal" : g === "roundups" ? "roundups" : (a.group || "account")) + ' · apart from ' + esc(main) + '</div>';
+  if (g === "goal") {
+    const t = potNum(potNote(a.label), /\btarget (\d+\.\d\d)/g), pct = potPct(a.c, t);
+    if (t) h += '<span class="pbar big"><i style="width:' + pct + '%"></i></span><p class="tabhint">' + money(a.c) + ' of ' + money(t) + ' · ' + pct + '%' +
+      (t > a.c ? ' · ' + money(t - a.c) + ' to go' : ' · reached') + '</p>';
+    h += '<label class="fld"><span>' + (t ? "Change the target" : "Target") + '</span><input id="pottg" type="text" inputmode="decimal" autocomplete="off" placeholder="' + (t ? c2(t) : "500.00") + '" value="' + esc(pot.t) + '"></label>' +
+      '<button class="go" data-potset="1">Save the target</button>';
+  }
+  if (g === "roundups") {
+    const lv = potNum(potNote(a.label), /\bround up to (\d+\.\d\d)/g) || 100, R = roundupsNow(X.P, lv, a.label);
+    h += '<div class="lbl">Roundups</div><div class="chips">' + [["1", "On"], ["0", "Off"]].map(function (o) {
+      return '<button data-ruon="' + o[0] + '" class="' + ((o[0] === "1") === R.on ? "on" : "") + '">' + o[1] + '</button>'; }).join("") + '</div>' +
+      '<p class="tabhint">' + (R.on ? 'On since ' + esc(R.since) + ' - every purchase out of ' + esc(main) + ' from then on is counted.' :
+        'Off' + (R.since ? ' since ' + esc(R.since) : "") + ' - nothing is counted. Tap On when you turn roundups on at your bank.') + '</p>' +
+      '<div class="lbl">Round up to the next</div><div class="chips c4">' + [100, 200, 500, 1000].map(function (v) {
+      return '<button data-potlv="' + v + '" class="' + (lv === v ? "on" : "") + '">$' + v / 100 + '</button>'; }).join("") + '</div>' +
+      (R.from ? '<p class="tabhint">Since ' + esc(R.from) + ': ' + R.n + ' purchase' + (R.n === 1 ? "" : "s") + ' round up to ' + money(R.est) + '.</p>' : "") +
+      (R.est ? '<button class="go pay" data-potround="' + R.est + '">Add ' + money(R.est) + ' to ' + esc(a.label) + '</button>' : '<p class="tabhint">Nothing to add right now.</p>');
+  }
+  h += '<div class="gorow"><button class="go pay" data-potmv="in">Put money in</button><button class="go pay out" data-potmv="out">Take money out</button></div>' +
+    '<button class="go" data-potmv="set">Set its balance</button><button class="go del" data-potmv="off">Take it off the list</button>';
+  openSheet(h);
+  $("sheet").classList.add("money");
+}
+
+function potSet(piece, msg, timed) {
+  const B = rawFile("budget_log.csv"), cur = state.cur, lab = String(pot.label).toLowerCase();
+  let last = null;
+  B.rows.forEach(function (r) { if (r.kind === "account" && String(r.label).toLowerCase() === lab && r.month <= cur && (!last || r.month >= last.month)) last = r; });
+  if (!last) { toast(pot.label + " was not found", false, true); return; }
+  const p = piece + (timed ? "" : " " + dayLabel(new Date())) + " - Ratio Vitae";
+  const ops = last.month === cur ? [{ f: "budget_log.csv", op: "replace", old: last.raw, rows: setFields(last, B.head, { note: noteSafe((last.note ? last.note + " - " : "") + p) }) }]
+    : [{ f: "budget_log.csv", op: "append", rows: [cur, "account", last.group, last.label, last.amount, noteSafe(p)].join(",") + "\n" }];
+  if (!potApply(ops)) return;
+  pot.t = "";
+  toast(msg, true, false);
+  render(); renderPot();
+}
+
+function potRoundAdd(T) {
+  if (!(T > 0)) return;
+  const B = rawFile("budget_log.csv"), cur = state.cur, P = period(parseCSV(readFile("budget_log.csv")), cur), lab = String(pot.label).toLowerCase();
+  const bal = B.rows.filter(function (r) { return r.month === cur && r.kind === "balance"; })[0];
+  let acc = null;
+  B.rows.forEach(function (r) { if (r.kind === "account" && String(r.label).toLowerCase() === lab && r.month <= cur && (!acc || r.month >= acc.month)) acc = r; });
+  if (!bal || !acc) { toast(!bal ? "No " + P.main + " balance this pay period" : pot.label + " was not found", false, true); return; }
+  const now = new Date(), when = dayLabel(now) + " " + timeLabel(now), b0 = cents(bal.amount), a0 = cents(acc.amount);
+  const ops = [{ f: "budget_log.csv", op: "replace", old: bal.raw, rows: setFields(bal, B.head, { amount: c2(b0 - T),
+    note: noteSafe((bal.note ? bal.note + " - " : "") + when + " transfer to " + acc.label + " " + c2(T) + " out (" + c2(b0) + " -> " + c2(b0 - T) + ") - Ratio Vitae") }) }];
+  const piece = when + " transfer from " + P.main + " " + c2(T) + " in (" + c2(a0) + " -> " + c2(a0 + T) + ") - roundups counted to " + when + " - Ratio Vitae";
+  if (acc.month === cur) ops.push({ f: "budget_log.csv", op: "replace", old: acc.raw, rows: setFields(acc, B.head, { amount: c2(a0 + T), note: noteSafe((acc.note ? acc.note + " - " : "") + piece) }) });
+  else ops.push({ f: "budget_log.csv", op: "append", rows: [cur, "account", acc.group, acc.label, c2(a0 + T), noteSafe(piece)].join(",") + "\n" });
+  if (!potApply(ops)) return;
+  toast(money(T) + " added to " + acc.label + " · " + P.main + " " + money(b0 - T), true, false);
+  render(); renderPot();
+}
+
+const CAT_COLS = ["#8FB4FF", "#AFAFFF", "#FF8FC8", "#FF8F8F", "#FFB86B", "#FFE08A", "#9BE38F", "#6FE0D2"];
+let addp = null;
+function openAddPot() { addp = { kind: "", name: "", t: "", lv: 100, cat: "expense", icon: "star", col: "#AFAFFF" }; renderAddPot(); }
+function renderAddPot() {
+  const main = period(parseCSV(readFile("budget_log.csv")), state.cur).main;
+  const K = [["goal", "🎯 A goal", "a name and a target"], ["roundups", "🪙 Roundups", "$1 · $2 · $5 · $10 - counted for you"],
+    ["savings", "💰 A savings pot", "any money you keep apart"], ["cat", "📁 A category", "for spending or money in"]];
+  let h = '<div class="grab"></div><h2 class="mh">Add to this list</h2><div class="addgrid">' + K.map(function (k) {
+    return '<button data-addk="' + k[0] + '" class="' + (addp.kind === k[0] ? "on" : "") + '"><b>' + k[1] + '</b><small>' + k[2] + '</small></button>'; }).join("") + '</div>';
+  if (addp.kind === "goal" || addp.kind === "savings")
+    h += '<label class="fld"><span>Name</span><input id="addnm" type="text" maxlength="40" autocomplete="off" placeholder="' + (addp.kind === "goal" ? "Vacation, new phone, emergency fund…" : "Rainy day, savings…") + '" value="' + esc(addp.name) + '"></label>';
+  if (addp.kind === "goal") h += '<label class="fld"><span>Target (you can leave it blank)</span><input id="addtg" type="text" inputmode="decimal" autocomplete="off" placeholder="500.00" value="' + esc(addp.t) + '"></label>';
+  if (addp.kind === "roundups") h += '<div class="lbl">Round up to the next</div><div class="chips c4">' + [100, 200, 500, 1000].map(function (v) {
+      return '<button data-addlv="' + v + '" class="' + (addp.lv === v ? "on" : "") + '">$' + v / 100 + '</button>'; }).join("") + '</div>' +
+      '<p class="tabhint">Each purchase out of ' + esc(main) + ' rounds up to the next $' + addp.lv / 100 + '. Ratio Vitae counts it, and you add it with one tap - whether your bank does roundups for you or not.</p>';
+  if (addp.kind === "cat")
+    h += '<div class="chips">' + [["expense", "Spending"], ["income", "Money in"]].map(function (k) { return '<button data-addck="' + k[0] + '" class="' + (addp.cat === k[0] ? "on" : "") + '">' + k[1] + '</button>'; }).join("") + '</div>' +
+      '<label class="fld"><span>Category name</span><input id="addnm" type="text" maxlength="40" autocomplete="off" placeholder="' + (addp.cat === "income" ? "Tax refunds, Side jobs…" : "Pets, Hobbies…") + '" value="' + esc(addp.name) + '"></label>' +
+      '<div class="lbl">Icon</div><div class="icpick">' + Object.keys(ICONS).map(function (k) { return '<button data-addic="' + k + '" class="' + (addp.icon === k ? "on" : "") + '">' + icon(k, addp.icon === k ? addp.col : "#9AA0C0", "ico sm") + '</button>'; }).join("") + '</div>' +
+      '<div class="lbl">Colour</div><div class="colpick">' + CAT_COLS.map(function (c) { return '<button data-addcol="' + c + '" class="' + (addp.col === c ? "on" : "") + '" style="background:' + c + '" aria-label="' + c + '"></button>'; }).join("") + '</div>' +
+      '<p class="tabhint">It shows in the + sheet with your other categories - add subcategories there.</p>';
+  if (addp.kind) h += '<button class="go pay" data-addsave="1">Add it</button>';
+  openSheet(h);
+  $("sheet").classList.add("money");
+}
+function saveAddPot() {
+  const P = period(parseCSV(readFile("budget_log.csv")), state.cur);
+  if (addp.kind === "cat") {
+    const nm = noteSafe(addp.name || "");
+    if (!nm) { toast("Name the category", false, true); return; }
+    const C = rawFile("categories.csv");
+    if (C.rows.some(function (r) { return r.kind === addp.cat && String(r.category).toLowerCase() === nm.toLowerCase(); })) { toast("You already have " + nm, false, true); return; }
+    if (!potApply([{ f: "categories.csv", op: "append", rows: [addp.cat, nm, "", addp.icon, addp.col, "^" + reEsc(nm.toLowerCase())].join(",") + "\n" }])) return;
+    closeSheet(); toast(nm + " is one of your categories now", true, false); render(); return;
+  }
+  const nm = addp.kind === "roundups" ? "Roundups" : noteSafe(addp.name || "");
+  if (!nm) { toast("Name it", false, true); return; }
+  if ([P.main, "cash"].concat(P.accounts.map(function (a) { return a.label; })).some(function (x) { return String(x).toLowerCase() === nm.toLowerCase(); })) { toast("You already have " + nm, false, true); return; }
+  let t = null;
+  if (addp.kind === "goal" && String(addp.t).trim()) { t = amtIn(addp.t); if (!t || isNaN(t)) { toast("The target is an amount, like 500.00", false, true); return; } }
+  const note = (addp.kind === "goal" ? "a goal" + (t ? " - target " + c2(t) : "") : addp.kind === "roundups" ? "roundups - round up to " + c2(addp.lv) + " - roundups on " + dayLabel(new Date()) + " " + timeLabel(new Date()) : "a savings pot") + " - added " + dayLabel(new Date()) + " - Ratio Vitae";
+  if (!potApply([{ f: "budget_log.csv", op: "append", rows: [state.cur, "account", addp.kind, nm, "0.00", noteSafe(note)].join(",") + "\n" }])) return;
+  closeSheet(); toast(nm + " is on your list" + (addp.kind === "savings" || addp.kind === "goal" ? " - tap it to put money in" : ""), true, false); render();
+}
+document.addEventListener("input", function (e) {
+  if (!e.target.closest("#sheet")) return;
+  if (addp && e.target.id === "addnm") addp.name = e.target.value;
+  if (addp && e.target.id === "addtg") addp.t = e.target.value;
+  if (pot && e.target.id === "pottg") pot.t = e.target.value;
+});
+document.addEventListener("click", function (e) {
+  const q = function (sel) { return e.target.closest(sel); };
+  let b;
+  if ((b = q("[data-sledit]"))) { state.slimEdit = b.getAttribute("data-sledit") === "1"; render(); return; }
+  if ((b = q("[data-slmv]"))) {
+    const v = b.getAttribute("data-slmv").split("|"), k = v[0], o = SLIM.slice(), i = o.indexOf(k), j = i + (+v[1]);
+    if (i < 0 || j < 0 || j >= o.length) return;
+    o[i] = o[j]; o[j] = k;
+    const L = store.get("slim", {}); L.order = o; store.set("slim", L); render(); return;
+  }
+  if ((b = q("[data-slhide]"))) {
+    const k = b.getAttribute("data-slhide"), L = store.get("slim", {}), hd = L.hidden || [];
+    L.hidden = hd.indexOf(k) >= 0 ? hd.filter(function (x) { return x !== k; }) : hd.concat([k]);
+    store.set("slim", L); render(); return;
+  }
+  if ((b = q("[data-sladd]"))) { openAddPot(); return; }
+  if ((b = q("[data-addk]"))) { addp.kind = b.getAttribute("data-addk"); renderAddPot(); const f = $("addnm"); if (f) f.focus(); return; }
+  if ((b = q("[data-addlv]"))) { addp.lv = +b.getAttribute("data-addlv"); renderAddPot(); return; }
+  if ((b = q("[data-addck]"))) { addp.cat = b.getAttribute("data-addck"); renderAddPot(); return; }
+  if ((b = q("[data-addic]"))) { addp.icon = b.getAttribute("data-addic"); renderAddPot(); return; }
+  if ((b = q("[data-addcol]"))) { addp.col = b.getAttribute("data-addcol"); renderAddPot(); return; }
+  if ((b = q("[data-addsave]"))) { saveAddPot(); return; }
+  if ((b = q("[data-pot]"))) { openPot(b.getAttribute("data-pot")); return; }
+  if ((b = q("[data-potlv]"))) { const v = +b.getAttribute("data-potlv"); potSet("round up to " + c2(v), "Roundups now go to the next $" + v / 100); return; }
+  if ((b = q("[data-potset]"))) {
+    const v = amtIn(pot.t);
+    if (!v || isNaN(v)) { toast("Type the target, like 500.00", false, true); return; }
+    potSet("target " + c2(v), "Target " + money(v)); return;
+  }
+  if ((b = q("[data-potround]"))) { potRoundAdd(+b.getAttribute("data-potround")); return; }
+  if ((b = q("[data-ruon]"))) {
+    const on = b.getAttribute("data-ruon") === "1", now = new Date();
+    potSet("roundups " + (on ? "on " : "off ") + dayLabel(now) + " " + timeLabel(now), on ? "Roundups on - purchases from now on are counted" : "Roundups off - nothing more is counted", true); return;
+  }
+  if ((b = q("[data-potmv]"))) {
+    const w = b.getAttribute("data-potmv"), L = pot.label;
+    closeSheet();
+    openMoney(function (m) {
+      if (w === "in") { m.type = "move"; m.from = "koho"; m.to = "@a:" + L; }
+      else if (w === "out") { m.type = "move"; m.from = "@a:" + L; m.to = "koho"; }
+      else { m.type = "koho"; m.acct = "@a:" + L; m.acctRemove = w === "off"; }
+    });
+    return;
+  }
+});
+function earnRows(rows, month, only) {
   const I = earnInfo(rows, month), D = earnDefs();
   let h = "";
-  for (const k of ["cb", "it"]) {
+  for (const k of only ? [only] : ["cb", "it"]) {
     const e = I[k];
     h += '<div class="r tap" data-earn="' + k + '"><div class="l">' + D[k].name + ' ›<small>' + money(e.now) + ' this pay period' +
       (e.since ? ' · the total since ' + esc(e.since) : "") + ' · tap to add</small></div><div class="a" style="color:var(--inc)">' + money(e.total) + '</div></div>';
@@ -6245,13 +6572,35 @@ function cardsRow(name) {
   const R = rawFile("cards.csv");
   return { R: R, r: R.rows.filter(function (x) { return String(x.name || "").trim() === name; })[0] || null };
 }
+
+function sinceStatement(note, st) {
+  let add = 0;
+  const seen = {}, rePay = new RegExp("^" + MONP + "\\s+(\\d{1,2}) payment (\\d+\\.\\d\\d)"),
+    reBuy = new RegExp("\\b" + MONP + "\\s+(\\d{1,2}) (\\d+\\.\\d\\d)(?=\\s|$)");
+  String(note || "").split(" - ").forEach(function (p) {
+    p = p.trim();
+    let m = rePay.exec(p), pay = !!m;
+    if (!m) m = reBuy.exec(p);
+    if (!m) return;
+    const d = noteDate(m[1], m[2], { start: Date.parse(st.closing), end: Date.parse(st.closing) });
+    if (!d || iso(d) < st.closing) return;
+    const k = iso(d) + "|" + m[3] + "|" + pay;
+    if (seen[k]) return;
+    seen[k] = 1;
+
+    const amt = new RegExp("(^|[^\\d.])" + m[3].replace(".", "\\.") + "(?![\\d])"), day = new RegExp("\\b" + m[1].slice(0, 3) + "[a-z]*\\.?\\s+0?" + (+m[2]) + "\\b", "i");
+    if (String(st.text || "").split("\n").some(function (l) { return amt.test(l) && day.test(l); })) return;
+    add += pay ? -cents(m[3]) : cents(m[3]);
+  });
+  return add;
+}
 function openUpdate(name, st, file, shot) {
   const r = cardsRow(name).r;
   if (!r) { importSay(file || name, name + " is not in cards.csv - nothing to update."); return; }
   const kind = String(r.kind || "card").trim().toLowerCase(), bal = cents(r.balance), d = dueOf(r.note);
   let def = bal;
 
-  if (st && st.balance !== null) def = st.closing && noteLatest(r.note) > st.closing ? bal : st.balance;
+  if (st && st.balance !== null) def = st.closing ? st.balance + sinceStatement(r.note, st) : st.balance;
   up = { name: name, kind: kind, raw: r.raw, st: st || null, file: file || "", was: bal, wasRate: String(r.rate || "").trim(),
     f: { bal: c2(def), min: st && st.minimum !== null ? c2(st.minimum) : "", due: st && st.due ? st.due : "",
       rate: st && st.rate !== null ? st.rate.toFixed(2) : String(r.rate || "").trim(), paid: kind === "loan" ? String(r.payment || "").trim() : "",
@@ -7141,6 +7490,20 @@ function widgetOnly() {
 drawLogos();
 drawSky();
 if (location.hash === "#widget") widgetOnly(); else load();
+</script>
+<button id="refresh" class="refresh" aria-label="Refresh" title="Refresh"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+<script>
+(function () {
+  const b = document.getElementById("refresh");
+  document.addEventListener("scroll", function (e) {
+    const t = e.target === document ? (document.scrollingElement || document.documentElement) : e.target;
+    if (t && t.scrollTop !== undefined && !(t.closest && t.closest("#sheet, .sheet"))) b.classList.toggle("away", t.scrollTop > 30);
+  }, true);
+})();
+document.getElementById("refresh").addEventListener("click", function () {
+  const b = this; b.classList.remove("spin"); void b.offsetWidth; b.classList.add("spin");
+  try { load(); toast("Up to date - everything read again", false, false); } catch (e) {   }
+});
 </script>
 </body>
 </html>

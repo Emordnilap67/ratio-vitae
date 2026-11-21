@@ -35,6 +35,10 @@ Five pages - swipe between them.
   come.
 - A new month: one tap carries your balance, income and fixed and monthly
   bills over, unpaid.
+- **Make the list yours**: **Edit list** moves rows up or down or hides them,
+  and **+ Add** makes a **goal** (with a target), a **savings pot**,
+  **Roundups** (every purchase rounds up to the next $1, $2, $5 or $10 - on and
+  off when you like, added in one tap) or a new **category**.
 - Cash back and interest totals, subscriptions with their yearly total, a
   grocery list with the prices you last paid, and a **PDF of the month**.
 
@@ -62,7 +66,8 @@ stock counter, **your own notes** (what happened, any day and hour), and a
 
 **Also**
 - **Three home-screen widgets**, all scrolling, and they keep up by themselves:
-  *Money* (left now, the four quick buttons, the next bill, the lowest point),
+  *Money* (left now, the four quick buttons, the next bill, the lowest point,
+  your credit scores with + New score),
   *Pills* (every group with a big Take button, blood pressure, heart rate,
   temperature, what to order) and *Investments* (the total and its line over
   time, every holding - and each copy shows the account you pick, so put one
@@ -70,6 +75,7 @@ stock counter, **your own notes** (what happened, any day and hour), and a
 - **Notifications**: bills the day before, a daily pills reminder, and a note
   each time a group is logged.
 - **Sideways**: on a wide screen held sideways the pages go two columns.
+- **Refresh**: a button top right reloads everything (it fades once you scroll).
 - **Read it for me**: a photo or screenshot of a receipt fills in the
   purchase; a card statement (PDF - Triangle, BMO, Capital One, Simplii) or
   a screenshot of a loan's app fills in that card or loan; share a file to
